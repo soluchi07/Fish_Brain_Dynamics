@@ -1,0 +1,86 @@
+{
+  "mode": "time-split",
+  "run_name": "13iii26_task3_timesplit",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 8,
+  "best_params": {
+    "gSig": 2,
+    "gSig_filt": 3,
+    "min_corr": 0.507202172349293,
+    "min_pnr": 3,
+    "rf": 80,
+    "stride": 40,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "multi-cam",
+    "n_files": 50,
+    "sample_shape": [
+      1,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      50,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.20170974731445312,
+    "final_shape": [
+      50,
+      512,
+      512
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 29,
+      "n_neurons": 4,
+      "recon_error": 0.9993409898401623,
+      "spatial_compactness": 0.9281385281385282,
+      "trace_sparsity": 4.960805191065742,
+      "stability": 0.0,
+      "composite_score": -0.06922395919575149,
+      "label": "test_half (frames 25-49)",
+      "runtime_s": 139.5,
+      "filter_counts": {
+        "input": 29,
+        "circularity_rejected": 1,
+        "max_area_rejected": 21,
+        "in_mask_rejected": 3,
+        "final": 4
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 236,
+      "n_neurons": 51,
+      "recon_error": 0.9944576357643172,
+      "spatial_compactness": 0.9212793984080478,
+      "trace_sparsity": 6.809322225940299,
+      "stability": 0.5,
+      "composite_score": 0.3535378539876108,
+      "label": "full_movie",
+      "runtime_s": 466.1,
+      "filter_counts": {
+        "input": 236,
+        "circularity_rejected": 14,
+        "max_area_rejected": 97,
+        "in_mask_rejected": 74,
+        "final": 51
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 50,
+  "data_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/manal_data/Imaging_Data/13iii26/Xgcamp_6dpf_animal4_task3stack0_stack_0-Gcamp8m 6dpf_channel_2_obj_bottom"
+}

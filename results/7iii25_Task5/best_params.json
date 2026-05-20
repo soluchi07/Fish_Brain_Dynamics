@@ -1,0 +1,20 @@
+{
+  "gSig": 4,
+  "gSig_filt": 4,
+  "min_corr": 0.6687571754545379,
+  "min_pnr": 3,
+  "rf": 80,
+  "stride": 40,
+  "p": 1,
+  "merge_thr": 0.85,
+  "split_half_stability": 0.099,
+  "composite_score": -0.9542140445617426,
+  "data_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/ZebraFishUMichiganProject/Army Project/7iii25/2025-03-07_090808/20250307-231510_Task_5_Description_for_C",
+  "run_name": "7iii25_Task5",
+  "z_method": "middle",
+  "T": 49,
+  "Z": 7,
+  "H_orig": 2048,
+  "W_orig": 2048,
+  "n_files": 49
+}

@@ -1,0 +1,48 @@
+{
+  "mode": "time-split",
+  "run_name": "Task4_timesplit_z3",
+  "best_params": {
+    "gSig": 8,
+    "gSig_filt": 10,
+    "min_corr": 0.5799374372718651,
+    "min_pnr": 3,
+    "rf": 320,
+    "stride": 160,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "n_calls": 10,
+  "tests": {
+    "tune_half": {
+      "n_neurons": 612,
+      "recon_error": 0.9629659269750568,
+      "spatial_compactness": 0.9256107684736666,
+      "trace_sparsity": 4.252875645337829,
+      "stability": 0.0,
+      "composite_score": 0.0022067566767468016
+    },
+    "test_half": {
+      "n_neurons": 528,
+      "recon_error": 0.9507395850096095,
+      "spatial_compactness": 0.9209064071510412,
+      "trace_sparsity": 4.4234988403920505,
+      "stability": 0.16477272727272727,
+      "composite_score": 0.1672640009327254,
+      "runtime_s": 8324.1
+    },
+    "full_movie": {
+      "n_neurons": 2509,
+      "recon_error": 0.846658777689432,
+      "spatial_compactness": 0.9200934394770843,
+      "trace_sparsity": 6.186905330706138,
+      "stability": 0.4084967320261438,
+      "composite_score": 0.4302064742442937,
+      "runtime_s": 28594.1
+    }
+  },
+  "z_index": 3,
+  "T_total": 42,
+  "T_tune": 21,
+  "T_test": 21,
+  "data_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/ZebraFishUMichiganProject/Army Project/7iii25/2025-03-07_090808/20250307-231142_Task_4_Description_for_C"
+}

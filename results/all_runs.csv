@@ -1,0 +1,10 @@
+run_name,data_dir,n_files,T,Z,n_neurons,composite_score,split_half_stability,gSig,min_corr,min_pnr,rf,p
+7iii25_Task4,/home/abl-dell/Documents/fishBrain_Kiitan/ZebraFishUMichiganProject/Army Project/7iii25/2025-03-07_090808/20250307-231142_Task_4_Description_for_C,42,42,7,202,-1.0294721012249057,0.275,2,0.5872333700639187,3,80,1
+7iii25_Task6,/home/abl-dell/Documents/fishBrain_Kiitan/ZebraFishUMichiganProject/Army Project/7iii25/2025-03-07_090808/20250307-231838_Task_6_Description_for_C,56,56,7,168,-1.0915769951517074,0.2,2,0.520004825035999,3,80,1
+7iii25_Task5,/home/abl-dell/Documents/fishBrain_Kiitan/ZebraFishUMichiganProject/Army Project/7iii25/2025-03-07_090808/20250307-231510_Task_5_Description_for_C,49,49,7,482,-0.9542140445617426,0.099,4,0.6687571754545379,3,80,1
+13iii26_task1_smoke,time-split,512,True,0,0,-inf,0.0,4,0.7508609501227463,8,40,1
+13iii26_task1_smoke4,time-split,512,True,12,79,0.0990751573766182,0.14285714285714285,2,0.5799374372718651,3,80,1
+13iii26_task3_timesplit,time-split,512,True,4,29,-0.06922395919575149,0.0,2,0.507202172349293,3,80,1
+13iii26_task1_timesplit,time-split,512,True,5,34,-0.10654730136358165,0.0,2,0.46801494590515785,3,80,1
+13iii26_task3_to_task1,file-plane-split,512,True,56,234,0.8161733117395193,0.96,2,0.5247517348880972,3,80,1
+13iii26_task1_to_task3,file-plane-split,512,True,50,215,0.8590706387466802,1.0,2,0.5247517351689782,3,80,1

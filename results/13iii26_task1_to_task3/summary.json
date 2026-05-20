@@ -1,0 +1,96 @@
+{
+  "mode": "file-plane-split",
+  "run_name": "13iii26_task1_to_task3",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 8,
+  "best_params": {
+    "gSig": 2,
+    "gSig_filt": 3,
+    "min_corr": 0.5247517351689782,
+    "min_pnr": 3,
+    "rf": 80,
+    "stride": 40,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "tune": {
+      "format": "multi-cam",
+      "n_files": 50,
+      "sample_shape": [
+        1,
+        2048,
+        2048
+      ],
+      "original_shape": [
+        50,
+        2048,
+        2048
+      ],
+      "downsampled_to": [
+        512,
+        512
+      ],
+      "stripe_removed": true,
+      "brain_mask_used": true,
+      "mask_coverage_frac": 0.20727920532226562,
+      "final_shape": [
+        50,
+        512,
+        512
+      ]
+    },
+    "test": {
+      "format": "multi-cam",
+      "n_files": 50,
+      "sample_shape": [
+        1,
+        2048,
+        2048
+      ],
+      "original_shape": [
+        50,
+        2048,
+        2048
+      ],
+      "downsampled_to": [
+        512,
+        512
+      ],
+      "stripe_removed": true,
+      "brain_mask_used": true,
+      "mask_coverage_frac": 0.20170974731445312,
+      "final_shape": [
+        50,
+        512,
+        512
+      ]
+    }
+  },
+  "tests": {
+    "test_file": {
+      "n_neurons_pre": 215,
+      "n_neurons": 50,
+      "recon_error": 0.9922839419710818,
+      "spatial_compactness": 0.9253475708642109,
+      "trace_sparsity": 6.774403756233813,
+      "stability": 1.0,
+      "composite_score": 0.8590706387466802,
+      "label": "test_file",
+      "runtime_s": 421.6,
+      "filter_counts": {
+        "input": 215,
+        "circularity_rejected": 14,
+        "max_area_rejected": 88,
+        "in_mask_rejected": 63,
+        "final": 50
+      }
+    }
+  },
+  "z_index": 0,
+  "tune_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/manal_data/Imaging_Data/13iii26/Xgcamp_6dpf_animal4_task1stack0_stack_0-Gcamp8m 6dpf_channel_2_obj_bottom",
+  "test_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/manal_data/Imaging_Data/13iii26/Xgcamp_6dpf_animal4_task3stack0_stack_0-Gcamp8m 6dpf_channel_2_obj_bottom"
+}
