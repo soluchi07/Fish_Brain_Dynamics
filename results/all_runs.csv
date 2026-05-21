@@ -8,3 +8,5 @@ run_name,data_dir,n_files,T,Z,n_neurons,composite_score,split_half_stability,gSi
 13iii26_task1_timesplit,time-split,512,True,5,34,-0.10654730136358165,0.0,2,0.46801494590515785,3,80,1
 13iii26_task3_to_task1,file-plane-split,512,True,56,234,0.8161733117395193,0.96,2,0.5247517348880972,3,80,1
 13iii26_task1_to_task3,file-plane-split,512,True,50,215,0.8590706387466802,1.0,2,0.5247517351689782,3,80,1
+smoke_timsplit,time-split,512,True,6,25,-0.04720555699325913,0.0,4,0.7508609501227463,8,40,1
+20iv26_142407_default,time-split,512,True,19,98,-0.006423942718853376,0.0,2,0.5799374372718651,3,80,1
