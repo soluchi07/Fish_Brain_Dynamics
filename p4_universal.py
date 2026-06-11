@@ -70,6 +70,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 RESULTS_ROOT = SCRIPT_DIR / "results"
 
 
+
 # =============================================================================
 # CLI
 # =============================================================================
@@ -115,6 +116,8 @@ def parse_args() -> argparse.Namespace:
     # Bayesian search
     p.add_argument("--n-calls", type=int, default=10)
     p.add_argument("--n-initial", type=int, default=5)
+    p.add_argument("--n-workers", type=int, default=64,
+                   help="CPU cores for CNMF patch processing (default: 64)")
 
     # Quality filter thresholds
     p.add_argument("--min-circularity", type=float, default=0.5,
@@ -140,6 +143,8 @@ elif ARGS.mode in ("file-plane-split", "file-split"):
     if ARGS.tune_dir is None or ARGS.test_dir is None:
         print(f"ERROR: --tune-dir and --test-dir required for mode {ARGS.mode}", file=sys.stderr)
         sys.exit(1)
+
+N_WORKERS = ARGS.n_workers
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -538,7 +543,7 @@ def run_cnmf(params_override: dict, fname_mmap: str,
     p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
     opts = params_module.CNMFParams(params_dict=p)
-    cnmf_obj = cnmf_module.CNMF(n_processes=1, params=opts)
+    cnmf_obj = cnmf_module.CNMF(n_processes=N_WORKERS, params=opts)
 
     t0 = time.time()
     try:
