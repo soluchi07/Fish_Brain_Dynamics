@@ -550,7 +550,9 @@ def run_cnmf(params_override: dict, fname_mmap: str,
 
     t0 = time.time()
     try:
+        print("  [fit_file starting — MC first, then CNMF init]", flush=True)
         cnmf_obj.fit_file(motion_correct=do_mc)
+        print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
             try:
                 Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_mmap)
