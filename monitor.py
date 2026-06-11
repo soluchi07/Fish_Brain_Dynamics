@@ -5,6 +5,8 @@ from datetime import datetime
 TARGET_STRING1 = "fit_file starting — MC first, then CNMF init"
 TARGET_STRING2 = "fit_file done"
 start_time = datetime.now().time()
+with open("logs/triggered_output.txt", "a") as f:
+    f.write(f"Monitoring started at {start_time}\n")
 
 # Read line-by-line from the terminal stream
 for line in sys.stdin:
