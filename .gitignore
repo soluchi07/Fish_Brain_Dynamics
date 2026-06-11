@@ -5,6 +5,9 @@ results/Task4_timesplit_z3/_work/
 results/Task4_timesplit_z3/traces_*.npy
 results/Task4_timesplit_z3/_work/
 results/Task4_timesplit_z3/traces_*.npy
+results/20iv26_142407_to_144159_file_split_full/traces_*.npy
+results/20iv26_142407_to_144159_file_split_full/_work/*.tif
+
 
 .claude
 venv

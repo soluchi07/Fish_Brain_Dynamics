@@ -6,7 +6,6 @@ av==17.0.0
 babel==2.18.0
 bleach==6.3.0
 bokeh==3.9.0
-caiman @ git+https://github.com/flatironinstitute/CaImAn.git@2956b1c1d9c4c5fdffbca38b2538924010308e2d
 certifi==2026.2.25
 charset-normalizer==3.4.7
 colorcet==3.1.0
