@@ -468,8 +468,8 @@ def get_search_space() -> list:
     return [
         Integer(4, 16, name="gSig"),
         Integer(4, 16, name="gSig_filt"),
-        Real(0.4, 0.85, name="min_corr"),
-        Integer(3, 12, name="min_pnr"),
+        Real(0.5, 0.85, name="min_corr"),
+        Integer(5, 12, name="min_pnr"),
         Categorical([100, 160, 240, 320], name="rf"),
         Categorical([1, 2], name="p"),
     ]
@@ -479,12 +479,15 @@ def get_base_params() -> dict:
     if ARGS.resolution == "512":
         mc = dict(max_shifts=(3, 3), strides=(48, 48),
                   overlaps=(24, 24), max_deviation_rigid=2)
+        ssub = 1
     elif ARGS.resolution == "1024":
         mc = dict(max_shifts=(6, 6), strides=(96, 96),
                   overlaps=(48, 48), max_deviation_rigid=3)
+        ssub = 1
     else:
         mc = dict(max_shifts=(12, 12), strides=(192, 192),
                   overlaps=(96, 96), max_deviation_rigid=3)
+        ssub = 2  # subsample 2x to cut init time ~16x on large FOV
 
     return {
         "fr": 5,
@@ -500,7 +503,7 @@ def get_base_params() -> dict:
         "min_SNR": ARGS.min_snr_trace,
         "rval_thr": 0.85,
         "del_duplicates": True,
-        "ssub": 1,
+        "ssub": ssub,
         "tsub": 1,
         "only_init": False,
         "pw_rigid": True,
