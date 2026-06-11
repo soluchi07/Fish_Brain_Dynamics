@@ -1,0 +1,86 @@
+{
+  "mode": "time-split",
+  "run_name": "20iv26_142407_default",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 10,
+  "best_params": {
+    "gSig": 2,
+    "gSig_filt": 3,
+    "min_corr": 0.5799374372718651,
+    "min_pnr": 3,
+    "rf": 80,
+    "stride": 40,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "single-movie",
+    "n_files": 1,
+    "sample_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.22192764282226562,
+    "final_shape": [
+      53,
+      512,
+      512
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 98,
+      "n_neurons": 19,
+      "recon_error": 0.9979652574163295,
+      "spatial_compactness": 0.9619246725446265,
+      "trace_sparsity": 4.162335944590403,
+      "stability": 0.0,
+      "composite_score": -0.006423942718853376,
+      "label": "test_half (frames 26-52)",
+      "runtime_s": 443.1,
+      "filter_counts": {
+        "input": 98,
+        "circularity_rejected": 4,
+        "max_area_rejected": 54,
+        "in_mask_rejected": 21,
+        "final": 19
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 379,
+      "n_neurons": 96,
+      "recon_error": 0.9948832486768431,
+      "spatial_compactness": 0.921208237324473,
+      "trace_sparsity": 5.534864581517515,
+      "stability": 0.0,
+      "composite_score": -0.09284990648479306,
+      "label": "full_movie",
+      "runtime_s": 1037.7,
+      "filter_counts": {
+        "input": 379,
+        "circularity_rejected": 14,
+        "max_area_rejected": 226,
+        "in_mask_rejected": 43,
+        "final": 96
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 53,
+  "data_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/manal_data/Imaging_Data/20iv26/2026-04-20_142407/raw/stack_0-A1-rGECO_channel_0_obj_bottom"
+}

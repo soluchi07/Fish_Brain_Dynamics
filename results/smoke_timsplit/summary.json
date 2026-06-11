@@ -1,0 +1,86 @@
+{
+  "mode": "time-split",
+  "run_name": "smoke_timsplit",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 2,
+  "best_params": {
+    "gSig": 4,
+    "gSig_filt": 2,
+    "min_corr": 0.7508609501227463,
+    "min_pnr": 8,
+    "rf": 40,
+    "stride": 20,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "single-movie",
+    "n_files": 1,
+    "sample_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.22192764282226562,
+    "final_shape": [
+      53,
+      512,
+      512
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 25,
+      "n_neurons": 6,
+      "recon_error": 0.9975848546779511,
+      "spatial_compactness": 0.8931963055536509,
+      "trace_sparsity": 4.262200143200189,
+      "stability": 0.0,
+      "composite_score": -0.04720555699325913,
+      "label": "test_half (frames 26-52)",
+      "runtime_s": 237.9,
+      "filter_counts": {
+        "input": 25,
+        "circularity_rejected": 2,
+        "max_area_rejected": 7,
+        "in_mask_rejected": 10,
+        "final": 6
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 145,
+      "n_neurons": 53,
+      "recon_error": 0.9909673451792967,
+      "spatial_compactness": 0.9075557162979477,
+      "trace_sparsity": 5.569858577007982,
+      "stability": 0.0,
+      "composite_score": -0.09794819499234236,
+      "label": "full_movie",
+      "runtime_s": 940.3,
+      "filter_counts": {
+        "input": 145,
+        "circularity_rejected": 9,
+        "max_area_rejected": 26,
+        "in_mask_rejected": 57,
+        "final": 53
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 53,
+  "data_dir": "/home/abl-dell/Documents/fishBrain_Kiitan/manal_data/Imaging_Data/20iv26/2026-04-20_142407/raw/stack_0-A1-rGECO_channel_0_obj_bottom"
+}

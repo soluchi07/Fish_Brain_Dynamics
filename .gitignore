@@ -7,3 +7,4 @@ results/Task4_timesplit_z3/_work/
 results/Task4_timesplit_z3/traces_*.npy
 
 .claude
+venv
