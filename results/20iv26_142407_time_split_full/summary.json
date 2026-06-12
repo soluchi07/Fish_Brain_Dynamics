@@ -1,0 +1,82 @@
+{
+  "mode": "time-split",
+  "run_name": "20iv26_142407_time_split_full",
+  "resolution": "full",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 10,
+  "best_params": {
+    "gSig": 4,
+    "gSig_filt": 10,
+    "min_corr": 0.6399513401003394,
+    "min_pnr": 5,
+    "rf": 320,
+    "stride": 160,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "single-movie",
+    "n_files": 1,
+    "sample_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      53,
+      2048,
+      2048
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.2211301326751709,
+    "final_shape": [
+      53,
+      2048,
+      2048
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 32,
+      "n_neurons": 2,
+      "recon_error": 0.9999735963510508,
+      "spatial_compactness": 0.9651162790697674,
+      "trace_sparsity": 4.131187266362591,
+      "stability": 0.0,
+      "composite_score": -0.006917965030590867,
+      "label": "test_half (frames 26-52)",
+      "runtime_s": 485.0,
+      "filter_counts": {
+        "input": 32,
+        "circularity_rejected": 0,
+        "max_area_rejected": 30,
+        "in_mask_rejected": 0,
+        "final": 2
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 104,
+      "n_neurons": 5,
+      "recon_error": 1.0000824864175781,
+      "spatial_compactness": 0.9673668956043956,
+      "trace_sparsity": 4.795789664563951,
+      "stability": 0.0,
+      "composite_score": -0.04174679935880448,
+      "label": "full_movie",
+      "runtime_s": 2213.9,
+      "filter_counts": {
+        "input": 104,
+        "circularity_rejected": 15,
+        "max_area_rejected": 71,
+        "in_mask_rejected": 13,
+        "final": 5
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 53,
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_142407-20260610T194439Z-3-001/2026-04-20_142407/raw/stack_0-A1-rGECO_channel_0_obj_bottom"
+}
