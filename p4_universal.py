@@ -60,6 +60,8 @@ import warnings
 from pathlib import Path
 from typing import Optional
 
+sys.stdout.reconfigure(line_buffering=True)
+
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
