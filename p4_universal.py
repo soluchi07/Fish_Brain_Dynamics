@@ -118,6 +118,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--n-initial", type=int, default=5)
     p.add_argument("--n-workers", type=int, default=64,
                    help="CPU cores for CNMF patch processing (default: 64)")
+    p.add_argument("--tune-p", type=int, default=1, choices=[1, 2],
+                   help="AR order during Bayesian tuning trials (default: 1, fast)")
+    p.add_argument("--final-p", type=int, default=1, choices=[1, 2],
+                   help="AR order for final test_cnmf runs (default: 1)")
 
     # Quality filter thresholds
     p.add_argument("--min-circularity", type=float, default=0.5,
@@ -446,32 +450,39 @@ def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dic
 # =============================================================================
 
 def get_search_space() -> list:
-    """Bayesian search space scaled to resolution."""
+    """Bayesian search space scaled to resolution.
+
+    Notes:
+    - p is excluded from tuning: always use p=1 during search (fast), p=2
+      only affects temporal AR fitting cost, not spatial components.
+      Apply p=2 in the final test run via --final-p if needed.
+    - rf=320 removed at full res: creates patches too large to run in
+      reasonable time on a full-FOV movie.
+    - min_corr/min_pnr floors raised: values of 0.4/3 flood CNMF with
+      spurious candidates and dominate runtime without improving neurons found.
+    """
     if ARGS.resolution == "512":
         return [
             Integer(2, 5, name="gSig"),
             Integer(1, 4, name="gSig_filt"),
-            Real(0.4, 0.85, name="min_corr"),
-            Integer(3, 12, name="min_pnr"),
+            Real(0.5, 0.85, name="min_corr"),
+            Integer(5, 12, name="min_pnr"),
             Categorical([25, 40, 60, 80], name="rf"),
-            Categorical([1, 2], name="p"),
         ]
     if ARGS.resolution == "1024":
         return [
             Integer(4, 10, name="gSig"),
             Integer(2, 8, name="gSig_filt"),
-            Real(0.4, 0.85, name="min_corr"),
-            Integer(3, 12, name="min_pnr"),
+            Real(0.5, 0.85, name="min_corr"),
+            Integer(5, 12, name="min_pnr"),
             Categorical([50, 80, 120, 160], name="rf"),
-            Categorical([1, 2], name="p"),
         ]
     return [
         Integer(4, 16, name="gSig"),
         Integer(4, 16, name="gSig_filt"),
-        Real(0.4, 0.85, name="min_corr"),
-        Integer(3, 12, name="min_pnr"),
-        Categorical([100, 160, 240, 320], name="rf"),
-        Categorical([1, 2], name="p"),
+        Real(0.5, 0.85, name="min_corr"),
+        Integer(5, 12, name="min_pnr"),
+        Categorical([100, 160, 240], name="rf"),
     ]
 
 
@@ -743,6 +754,7 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int],
     def objective(params):
         tp = dict(zip(PARAM_NAMES, params))
         tp["stride"] = tp["rf"] // 2
+        tp["p"] = ARGS.tune_p  # p is fixed during tuning to keep trials fast
         num = len(trial_log) + 1
         print(f"  Trial {num:2d}: {tp} ...", end=" ", flush=True)
 
@@ -785,7 +797,7 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int],
         "min_pnr": int(best["min_pnr"]),
         "rf": int(best["rf"]),
         "stride": int(best["rf"]) // 2,
-        "p": int(best["p"]),
+        "p": ARGS.final_p,  # use final_p (default 1) for test runs; upgrade to 2 via --final-p 2
         "merge_thr": 0.85,
     }
 
