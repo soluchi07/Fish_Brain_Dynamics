@@ -1,0 +1,67 @@
+Monitoring started at 11:12:51.731693
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7508609501227463, 'min_pnr': np.int64(8), 'rf': 160, 'p': 1, 'stride': 80} ...   [fit_file starting — MC first, then CNMF init]
+ at time 11:13:39.125479
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  2: {'gSig': np.int64(10), 'gSig_filt': np.int64(8), 'min_corr': 0.4642900680648734, 'min_pnr': np.int64(9), 'rf': 100, 'p': 2, 'stride': 50} ...   [fit_file starting — MC first, then CNMF init]
+ at time 11:46:16.558678
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  3: {'gSig': np.int64(15), 'gSig_filt': np.int64(4), 'min_corr': 0.846495201681048, 'min_pnr': np.int64(9), 'rf': 240, 'p': 1, 'stride': 120} ...   [fit_file starting — MC first, then CNMF init]
+ at time 12:01:35.578492
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  4: {'gSig': np.int64(4), 'gSig_filt': np.int64(10), 'min_corr': 0.5799374372718651, 'min_pnr': np.int64(3), 'rf': 320, 'p': 1, 'stride': 160} ...   [fit_file starting — MC first, then CNMF init]
+ at time 12:43:43.649269
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  5: {'gSig': np.int64(5), 'gSig_filt': np.int64(11), 'min_corr': 0.5721078960702233, 'min_pnr': np.int64(12), 'rf': 160, 'p': 2, 'stride': 80} ...   [fit_file starting — MC first, then CNMF init]
+ at time 13:53:18.963700
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  6: {'gSig': np.int64(15), 'gSig_filt': np.int64(9), 'min_corr': 0.801440910397935, 'min_pnr': np.int64(8), 'rf': np.int64(240), 'p': np.int64(1), 'stride': np.int64(120)} ...   [fit_file starting — MC first, then CNMF init]
+ at time 14:01:04.357330
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  7: {'gSig': np.int64(4), 'gSig_filt': np.int64(4), 'min_corr': 0.4, 'min_pnr': np.int64(3), 'rf': np.int64(320), 'p': np.int64(1), 'stride': np.int64(160)} ...   [fit_file starting — MC first, then CNMF init]
+ at time 14:53:22.961120
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  8: {'gSig': np.int64(4), 'gSig_filt': np.int64(4), 'min_corr': 0.4, 'min_pnr': np.int64(12), 'rf': np.int64(240), 'p': np.int64(1), 'stride': np.int64(120)} ...   [fit_file starting — MC first, then CNMF init]
+ at time 16:09:50.401027
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  9: {'gSig': np.int64(16), 'gSig_filt': np.int64(4), 'min_corr': 0.4, 'min_pnr': np.int64(3), 'rf': np.int64(240), 'p': np.int64(2), 'stride': np.int64(120)} ...   [fit_file starting — MC first, then CNMF init]
+ at time 16:18:13.297948
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial 10: {'gSig': np.int64(15), 'gSig_filt': np.int64(6), 'min_corr': 0.7322132851819654, 'min_pnr': np.int64(7), 'rf': np.int64(240), 'p': np.int64(1), 'stride': np.int64(120)} ...   [fit_file starting — MC first, then CNMF init]
+ at time 19:44:46.295191
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 20:49:50.414977
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 21:32:12.573820
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 22:13:16.468687
+
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 11:46:11.756478
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 12:01:32.630157
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 12:43:42.022812
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 13:52:56.489454
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 14:01:03.670313
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 14:53:17.547134
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 16:09:13.280949
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 16:18:12.996249
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 19:43:45.813987
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 20:49:41.946494
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 21:32:11.788273
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 22:13:08.660620
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 23:54:26.447293
+
+
+NaN values detected for space correlation in [5]. Changing their value to -1.
+*** Variable cnn_preds has not the same number of components as A ***
+  Raw neurons: 78  kept: 36  composite: -0.1000 stability: 0.000  t=6074s
+
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/20iv26_144159_time_split_full/
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv
+
+======================================================================
+DONE  |  time-split  |  20iv26_144159_time_split_full  |  762.0 min
+======================================================================
+Monitoring ended at 23:54:55.953317

@@ -1,0 +1,82 @@
+{
+  "mode": "time-split",
+  "run_name": "20iv26_144159_time_split_full",
+  "resolution": "full",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 10,
+  "best_params": {
+    "gSig": 15,
+    "gSig_filt": 4,
+    "min_corr": 0.846495201681048,
+    "min_pnr": 9,
+    "rf": 240,
+    "stride": 120,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "single-movie",
+    "n_files": 1,
+    "sample_shape": [
+      52,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      52,
+      2048,
+      2048
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.259188175201416,
+    "final_shape": [
+      52,
+      2048,
+      2048
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 7,
+      "n_neurons": 3,
+      "recon_error": 0.9992817496297909,
+      "spatial_compactness": 0.9433787114249261,
+      "trace_sparsity": 3.7340659101976743,
+      "stability": 0.0,
+      "composite_score": 0.007358570326720017,
+      "label": "test_half (frames 26-51)",
+      "runtime_s": 2456.4,
+      "filter_counts": {
+        "input": 7,
+        "circularity_rejected": 1,
+        "max_area_rejected": 2,
+        "in_mask_rejected": 1,
+        "final": 3
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 78,
+      "n_neurons": 36,
+      "recon_error": 0.99789996400591,
+      "spatial_compactness": 0.9113129732110856,
+      "trace_sparsity": 5.496512916477744,
+      "stability": 0.0,
+      "composite_score": -0.10001222705562696,
+      "label": "full_movie",
+      "runtime_s": 6074.3,
+      "filter_counts": {
+        "input": 78,
+        "circularity_rejected": 6,
+        "max_area_rejected": 17,
+        "in_mask_rejected": 19,
+        "final": 36
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 52,
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_144159-20260610T194530Z-3-001/2026-04-20_144159/raw/stack_0-A1-rGECO_channel_0_obj_bottom"
+}

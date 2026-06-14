@@ -24,7 +24,8 @@ for line in sys.stdin:
         with open(f"logs/{args.filename}", "a") as f:
             f.write(f"Alert! Found {TARGET_STRING1} in line: {line} at time {datetime.now().time()}\n")
     elif TARGET_STRING2 in line:
-        with open("logs/triggered_output.txt", "a") as f:
+        with open(f"logs/{args.filename}", "a") as f:
             f.write(f"Alert! Found {TARGET_STRING2} in line: {line} at time {datetime.now().time()}\n")
 
-print(f"Monitoring ended at {datetime.now().time()}")
+with open(f"logs/{args.filename}", "a") as f:
+    f.write(f"Monitoring ended at {datetime.now().time()}\n")
