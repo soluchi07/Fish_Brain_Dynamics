@@ -54,6 +54,7 @@ import argparse
 import glob
 import json
 import re
+import os
 import sys
 import time
 import warnings
@@ -118,8 +119,10 @@ def parse_args() -> argparse.Namespace:
     # Bayesian search
     p.add_argument("--n-calls", type=int, default=10)
     p.add_argument("--n-initial", type=int, default=5)
-    p.add_argument("--n-workers", type=int, default=64,
-                   help="CPU cores for CNMF patch processing (default: 64)")
+    p.add_argument("--n-workers", type=int, default=None,
+                   help="CPU workers for CNMF patch processing (default: --pin-cpus count, else 64)")
+    p.add_argument("--pin-cpus", type=str, default=None,
+                   help="CPU cores to pin to, e.g. '0-31' or '0-15,32-47' (Linux only)")
     p.add_argument("--tune-p", type=int, default=1, choices=[1, 2],
                    help="AR order during Bayesian tuning trials (default: 1, fast)")
     p.add_argument("--final-p", type=int, default=1, choices=[1, 2],
@@ -138,6 +141,19 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
+def parse_cpu_spec(spec: str) -> set:
+    """Parse '0-31', '0,2,4', or '0-15,32-47' into a set of core indices."""
+    cores: set = set()
+    for part in spec.split(","):
+        part = part.strip()
+        if "-" in part:
+            lo, hi = part.split("-", 1)
+            cores.update(range(int(lo), int(hi) + 1))
+        else:
+            cores.add(int(part))
+    return cores
+
+
 ARGS = parse_args()
 
 # Validate args per mode
@@ -150,7 +166,24 @@ elif ARGS.mode in ("file-plane-split", "file-split"):
         print(f"ERROR: --tune-dir and --test-dir required for mode {ARGS.mode}", file=sys.stderr)
         sys.exit(1)
 
-N_WORKERS = ARGS.n_workers
+_pinned_cores: set = set()
+if ARGS.pin_cpus:
+    _pinned_cores = parse_cpu_spec(ARGS.pin_cpus)
+    try:
+        os.sched_setaffinity(0, _pinned_cores)
+    except AttributeError:
+        print("WARNING: os.sched_setaffinity not available on this OS — --pin-cpus ignored.")
+        _pinned_cores = set()
+    except PermissionError:
+        print("WARNING: Permission denied for sched_setaffinity — --pin-cpus ignored.")
+        _pinned_cores = set()
+
+if ARGS.n_workers is not None:
+    N_WORKERS = ARGS.n_workers
+elif _pinned_cores:
+    N_WORKERS = len(_pinned_cores)
+else:
+    N_WORKERS = 64
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -197,6 +230,8 @@ print(f"Resolution : {ARGS.resolution}")
 print(f"Brain mask : {'OFF' if ARGS.no_mask else 'ON'}")
 print(f"Quality    : {'OFF' if ARGS.no_quality_filters else 'ON'}")
 print(f"Trials     : n_calls={ARGS.n_calls}  n_initial={ARGS.n_initial}")
+_cpu_pin_str = f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
+print(f"CPU pin    : {_cpu_pin_str}  workers={N_WORKERS}")
 
 
 # =============================================================================
