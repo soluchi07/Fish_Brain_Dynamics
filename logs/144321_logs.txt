@@ -1,0 +1,84 @@
+Monitoring started at 21:43:08.857499
+
+======================================================================
+p4_universal.py  |  mode=time-split  |  run=20iv26_144321_time_split_full
+======================================================================
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/20iv26_144321_time_split_full
+Resolution : full
+Brain mask : ON
+Quality    : ON
+Trials     : n_calls=10  n_initial=5
+CPU pin    : 0-63  (64 cores)  workers=64
+
+--- TIME-SPLIT mode ---
+  Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom
+  Format : single-movie  (1 file(s), sample shape=(4900, 2048, 2048))
+  Loading 1000/4900 frames from single file...
+
+Alert! Found fit_file done in line: Time split: tune frames 0-499 (500), test frames 500-999 (500)
+ at time 21:49:59.112770
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 21:52:31.392092
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 22:32:48.126211
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(10), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 22:33:07.811955
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 23:01:35.279043
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  3: {'gSig': np.int64(5), 'gSig_filt': np.int64(13), 'min_corr': 0.8284934481555126, 'min_pnr': np.int64(5), 'rf': 240, 'stride': 120, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 23:02:01.225064
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 23:20:20.486814
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  4: {'gSig': np.int64(11), 'gSig_filt': np.int64(11), 'min_corr': 0.5024732068269011, 'min_pnr': np.int64(5), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 23:20:32.544653
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 01:15:41.608425
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  5: {'gSig': np.int64(9), 'gSig_filt': np.int64(5), 'min_corr': 0.8408144315945107, 'min_pnr': np.int64(7), 'rf': 100, 'stride': 50, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 01:17:25.349256
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 01:54:07.909288
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  6: {'gSig': np.int64(16), 'gSig_filt': np.int64(6), 'min_corr': 0.5428461914124132, 'min_pnr': np.int64(9), 'rf': np.int64(240), 'stride': np.int64(120), 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 01:54:39.856452
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 02:51:03.359417
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  7: {'gSig': np.int64(16), 'gSig_filt': np.int64(16), 'min_corr': 0.5, 'min_pnr': np.int64(5), 'rf': np.int64(160), 'stride': np.int64(80), 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 02:51:24.940433
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 05:34:48.678880
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  8: {'gSig': np.int64(16), 'gSig_filt': np.int64(16), 'min_corr': 0.85, 'min_pnr': np.int64(5), 'rf': np.int64(240), 'stride': np.int64(120), 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 05:36:30.509992
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 07:48:52.702165
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  9: {'gSig': np.int64(15), 'gSig_filt': np.int64(14), 'min_corr': 0.5035633701765879, 'min_pnr': np.int64(12), 'rf': np.int64(160), 'stride': np.int64(80), 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 07:50:04.899254
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 08:24:47.355400
+Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial 10: {'gSig': np.int64(15), 'gSig_filt': np.int64(4), 'min_corr': 0.7056088568696226, 'min_pnr': np.int64(11), 'rf': np.int64(160), 'stride': np.int64(80), 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
+ at time 08:24:59.388170
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 09:02:26.968216
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 09:02:40.831643
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 09:20:53.508826
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 09:20:56.777280
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 09:35:12.796532
+Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
+ at time 09:37:43.956382
+Alert! Found fit_file done in line:   [fit_file done]
+ at time 10:05:52.448028
+
+Component 18 is only active jointly with neighboring components. Space correlation calculation might be unreliable.
+*** Variable cnn_preds has not the same number of components as A ***
+  Raw neurons: 40  kept: 1  composite: -0.5840 stability: 0.000  t=1691s
+
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/20iv26_144321_time_split_full/
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv
+
+======================================================================
+DONE  |  time-split  |  20iv26_144321_time_split_full  |  743.1 min
+======================================================================
+
+Monitoring ended at 10:06:19.948045
