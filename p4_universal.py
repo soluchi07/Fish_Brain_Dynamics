@@ -250,14 +250,14 @@ if ARGS.n_planes:
 # =============================================================================
 
 def read_n_planes(filepath: str) -> int:
-    """Read n_planes from metadata["stack"]["n"] in a .lux*.h5 file; fall back to 1."""
+    """Read n_planes from metadata["metaData"]["stack"]["n"] in a .lux*.h5 file; fall back to 1."""
     try:
         with h5py.File(filepath, "r") as fh:
             if "metadata" not in fh:
                 return 1
             raw = fh["metadata"][()]
             meta = json.loads(raw)
-            return int(meta["stack"]["n"])
+            return int(meta["metaData"]["stack"]["n"])
     except Exception:
         return 1
 
