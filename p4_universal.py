@@ -100,11 +100,6 @@ def parse_args() -> argparse.Namespace:
                    help="Z-plane index for time-split, file-plane-split (default: middle)")
     p.add_argument("--tune-z", type=int, default=None,
                    help="Z-plane to tune on for plane-split (default: middle)")
-    p.add_argument("--n-planes", type=int, default=None,
-                   help="Number of Z-planes interleaved in a single-movie file "
-                        "(e.g. 7 when 700-rep × 7-plane = 4900 total frames). "
-                        "Strides the T axis: keeps frames z_index, z_index+n_planes, ... "
-                        "Pair with --z-index to pick a specific plane (default: middle).")
 
     # Resolution / preprocessing
     p.add_argument("--resolution", choices=["full", "1024", "512"], default="512",
@@ -237,9 +232,6 @@ print(f"Quality    : {'OFF' if ARGS.no_quality_filters else 'ON'}")
 print(f"Trials     : n_calls={ARGS.n_calls}  n_initial={ARGS.n_initial}")
 _cpu_pin_str = f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
 print(f"CPU pin    : {_cpu_pin_str}  workers={N_WORKERS}")
-if ARGS.n_planes:
-    _default_z = ARGS.z_index if ARGS.z_index is not None else ARGS.n_planes // 2
-    print(f"Z-planes   : {ARGS.n_planes} interleaved  (extracting z={_default_z})")
 
 
 # =============================================================================
@@ -308,8 +300,7 @@ def discover(folder: Path, override: Optional[str] = None
 
 def load_movie(folder: Path, fmt: str, files: list[str], shape: tuple,
                z_index: Optional[int] = None,
-               max_frames: Optional[int] = None,
-               n_planes: Optional[int] = None) -> np.ndarray:
+               max_frames: Optional[int] = None) -> np.ndarray:
     """
     Build (T, H, W) float32 movie regardless of source format.
 
@@ -349,22 +340,10 @@ def load_movie(folder: Path, fmt: str, files: list[str], shape: tuple,
 
     if fmt in ("single-movie", "legacy"):
         T_full, H, W = shape
+        T = T_full if max_frames is None else min(T_full, max_frames)
+        print(f"  Loading {T}/{T_full} frames from single file...")
         with h5py.File(files[0], "r") as fh:
-            if n_planes and n_planes > 1:
-                if z_index is None:
-                    z_index = n_planes // 2
-                if z_index >= n_planes:
-                    raise ValueError(f"z_index {z_index} >= n_planes {n_planes}")
-                indices = list(range(z_index, T_full, n_planes))
-                if max_frames:
-                    indices = indices[:max_frames]
-                T = len(indices)
-                print(f"  Striding {T_full} frames by n_planes={n_planes} (z={z_index}) -> {T} time-points...")
-                data = fh["Data"][indices].astype(np.float32)
-            else:
-                T = T_full if max_frames is None else min(T_full, max_frames)
-                print(f"  Loading {T}/{T_full} frames from single file...")
-                data = fh["Data"][:T].astype(np.float32)
+            data = fh["Data"][:T].astype(np.float32)
         return data
 
     raise ValueError(f"Unknown format: {fmt}")
@@ -1044,12 +1023,9 @@ def mode_time_split():
     if fmt == "multi-tp":
         Z = sample_shape[0]
         z_index = Z // 2 if z_index is None else z_index
-    elif ARGS.n_planes and z_index is None:
-        z_index = ARGS.n_planes // 2
 
     raw = load_movie(ARGS.data_dir, fmt, files, sample_shape,
-                     z_index=z_index, max_frames=ARGS.max_frames,
-                     n_planes=ARGS.n_planes)
+                     z_index=z_index, max_frames=ARGS.max_frames)
     data, mask, prep_info = preprocess_movie(raw, label="movie")
 
     T_full = data.shape[0]
@@ -1085,8 +1061,8 @@ def mode_time_split():
     save_summary("time-split", best_params,
                  {"test_half": test_metrics, "full_movie": full_metrics},
                  fmt_info,
-                 extra={"z_index": z_index, "n_planes": ARGS.n_planes,
-                        "T_total": T_full, "data_dir": str(ARGS.data_dir)})
+                 extra={"z_index": z_index, "T_total": T_full,
+                        "data_dir": str(ARGS.data_dir)})
 
 
 def mode_plane_split():
@@ -1168,16 +1144,13 @@ def mode_file_plane_split():
     z_index = ARGS.z_index
     if fmt_t == "multi-tp" and z_index is None:
         z_index = shape_t[0] // 2
-    elif ARGS.n_planes and z_index is None:
-        z_index = ARGS.n_planes // 2
     if z_index is None:
         z_index = 0
     print(f"\nUsing z={z_index}")
 
     print("\n[Loading tune]")
     tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
-                          z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          z_index=z_index, max_frames=ARGS.max_frames)
     tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label="tune")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1190,8 +1163,7 @@ def mode_file_plane_split():
 
     print("\n[Loading test]")
     test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
-                          z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          z_index=z_index, max_frames=ARGS.max_frames)
     test_data, test_mask, prep_info_test = preprocess_movie(test_raw, label="test")
     test_mmap = array_to_memmap(test_data, WORK_DIR / "test")
 
@@ -1224,8 +1196,7 @@ def mode_file_split():
 
     print("\n[Loading tune]")
     tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
-                          z_index=tune_z, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          z_index=tune_z, max_frames=ARGS.max_frames)
     tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1241,8 +1212,7 @@ def mode_file_split():
         z_iter = range(Z_te)
     else:
         Z_te = 1
-        _z0 = ARGS.z_index if ARGS.z_index is not None else (ARGS.n_planes // 2 if ARGS.n_planes else 0)
-        z_iter = [_z0]
+        z_iter = [0]
 
     all_metrics = {}
     for z in z_iter:
@@ -1252,8 +1222,7 @@ def mode_file_split():
             test_raw = load_plane_multi_tp(test_files, z)
         else:
             test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
-                                  z_index=z, max_frames=ARGS.max_frames,
-                                  n_planes=ARGS.n_planes)
+                                  z_index=z, max_frames=ARGS.max_frames)
         test_data, test_mask, _ = preprocess_movie(test_raw, label=label)
         test_mmap = array_to_memmap(test_data, WORK_DIR / label)
         m = test_cnmf(
