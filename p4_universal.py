@@ -191,7 +191,7 @@ if ARGS.n_workers is not None:
 elif _pinned_cores:
     N_WORKERS = len(_pinned_cores)
 else:
-    N_WORKERS = 64
+    N_WORKERS = os.cpu_count() - 1
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
