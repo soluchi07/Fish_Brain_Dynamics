@@ -1,0 +1,82 @@
+{
+  "mode": "time-split",
+  "run_name": "20iv26_144321_time_split_full",
+  "resolution": "full",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "n_calls": 10,
+  "best_params": {
+    "gSig": 5,
+    "gSig_filt": 13,
+    "min_corr": 0.8284934481555126,
+    "min_pnr": 5,
+    "rf": 240,
+    "stride": 120,
+    "p": 1,
+    "merge_thr": 0.85
+  },
+  "format_info": {
+    "format": "single-movie",
+    "n_files": 1,
+    "sample_shape": [
+      4900,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      1000,
+      2048,
+      2048
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.20111083984375,
+    "final_shape": [
+      1000,
+      2048,
+      2048
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 15,
+      "n_neurons": 2,
+      "recon_error": 1.0006267589848794,
+      "spatial_compactness": 0.893216971761033,
+      "trace_sparsity": 22.05434170964338,
+      "stability": 0.5,
+      "composite_score": 0.005724105521251099,
+      "label": "test_half (frames 500-999)",
+      "runtime_s": 856.8,
+      "filter_counts": {
+        "input": 15,
+        "circularity_rejected": 0,
+        "max_area_rejected": 12,
+        "in_mask_rejected": 1,
+        "final": 2
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 40,
+      "n_neurons": 1,
+      "recon_error": 1.02334904385992,
+      "spatial_compactness": 0.967741935483871,
+      "trace_sparsity": 31.586090808583766,
+      "stability": 0.0,
+      "composite_score": -0.5839505894413298,
+      "label": "full_movie",
+      "runtime_s": 1690.9,
+      "filter_counts": {
+        "input": 40,
+        "circularity_rejected": 1,
+        "max_area_rejected": 34,
+        "in_mask_rejected": 4,
+        "final": 1
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 1000,
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom"
+}
