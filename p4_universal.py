@@ -3,13 +3,10 @@
 p4_universal.py  —  Phase 4: Universal CNMF Pipeline with Quality Filters
 
 Major upgrades over p3:
-  * Auto-detects 5 input formats:
+  * Auto-detects 4 input formats:
       multi-tp     : many tp-*.lux.h5 files, each (Z, H, W)
       multi-cam    : many Cam_long_*.lux.h5 files, each (1, H, W)   (13iii26 style)
       single-movie : one big Cam_long_*.lux.h5 file, shape (T, H, W) (20iv26 style)
-      interleaved  : one *.lux*.h5 file, shape (T*Z, H, W); planes
-                     stride the time axis (e.g. 7-plane → data[z::7]).
-                     n_planes auto-detected from metadata["stack"]["n"].
       legacy       : one .h5 file with shape (T, H, W)
   * Optional brain mask preprocessing (default ON) — kills false positives
     in dark periphery (addresses bio team "shouldn't capture above the planes")
@@ -121,7 +118,7 @@ def parse_args() -> argparse.Namespace:
 
     # Format override
     p.add_argument("--format", dest="format_override",
-                   choices=["multi-tp", "multi-cam", "single-movie", "interleaved", "legacy"],
+                   choices=["multi-tp", "multi-cam", "single-movie", "legacy"],
                    default=None, help="Override auto-detect format")
 
     # Bayesian search
@@ -249,27 +246,13 @@ if ARGS.n_planes:
 # FORMAT DETECTION
 # =============================================================================
 
-def read_n_planes(filepath: str) -> int:
-    """Read n_planes from metadata["stack"]["n"] in a .lux*.h5 file; fall back to 1."""
-    try:
-        with h5py.File(filepath, "r") as fh:
-            if "metadata" not in fh:
-                return 1
-            raw = fh["metadata"][()]
-            meta = json.loads(raw)
-            return int(meta["stack"]["n"])
-    except Exception:
-        return 1
-
-
 def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
     """
     Return (format_name, file_list, sample_shape).
 
     multi-tp     : many tp-*.lux.h5 files, each (Z, H, W) with Z>1
-    multi-cam    : many Cam_long_*.lux*.h5 files, each (1, H, W)
-    single-movie : one Cam_long_*.lux*.h5 file with 1 plane (T, H, W)
-    interleaved  : one *.lux*.h5 file with Z>1 planes packed into T axis
+    multi-cam    : many Cam_long_*.lux.h5 files, each (1, H, W)
+    single-movie : one big .lux.h5 file with (T, H, W)
     legacy       : one .h5 file with (T, H, W)
     """
     folder = Path(folder)
@@ -283,34 +266,18 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
             shape = tuple(fh["Data"].shape)
         return "multi-tp", tp_files, shape
 
-    # Broaden glob to catch both *.lux.h5 and *.lux-NNN.h5 naming
     cam_files = sorted(
-        glob.glob(str(folder / "Cam_long_*.lux*.h5")),
+        glob.glob(str(folder / "Cam_long_*.lux.h5")),
         key=lambda p: int(re.search(r"Cam_long_(\d+)", p).group(1)),
     )
     if cam_files:
         with h5py.File(cam_files[0], "r") as fh:
             shape = tuple(fh["Data"].shape)
-        if len(cam_files) > 1:
-            if shape[0] == 1:
-                return "multi-cam", cam_files, shape
+        if len(cam_files) == 1:
             return "single-movie", cam_files, shape
-        # Single file — check metadata for plane count
-        n_z = read_n_planes(cam_files[0])
-        if n_z > 1:
-            return "interleaved", cam_files, shape
+        if shape[0] == 1:
+            return "multi-cam", cam_files, shape
         return "single-movie", cam_files, shape
-
-    # Catch-all for any other *.lux*.h5 files (non-Cam_long naming)
-    lux_files = sorted(glob.glob(str(folder / "*.lux*.h5")))
-    if lux_files:
-        with h5py.File(lux_files[0], "r") as fh:
-            if "Data" in fh:
-                shape = tuple(fh["Data"].shape)
-                n_z = read_n_planes(lux_files[0])
-                if n_z > 1:
-                    return "interleaved", lux_files, shape
-                return "single-movie", lux_files, shape
 
     h5_files = sorted(glob.glob(str(folder / "*.h5")))
     if h5_files:
@@ -320,22 +287,18 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
                 shape = tuple(fh["Data"].shape)
                 return "legacy", h5_files, shape
 
-    raise FileNotFoundError(f"No recognizable .lux*.h5 / .h5 files in {folder}")
+    raise FileNotFoundError(f"No recognizable .lux.h5 / .h5 files in {folder}")
 
 
 def discover(folder: Path, override: Optional[str] = None
              ) -> tuple[str, list[str], tuple]:
-    """Detect or override format. Print result. Auto-populates ARGS.n_planes for interleaved."""
+    """Detect or override format. Print result."""
     fmt, files, shape = detect_format(folder)
     if override and override != fmt:
         print(f"  Format override: detected={fmt} -> using={override}")
         fmt = override
     print(f"  Folder : {folder}")
     print(f"  Format : {fmt}  ({len(files)} file(s), sample shape={shape})")
-    if fmt == "interleaved" and ARGS.n_planes is None:
-        detected_z = read_n_planes(files[0])
-        print(f"  Auto-detected n_planes={detected_z} from metadata")
-        ARGS.n_planes = detected_z
     return fmt, files, shape
 
 
@@ -352,24 +315,8 @@ def load_movie(folder: Path, fmt: str, files: list[str], shape: tuple,
 
     For multi-tp: pick z_index plane from each timepoint file.
     For multi-cam: each file is one timepoint, use Data[0].
-    For interleaved: stride the T axis by n_planes to extract one Z plane.
     For single-movie/legacy: read whole Data array (or chunks if huge).
     """
-    if fmt == "interleaved":
-        T_full, H, W = shape
-        nz = n_planes or 1
-        if z_index is None:
-            z_index = nz // 2
-        if z_index >= nz:
-            raise ValueError(f"z_index {z_index} >= n_planes {nz}")
-        indices = list(range(z_index, T_full, nz))
-        if max_frames:
-            indices = indices[:max_frames]
-        print(f"  Interleaved: z={z_index}/{nz} planes -> {len(indices)} frames")
-        with h5py.File(files[0], "r") as fh:
-            data = fh["Data"][indices].astype(np.float32)
-        return data
-
     if fmt == "multi-tp":
         Z, H, W = shape
         if z_index is None:
@@ -435,16 +382,6 @@ def load_plane_multi_tp(files: list[str], z_index: int) -> np.ndarray:
         with h5py.File(fp, "r") as fh:
             data[i] = fh["Data"][z_index].astype(np.float32)
     return data
-
-
-def load_plane_interleaved(filepath: str, z_index: int, n_planes: int) -> np.ndarray:
-    """Load one Z plane from an interleaved single file by striding the T axis."""
-    with h5py.File(filepath, "r") as fh:
-        T_full, H, W = fh["Data"].shape
-        if z_index >= n_planes:
-            raise ValueError(f"z_index {z_index} >= n_planes {n_planes}")
-        indices = list(range(z_index, T_full, n_planes))
-        return fh["Data"][indices].astype(np.float32)
 
 
 # =============================================================================
@@ -1107,8 +1044,6 @@ def mode_time_split():
     if fmt == "multi-tp":
         Z = sample_shape[0]
         z_index = Z // 2 if z_index is None else z_index
-    elif fmt == "interleaved" and z_index is None:
-        z_index = ARGS.n_planes // 2
     elif ARGS.n_planes and z_index is None:
         z_index = ARGS.n_planes // 2
 
@@ -1155,24 +1090,22 @@ def mode_time_split():
 
 
 def mode_plane_split():
-    """Tune on one Z, test on every other Z. Supports multi-tp and interleaved formats."""
+    """Tune on one Z, test on every other Z. Requires multi-tp format."""
     print(f"\n--- PLANE-SPLIT mode ---")
     fmt, files, sample_shape = discover(ARGS.data_dir, ARGS.format_override)
 
-    if fmt == "interleaved":
-        Z = ARGS.n_planes  # auto-populated by discover()
-        def _load_plane(z):
-            return load_plane_interleaved(files[0], z, Z)
-    elif fmt == "multi-tp":
-        Z = sample_shape[0]
-        def _load_plane(z):
-            return load_plane_multi_tp(files, z)
-    else:
-        print(f"ERROR: plane-split requires multi-tp or interleaved format (got {fmt}).")
-        print("Use time-split for single-plane data, or file-plane-split for cross-file.")
-        sys.exit(2)
+    if fmt != "multi-tp":
+        print(f"\nWARNING: plane-split requires multi-tp format. Detected: {fmt}")
+        if fmt in ("multi-cam", "single-movie") and len(sample_shape) >= 1:
+            z_dim = sample_shape[0]
+            if z_dim == 1:
+                print("This dataset has only Z=1. plane-split is impossible.")
+                print("Use time-split or file-plane-split instead.")
+                sys.exit(2)
+        print("Continuing anyway (may fail).")
 
-    if Z is None or Z < 2:
+    Z = sample_shape[0] if fmt == "multi-tp" else 1
+    if Z < 2:
         print(f"ERROR: plane-split needs Z>=2 (got {Z})")
         sys.exit(2)
 
@@ -1183,7 +1116,7 @@ def mode_plane_split():
     dims_native = sample_shape[1:]
     print(f"\nZ={Z}; tune on z={tune_z}, test on z=0..{Z-1}\\{{tune_z}}")
 
-    tune_raw = _load_plane(tune_z)
+    tune_raw = load_plane_multi_tp(files, tune_z)
     tune_data, tune_mask, prep_info = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
@@ -1197,7 +1130,7 @@ def mode_plane_split():
     all_metrics = {}
     for z in range(Z):
         print(f"\n--- z={z} ---")
-        test_raw = _load_plane(z)
+        test_raw = load_plane_multi_tp(files, z)
         test_data, test_mask, _ = preprocess_movie(test_raw, label=f"test_z{z}")
         test_mmap = array_to_memmap(test_data, WORK_DIR / f"test_z{z}")
         m = test_cnmf(
@@ -1235,8 +1168,6 @@ def mode_file_plane_split():
     z_index = ARGS.z_index
     if fmt_t == "multi-tp" and z_index is None:
         z_index = shape_t[0] // 2
-    elif fmt_t == "interleaved" and z_index is None:
-        z_index = ARGS.n_planes // 2
     elif ARGS.n_planes and z_index is None:
         z_index = ARGS.n_planes // 2
     if z_index is None:
@@ -1288,12 +1219,7 @@ def mode_file_split():
     print("\nTest dataset:")
     fmt_te, test_files, shape_te = discover(ARGS.test_dir, ARGS.format_override)
 
-    if fmt_t == "multi-tp":
-        tune_z = shape_t[0] // 2
-    elif fmt_t == "interleaved":
-        tune_z = ARGS.n_planes // 2
-    else:
-        tune_z = 0
+    tune_z = (shape_t[0] // 2) if fmt_t == "multi-tp" else 0
     print(f"\nTuning on tune-file z={tune_z}")
 
     print("\n[Loading tune]")
@@ -1313,9 +1239,6 @@ def mode_file_split():
     if fmt_te == "multi-tp":
         Z_te = shape_te[0]
         z_iter = range(Z_te)
-    elif fmt_te == "interleaved":
-        Z_te = ARGS.n_planes
-        z_iter = range(Z_te)
     else:
         Z_te = 1
         _z0 = ARGS.z_index if ARGS.z_index is not None else (ARGS.n_planes // 2 if ARGS.n_planes else 0)
@@ -1327,8 +1250,6 @@ def mode_file_split():
         print(f"\n--- {label} ---")
         if fmt_te == "multi-tp":
             test_raw = load_plane_multi_tp(test_files, z)
-        elif fmt_te == "interleaved":
-            test_raw = load_plane_interleaved(test_files[0], z, Z_te)
         else:
             test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
                                   z_index=z, max_frames=ARGS.max_frames,
