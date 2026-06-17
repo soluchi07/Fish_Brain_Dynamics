@@ -146,6 +146,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--no-quality-filters", action="store_true",
                    help="Disable post-hoc quality filters (debug only)")
 
+    # dF/F
+    p.add_argument("--no-bleach-correct", action="store_true",
+                   help="Skip double-exponential photobleaching correction (default: ON for T>=100)")
+    p.add_argument("--dff-percentile", type=float, default=8.0,
+                   help="Percentile used for F0 baseline in dF/F (default: 8)")
+
     return p.parse_args()
 
 
@@ -210,7 +216,7 @@ import tifffile
 import skimage.transform
 from skimage.morphology import convex_hull_image, binary_closing, binary_opening, disk, remove_small_objects
 from skimage.filters import threshold_otsu
-from scipy.optimize import linear_sum_assignment
+from scipy.optimize import linear_sum_assignment, curve_fit
 from skopt import gp_minimize
 from skopt.space import Integer, Real, Categorical
 from skopt.plots import plot_convergence
@@ -238,6 +244,7 @@ print(f"Output dir : {OUTPUT_DIR}")
 print(f"Resolution : {ARGS.resolution}")
 print(f"Brain mask : {'OFF' if ARGS.no_mask else 'ON'}")
 print(f"Quality    : {'OFF' if ARGS.no_quality_filters else 'ON'}")
+print(f"dF/F       : percentile={ARGS.dff_percentile}  bleach_correct={'OFF' if ARGS.no_bleach_correct else 'ON (T>=100)'}")
 print(f"Trials     : n_calls={ARGS.n_calls}  n_initial={ARGS.n_initial}")
 _cpu_pin_str = f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
 print(f"CPU pin    : {_cpu_pin_str}  workers={N_WORKERS}")
@@ -468,6 +475,47 @@ def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     col_median = np.median(data, axis=(0, 1), keepdims=True)
     cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
     return cleaned, col_median
+
+
+def compute_dff(traces: np.ndarray) -> np.ndarray:
+    """
+    Compute dF/F with optional double-exponential photobleaching correction.
+
+    For recordings >= 100 frames (and --no-bleach-correct not set), fits
+    a * exp(-t/tau1) + b * exp(-t/tau2) per neuron and subtracts the trend
+    before computing F0 via constant percentile baseline.
+
+    Returns (N, T) dF/F array.
+    """
+    N, T = traces.shape
+    dff = np.zeros_like(traces, dtype=np.float32)
+    t = np.arange(T, dtype=np.float64)
+    bleach_correct = (not ARGS.no_bleach_correct) and (T >= 100)
+
+    for i in range(N):
+        F = traces[i].astype(np.float64)
+
+        if bleach_correct:
+            try:
+                def _double_exp(t, a, tau1, b, tau2):
+                    return a * np.exp(-t / tau1) + b * np.exp(-t / tau2)
+
+                F_range = float(F.max() - F.min())
+                p0 = [F_range * 0.5, T * 0.3, F_range * 0.3, T * 0.1]
+                bounds = ([0, 1, 0, 1], [np.inf, T * 10, np.inf, T * 10])
+                popt, _ = curve_fit(_double_exp, t, F - F.min(), p0=p0,
+                                    bounds=bounds, maxfev=5000)
+                trend = _double_exp(t, *popt)
+                F = F - trend  # subtract bleach, keep residual + offset
+            except Exception:
+                pass  # fit failed; use raw F
+
+        F0 = np.percentile(F, ARGS.dff_percentile)
+        if abs(F0) < 1e-6:
+            F0 = 1e-6
+        dff[i] = (F - F0) / abs(F0)
+
+    return dff
 
 
 def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
@@ -1034,8 +1082,11 @@ def test_cnmf(best_params: dict, mmap_path: str, data: np.ndarray,
         plt.savefig(str(OUTPUT_DIR / f"contours_{safe}.png"), dpi=150)
         plt.close(fig)
 
-        # Sample traces
+        # Raw traces and dF/F
         traces = cnmf_obj.estimates.C[keep]
+        dff = compute_dff(traces)
+        bleach_applied = (not ARGS.no_bleach_correct) and (traces.shape[1] >= 100)
+
         n_plot = min(8, traces.shape[0])
         T = data.shape[0]
         t_axis = np.arange(T)
@@ -1043,16 +1094,19 @@ def test_cnmf(best_params: dict, mmap_path: str, data: np.ndarray,
         if n_plot == 1:
             axes_t = [axes_t]
         for i, ax in enumerate(axes_t):
-            ax.plot(t_axis, traces[i], lw=1)
+            ax.plot(t_axis, dff[i], lw=1)
             ax.set_ylabel(f"N{i}", fontsize=8)
             ax.grid(True, alpha=0.3)
         axes_t[-1].set_xlabel("Frame")
-        plt.suptitle(f"Traces — {label}")
+        bleach_tag = " + bleach corr" if bleach_applied else ""
+        plt.suptitle(f"dF/F{bleach_tag} — {label}")
         plt.tight_layout()
         plt.savefig(str(OUTPUT_DIR / f"traces_{safe}.png"), dpi=120)
         plt.close(fig)
 
         np.save(str(OUTPUT_DIR / f"traces_{safe}.npy"), traces)
+        np.save(str(OUTPUT_DIR / f"dff_{safe}.npy"), dff)
+        print(f"  dF/F: percentile={ARGS.dff_percentile}  bleach_correct={bleach_applied}")
 
     return metrics
 
