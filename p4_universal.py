@@ -219,6 +219,7 @@ import caiman as cm
 import caiman
 import caiman.mmapping
 import caiman.base.movies
+from caiman.motion_correction import MotionCorrect
 from caiman.source_extraction.cnmf import cnmf as cnmf_module
 from caiman.source_extraction.cnmf import params as params_module
 
@@ -660,6 +661,26 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
     )
 
 
+def run_motion_correction(fname_mmap: str) -> str:
+    """Run MC once on fname_mmap; return path to corrected memmap."""
+    print("  [motion correction — running once for all Bayesian trials]", flush=True)
+    t0 = time.time()
+    mc = MotionCorrect(
+        [fname_mmap],
+        dview=None,
+        max_shifts=BASE_PARAMS["max_shifts"],
+        strides=BASE_PARAMS["strides"],
+        overlaps=BASE_PARAMS["overlaps"],
+        max_deviation_rigid=BASE_PARAMS["max_deviation_rigid"],
+        pw_rigid=BASE_PARAMS["pw_rigid"],
+        nonneg_movie=True,
+    )
+    mc.motion_correct(save_movie=True)
+    fname_mc = mc.fname_tot_els[0] if BASE_PARAMS["pw_rigid"] else mc.fname_tot_rig[0]
+    print(f"  [MC done in {time.time()-t0:.0f}s] -> {Path(fname_mc).name}", flush=True)
+    return fname_mc
+
+
 def run_cnmf(params_override: dict, fname_mmap: str,
              do_mc: bool = True, do_filter_caiman: bool = True):
     """Run CNMF + CaImAn's built-in evaluate_components / select_components."""
@@ -879,7 +900,7 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int],
         num = len(trial_log) + 1
         print(f"  Trial {num:2d}: {tp} ...", end=" ", flush=True)
 
-        cnmf_obj, rt = run_cnmf(tp, mmap_path)
+        cnmf_obj, rt = run_cnmf(tp, mmap_path, do_mc=False)
         metrics, _, counts = score_run(cnmf_obj, Yr, dims, mask, gSig=int(tp["gSig"]))
         metrics.update(tp)
         metrics["runtime_s"] = round(rt, 1)
@@ -1128,10 +1149,13 @@ def mode_time_split():
     tune_mmap = array_to_memmap(data[:mid], WORK_DIR / "tune_half")
     test_mmap = array_to_memmap(data[mid:], WORK_DIR / "test_half")
 
-    best_params, _, _ = bayesian_tune(tune_mmap, dims, mask, tag="time_split")
+    print("\n[Pre-computing motion correction on tune half]")
+    mc_tune_mmap = run_motion_correction(tune_mmap)
+
+    best_params, _, _ = bayesian_tune(mc_tune_mmap, dims, mask, tag="time_split")
 
     print("\nRe-running best params on tune half...")
-    cnmf_tune, _ = run_cnmf(best_params, tune_mmap)
+    cnmf_tune, _ = run_cnmf(best_params, mc_tune_mmap, do_mc=False)
     tune_keep, _ = quality_filter(cnmf_tune, dims, mask, int(best_params["gSig"])) if cnmf_tune else ([], {})
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
@@ -1188,9 +1212,12 @@ def mode_plane_split():
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
 
-    best_params, _, _ = bayesian_tune(tune_mmap, dims, tune_mask, tag=f"z{tune_z}")
+    print(f"\n[Pre-computing motion correction on tune z={tune_z}]")
+    mc_tune_mmap = run_motion_correction(tune_mmap)
 
-    cnmf_tune, _ = run_cnmf(best_params, tune_mmap)
+    best_params, _, _ = bayesian_tune(mc_tune_mmap, dims, tune_mask, tag=f"z{tune_z}")
+
+    cnmf_tune, _ = run_cnmf(best_params, mc_tune_mmap, do_mc=False)
     tune_keep, _ = quality_filter(cnmf_tune, dims, tune_mask, int(best_params["gSig"])) if cnmf_tune else ([], {})
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
@@ -1251,9 +1278,12 @@ def mode_file_plane_split():
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
-    best_params, _, _ = bayesian_tune(tune_mmap, dims, tune_mask, tag="tune")
+    print("\n[Pre-computing motion correction on tune file]")
+    mc_tune_mmap = run_motion_correction(tune_mmap)
 
-    cnmf_tune, _ = run_cnmf(best_params, tune_mmap)
+    best_params, _, _ = bayesian_tune(mc_tune_mmap, dims, tune_mask, tag="tune")
+
+    cnmf_tune, _ = run_cnmf(best_params, mc_tune_mmap, do_mc=False)
     tune_keep, _ = quality_filter(cnmf_tune, dims, tune_mask, int(best_params["gSig"])) if cnmf_tune else ([], {})
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
@@ -1304,9 +1334,12 @@ def mode_file_split():
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
-    best_params, _, _ = bayesian_tune(tune_mmap, dims, tune_mask, tag="tune")
+    print("\n[Pre-computing motion correction on tune file]")
+    mc_tune_mmap = run_motion_correction(tune_mmap)
 
-    cnmf_tune, _ = run_cnmf(best_params, tune_mmap)
+    best_params, _, _ = bayesian_tune(mc_tune_mmap, dims, tune_mask, tag="tune")
+
+    cnmf_tune, _ = run_cnmf(best_params, mc_tune_mmap, do_mc=False)
     tune_keep, _ = quality_filter(cnmf_tune, dims, tune_mask, int(best_params["gSig"])) if cnmf_tune else ([], {})
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
