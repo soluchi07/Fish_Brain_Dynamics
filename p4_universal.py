@@ -751,7 +751,7 @@ def run_cnmf(params_override: dict, fname_mmap: str,
     p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
     opts = params_module.CNMFParams(params_dict=p)
-    cnmf_obj = cnmf_module.CNMF(n_processes=N_WORKERS, dview=DVIEW, params=opts)
+    cnmf_obj = cnmf_module.CNMF(n_processes=N_WORKERS, params=opts)
 
     t0 = time.time()
     try:
