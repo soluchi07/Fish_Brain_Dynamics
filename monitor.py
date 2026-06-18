@@ -26,11 +26,11 @@ for line in sys.stdin:
             continue  # Skip logging if the line is already in the output stack
         else:
             with open(f"logs/{output_file}", "a") as f:
-                f.write(f"Alert! Found {SKIPPED_STRING} in line: {line} at time {datetime.now().time()}\n")
+                f.write(f"Alert! Found {SKIPPED_STRING} in line: {line.strip()} at time {datetime.now().time()}\n")
                 output_stack.append(line)
     else:
         with open(f"logs/{output_file}", "a") as f:
-            f.write(f"{line} at time {datetime.now().time()}\n")
+            f.write(f"{line.strip()} at time {datetime.now().time()}\n")
         output_stack.clear()  # Clear the stack if the line does not contain the target string
 
 with open(f"logs/{output_file}", "a") as f:
