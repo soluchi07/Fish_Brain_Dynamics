@@ -1,0 +1,179 @@
+Monitoring started at 14:23:11.167856
+Alert! Found line: ======================================================================
+ at time 14:23:16.469884
+Alert! Found line: p4_universal.py  |  mode=time-split  |  run=20iv26_144321_time_split_v2
+ at time 14:23:16.470024
+Alert! Found line: ======================================================================
+ at time 14:23:16.470104
+Alert! Found line: Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/20iv26_144321_time_split_v2
+ at time 14:23:16.470172
+Alert! Found line: Resolution : full
+ at time 14:23:16.470239
+Alert! Found line: Brain mask : ON
+ at time 14:23:16.470305
+Alert! Found line: Quality    : ON
+ at time 14:23:16.470369
+Alert! Found line: dF/F       : percentile=8.0  bleach_correct=ON (T>=100)
+ at time 14:23:16.470433
+Alert! Found line: Trials     : n_calls=10  n_initial=5
+ at time 14:23:16.470497
+Alert! Found line: CPU pin    : unpinned  workers=40
+ at time 14:23:16.470562
+Alert! Found line: 
+ at time 14:23:16.806036
+Alert! Found line: --- TIME-SPLIT mode ---
+ at time 14:23:16.806176
+Alert! Found line:   Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom
+ at time 14:23:16.814181
+Alert! Found line:   Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048))
+ at time 14:23:16.814298
+Alert! Found line:   Auto-detected n_planes=7 from metadata
+ at time 14:23:16.815352
+Alert! Found line:   Interleaved: z=3/7 planes -> 700 frames
+ at time 14:23:16.815432
+Alert! Found line: 
+ at time 14:29:01.431896
+Alert! Found line: [preprocess movie]  input shape=(700, 2048, 2048)
+ at time 14:29:01.432057
+Alert! Found line:   Brain mask coverage: 24.2% of frame
+ at time 14:33:31.356326
+Alert! Found line: 
+ at time 14:33:42.220926
+Alert! Found line: Time split: tune frames 0-349 (350), test frames 350-699 (350)
+ at time 14:33:42.221085
+Alert! Found line: 
+ at time 14:35:00.478455
+Alert! Found line: [Pre-computing motion correction on tune half]
+ at time 14:35:00.478594
+Alert! Found line:   [motion correction — running once for all Bayesian trials]
+ at time 14:35:00.478717
+Alert! Found line:   [MC done in 162s] -> tune_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap
+ at time 14:37:42.399575
+Alert! Found line: 
+ at time 14:37:42.406747
+Alert! Found line: ============================================================
+ at time 14:37:42.406891
+Alert! Found line: BAYESIAN TUNE (time_split)
+ at time 14:37:42.407011
+Alert! Found line: ============================================================
+ at time 14:37:42.407120
+Alert! Found line:   Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:37:42.427948
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:38:15.998556
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=34s
+ at time 14:38:16.006818
+Alert! Found line:   Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(10), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:38:16.014463
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:38:48.738930
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=33s
+ at time 14:38:48.747370
+Alert! Found line:   Trial  3: {'gSig': np.int64(5), 'gSig_filt': np.int64(13), 'min_corr': 0.8284934481555126, 'min_pnr': np.int64(5), 'rf': 240, 'stride': 120, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:38:48.754871
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:39:20.700480
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=32s
+ at time 14:39:20.709008
+Alert! Found line:   Trial  4: {'gSig': np.int64(11), 'gSig_filt': np.int64(11), 'min_corr': 0.5024732068269011, 'min_pnr': np.int64(5), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:39:20.716214
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:39:54.065965
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=33s
+ at time 14:39:54.074415
+Alert! Found line:   Trial  5: {'gSig': np.int64(9), 'gSig_filt': np.int64(5), 'min_corr': 0.8408144315945107, 'min_pnr': np.int64(7), 'rf': 100, 'stride': 50, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:39:54.081516
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:40:23.402039
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=29s
+ at time 14:40:23.410363
+Alert! Found line:   Trial  6: {'gSig': np.int64(14), 'gSig_filt': np.int64(16), 'min_corr': 0.5310748464929469, 'min_pnr': np.int64(12), 'rf': np.int64(240), 'stride': np.int64(120), 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:40:23.535318
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:40:55.934357
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=32s
+ at time 14:40:55.942787
+Alert! Found line:   Trial  7: {'gSig': np.int64(4), 'gSig_filt': np.int64(16), 'min_corr': 0.5791198230566421, 'min_pnr': np.int64(12), 'rf': np.int64(100), 'stride': np.int64(50), 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:40:56.019164
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:41:25.447248
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=29s
+ at time 14:41:25.455498
+Alert! Found line:   Trial  8: {'gSig': np.int64(15), 'gSig_filt': np.int64(4), 'min_corr': 0.5099695102860073, 'min_pnr': np.int64(12), 'rf': np.int64(240), 'stride': np.int64(120), 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:41:25.535327
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:41:57.501655
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=32s
+ at time 14:41:57.509990
+Alert! Found line:   Trial  9: {'gSig': np.int64(16), 'gSig_filt': np.int64(15), 'min_corr': 0.5397529565826736, 'min_pnr': np.int64(5), 'rf': np.int64(100), 'stride': np.int64(50), 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:41:57.590731
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:42:27.050351
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=29s
+ at time 14:42:27.058856
+Alert! Found line:   Trial 10: {'gSig': np.int64(4), 'gSig_filt': np.int64(4), 'min_corr': 0.812646907568238, 'min_pnr': np.int64(12), 'rf': np.int64(160), 'stride': np.int64(80), 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 14:42:27.143781
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:43:00.577066
+Alert! Found line: raw=  0 kept=  0 composite=-inf t=33s
+ at time 14:43:00.585835
+Alert! Found line: 
+ at time 14:43:00.673740
+Alert! Found line: Best params (time_split):
+ at time 14:43:00.673859
+Alert! Found line:   gSig: 14
+ at time 14:43:00.673930
+Alert! Found line:   gSig_filt: 6
+ at time 14:43:00.673994
+Alert! Found line:   min_corr: 0.7728918500954693
+ at time 14:43:00.674055
+Alert! Found line:   min_pnr: 9
+ at time 14:43:00.674116
+Alert! Found line:   rf: 160
+ at time 14:43:00.674174
+Alert! Found line:   stride: 80
+ at time 14:43:00.674239
+Alert! Found line:   p: 1
+ at time 14:43:00.674298
+Alert! Found line:   merge_thr: 0.85
+ at time 14:43:00.674359
+Alert! Found line: 
+ at time 14:43:01.876072
+Alert! Found line: Re-running best params on tune half...
+ at time 14:43:01.876204
+Alert! Found line:   [fit_file starting — CNMF init (no MC)]
+ at time 14:43:01.881765
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:43:33.986341
+Alert! Found line: 
+ at time 14:43:33.994863
+Alert! Found line: ============================================================
+ at time 14:43:33.994979
+Alert! Found line: TEST: test_half (frames 350-699)
+ at time 14:43:33.995049
+Alert! Found line: ============================================================
+ at time 14:43:33.995802
+Alert! Found line:   [motion correction — running once for all Bayesian trials]
+ at time 14:43:33.995872
+Alert! Found line:   [MC done in 159s] -> test_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap
+ at time 14:46:12.574473
+Alert! Found line:   [fit_file starting — CNMF init (no MC)]
+ at time 14:46:12.597769
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 14:46:43.371300
+Alert! Found line:   Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=31s
+ at time 14:46:43.380115
+Alert! Found line: 
+ at time 14:48:20.697451
+Alert! Found line: ============================================================
+ at time 14:48:20.697600
+Alert! Found line: TEST: full_movie
+ at time 14:48:20.697729
+Alert! Found line: ============================================================
+ at time 14:48:20.697800
+Alert! Found line:   [motion correction — running once for all Bayesian trials]
+ at time 14:48:20.697868
+Alert! Found line:   [MC done in 257s] -> full_movie_d1_2048_d2_2048_d3_1_order_C_frames_700_els__d1_2048_d2_2048_d3_1_order_F_frames_700.mmap
+ at time 14:52:37.561988
+Alert! Found line:   [fit_file starting — CNMF init (no MC)]
+ at time 14:52:37.585508
