@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-06-18 (5)
+
+### Fix SVD failure: `nb=0` passes `k=0` to `scipy.sparse.linalg.svds`
+
+**Problem:**
+Every CNMF trial failed with `SVD did not converge in Linear Least Squares` regardless
+of resolution, masking, or thread count.
+
+**Root cause (confirmed from CaImAn source — `initialization.py` / `compute_W`):**
+`BASE_PARAMS` set `"nb": 0` (zero background components). CaImAn's `greedyROI_corr`
+passes `nb` directly to `scipy.sparse.linalg.svds` as the `k` argument via `compute_W`:
+```python
+b_in, s_in, f_in = spr.linalg.svds(B, k=nb)   # k=0 is undefined behaviour
+```
+`svds(k=0)` is not a valid call — it raises `LinAlgError` or produces LAPACK parameter
+warnings (`** On entry to DLASCL`) depending on the scipy/LAPACK version. This caused
+100% trial failure at every resolution and parameter combination.
+
+The per-trial CaImAn warning `gnb=0, hence setting keys nb_patch and low_rank_background
+in group patch automatically` was the library flagging this exact condition on every trial.
+
+**Fix:**
+- `"nb": 0` → `"nb": 1` in `BASE_PARAMS`
+- `"nb_patch": 0` → `"nb_patch": 1` in `BASE_PARAMS`
+
+One background component gives `svds` a valid `k=1`. The ring model (`ring_size_factor=1.4`,
+`center_psf=True`) still handles local background suppression as before; the single global
+background component is a minor addition that does not change neuron detection behaviour.
+
+---
+
 ## 2026-06-18 (4)
 
 ### Fix SVD convergence failure and DLASCL worker warnings
