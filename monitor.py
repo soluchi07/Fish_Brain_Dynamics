@@ -30,7 +30,8 @@ for line in sys.stdin:
                 output_stack.append(line)
     else:
         with open(f"logs/{output_file}", "a") as f:
-            f.write(f"Alert! Found line: {line} at time {datetime.now().time()}\n")
+            f.write(f"{line} at time {datetime.now().time()}\n")
+        output_stack.clear()  # Clear the stack if the line does not contain the target string
 
 with open(f"logs/{output_file}", "a") as f:
     f.write(f"Monitoring ended at {datetime.now().time()}\n")
