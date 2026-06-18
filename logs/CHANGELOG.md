@@ -2,6 +2,51 @@
 
 ---
 
+## 2026-06-18 (4)
+
+### Fix SVD convergence failure and DLASCL worker warnings
+
+**Problem:**
+All CNMF trials failed with `CNMF failed: SVD did not converge in Linear Least Squares`
+across every parameter combination and resolution. At 1024×1024 the error was intermittent
+(only test_half); at full (2048×2048) it was universal. Runs also emitted
+`** On entry to DLASCL parameter number 4 had an illegal value` twice after DONE.
+
+**Root cause (confirmed via regression tests at full and 1024 resolution, with and without
+brain mask):**
+`caiman.cluster.setup_cluster()` sets `OMP_NUM_THREADS=1` (and related BLAS env vars) in
+the main process to prevent thread oversubscription across cluster workers. These env vars
+are read at BLAS library load time, so they cannot be reversed by changing `os.environ`
+after the fact. With a single BLAS thread, LAPACK's `dgelsd` SVD driver uses a simpler
+iterative algorithm instead of divide-and-conquer. At large spatial scales the iterative
+path fails to converge on the borderline ill-conditioned matrices produced by the ring
+model background in CNMF-E.
+
+The DLASCL warnings (`** On entry to DLASCL parameter number 4 had an illegal value`) are
+a downstream symptom of the same ill-conditioned matrices: they are printed to C-level
+stderr by LAPACK workers that were forked before the fix and inherited the live fd 2.
+Because worker stderr is buffered and flushed on shutdown, the messages appear after DONE.
+
+**Changes:**
+
+#### threadpoolctl wrap around `fit_file` (SVD fix)
+- `from threadpoolctl import threadpool_limits` added to module-level imports (line 75).
+- `cnmf_obj.fit_file(motion_correct=do_mc)` wrapped in
+  `with threadpool_limits(limits=N_WORKERS):` inside `run_cnmf`.
+- `threadpool_limits` calls the BLAS library's own runtime thread-control API
+  (e.g. `openblas_set_num_threads`), bypassing the env-var limit set by `setup_cluster`.
+  Multi-threaded divide-and-conquer SVD is restored for the duration of each fit.
+
+#### fd-2 redirect before `setup_cluster` (DLASCL guard)
+- fd 2 (C-level stderr) is redirected to `/dev/null` immediately before the
+  `setup_cluster()` call and restored immediately after.
+- On Linux, `setup_cluster` uses `fork()`. Forked worker processes inherit the file
+  descriptor table at fork time, so each worker gets fd 2 → `/dev/null`.
+- Any LAPACK parameter warnings printed by workers write to `/dev/null`; the main
+  process stderr is unaffected.
+
+---
+
 ## 2026-06-18 (3)
 
 ### CaImAn API fixes — `dview` placement and cluster teardown

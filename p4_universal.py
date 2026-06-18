@@ -72,6 +72,8 @@ import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
 
+from threadpoolctl import threadpool_limits
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESULTS_ROOT = SCRIPT_DIR / "results"
 
@@ -757,7 +759,8 @@ def run_cnmf(params_override: dict, fname_mmap: str,
     try:
         _label = "MC + CNMF init" if do_mc else "CNMF init (no MC)"
         print(f"  [fit_file starting — {_label}]", flush=True)
-        cnmf_obj.fit_file(motion_correct=do_mc)
+        with threadpool_limits(limits=N_WORKERS):
+            cnmf_obj.fit_file(motion_correct=do_mc)
         print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
             try:
@@ -1476,9 +1479,15 @@ MODES = {
 }
 
 import caiman.cluster as _cluster
+_devnull_fd = os.open(os.devnull, os.O_WRONLY)
+_orig_stderr_fd = os.dup(2)
+os.dup2(_devnull_fd, 2)
+os.close(_devnull_fd)
 _, _dview, _ = _cluster.setup_cluster(
     backend="local", n_processes=N_WORKERS, single_thread=False
 )
+os.dup2(_orig_stderr_fd, 2)
+os.close(_orig_stderr_fd)
 DVIEW = _dview
 t_start = time.time()
 try:
