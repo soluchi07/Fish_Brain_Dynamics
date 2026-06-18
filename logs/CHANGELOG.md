@@ -1,25 +1,174 @@
-2026-06-17 — p4_universal.py: Pre-compute motion correction once before Bayesian tuning
+# Changelog — p4_universal.py
 
-Problem:
-  Motion correction (piecewise-rigid, pw_rigid=True) was being re-run inside every
-  Bayesian trial via run_cnmf(..., do_mc=True). With n_calls=10, this meant 11 MC
-  runs per tune dataset (10 trials + 1 post-tune re-run) even though MC output is
-  identical across trials — only CNMF hyperparameters (gSig, min_corr, rf, etc.) vary.
+---
 
-Changes:
-  - Added run_motion_correction(fname_mmap) function: calls MotionCorrect directly
-    with BASE_PARAMS MC settings (max_shifts, strides, overlaps, max_deviation_rigid,
-    pw_rigid), saves corrected movie, returns corrected memmap path.
-  - Added `from caiman.motion_correction import MotionCorrect` import.
-  - bayesian_tune() objective: changed run_cnmf(tp, mmap_path) to
-    run_cnmf(tp, mmap_path, do_mc=False) — caller now pre-MCs the mmap.
-  - All four mode functions (time-split, plane-split, file-plane-split, file-split):
-    call run_motion_correction(tune_mmap) once before bayesian_tune(), then pass
-    mc_tune_mmap to bayesian_tune() and to the post-tune re-run with do_mc=False.
-  - test_cnmf() is unchanged — each test dataset is fitted exactly once so MC there
-    runs once with no redundancy.
+## 2026-06-18
 
-Expected speedup:
-  (n_calls - 1) + 1 = n_calls fewer MC runs per tune dataset.
-  With default n_calls=10: 10 fewer MC runs per mode invocation.
-  Estimated wall-clock reduction: 30-60% depending on movie length and resolution.
+### Persistent CaImAn cluster across Bayesian trials (A1–A4)
+
+**Problem:**
+Each call to `run_cnmf` / `MotionCorrect` / `evaluate_components` was implicitly
+creating and tearing down a worker pool. On the Linux target (2× Xeon Gold 6240R,
+96 logical CPUs) this incurred pool-setup overhead for every Bayesian trial.
+
+**Changes:**
+- Added module-level `DVIEW = None` sentinel (line 699) initialised before any mode
+  runs, replaced by the real dview once `setup_cluster()` completes.
+- `run_motion_correction`: passes `dview=DVIEW` to `MotionCorrect`.
+- `run_cnmf`: passes `dview=DVIEW` to both `fit_file` and `evaluate_components`.
+- Main dispatch (lines 1476–1486): wraps `MODES[ARGS.mode]()` in a `try/finally` that
+  calls `_cluster.setup_cluster(backend="local", n_processes=40)` before the run and
+  `_cluster.stop_cluster(dview=DVIEW)` in the `finally` block.
+- All mode functions inherit the persistent pool through the global; no signature
+  changes needed.
+
+**Expected benefit:**
+Eliminates pool setup/teardown on every trial. Estimated 1–3 min saved per full run
+on the Linux target (modest due to fork semantics vs. spawn on Windows).
+
+---
+
+### Correctness fixes (C1, C2)
+
+#### C1 — OOB centroid passes mask filter (line 837)
+
+**Problem:**
+The original condition `if 0 <= cy < H and 0 <= cx < W and not mask[cy, cx]`
+accepted out-of-bounds centroids instead of rejecting them.
+
+**Fix:**
+`if not (0 <= cy < H and 0 <= cx < W) or not mask[cy, cx]` — now rejects any
+centroid that is out of bounds OR falls outside the brain mask.
+
+#### C2 — dF/F sign inverted when F0 < 0 (lines 514–517)
+
+**Problem:**
+Dividing by `abs(F0)` inverted the sign of all transients when the baseline went
+negative after photobleach correction.
+
+**Fix:**
+Guard changed from `abs(F0) < 1e-6` to `F0 < 1e-6`; denominator changed from
+`abs(F0)` to `F0`. A warning is printed when clamping is applied. dF/F transients
+are now always positive when fluorescence rises above baseline.
+
+---
+
+### Warning fixes (W1–W5)
+
+#### W1 + W2 — MC mmap mismatch in test phase corrupts `recon_error` (lines 1053–1055, 762–763)
+
+**Problem:**
+`test_cnmf` was loading `Yr` from the raw (pre-MC) mmap and then fitting CNMF on
+the motion-corrected mmap. The two matrices described different movies, inflating
+`recon_error` in all composite scores. Similarly, `evaluate_components` inside
+`run_cnmf` was loading `Yr` from the original `fname_mmap` even after `fit_file`
+had internally redirected to a corrected path.
+
+**Fix (W1):**
+`test_cnmf` now calls `run_motion_correction(mmap_path)` first, loads `Yr` from the
+returned `mc_mmap`, and passes `mc_mmap` to `run_cnmf` with `do_mc=False`.
+
+**Fix (W2):**
+`evaluate_components` block reads the corrected path via
+`cnmf_obj.params.data.get('fnames', [fname_mmap])[0]` so `Yr` always matches the
+mmap CNMF actually fitted.
+
+#### W3 — `area < 5` increments wrong counter (lines 804, 813–815, 844)
+
+**Problem:**
+Sub-5-pixel components were counted under `circularity_rejected`, making filter
+diagnostics misleading.
+
+**Fix:**
+Added `rej_small = 0` counter; `area < 5` now increments `rej_small` and records
+`counts["small_rejected"]` separately from `counts["circularity_rejected"]`.
+
+#### W4 — `re.search` crash on unexpected filename (lines 287, 297)
+
+**Problem:**
+If a `.lux.h5` filename didn't match the expected pattern, `m.group(1)` raised
+`AttributeError` (`NoneType` has no attribute `group`).
+
+**Fix:**
+Both sort-key lambdas use a walrus-operator guard:
+`int(m.group(1)) if (m := re.search(...)) else 0` — falls back to `0` on mismatch.
+
+#### W5 — Misleading log when `do_mc=False` (lines 756–757)
+
+**Problem:**
+Log always printed `"MC first, then CNMF init"` even when motion correction was
+skipped, making trial logs confusing.
+
+**Fix:**
+`_label = "MC + CNMF init" if do_mc else "CNMF init (no MC)"` — log now reflects
+whether MC actually runs.
+
+---
+
+### Performance and style fixes (S1–S3)
+
+#### S1 — `_double_exp` redefined on every loop iteration (lines 495–498)
+
+**Problem:**
+The `_double_exp` helper was defined inside the `for i in range(N)` loop, creating
+a new function object on every iteration.
+
+**Fix:**
+Moved the definition to immediately before the loop; one object, N uses.
+
+#### S2 — Dense `Y_hat` materialisation in `score_run` (lines 883–894)
+
+**Problem:**
+`Y_hat = A @ C` materialised a dense (pixels × frames) matrix. At full resolution
+(2048×2048, 1000 frames) this is ~16 GB, causing OOM on large datasets.
+
+**Fix:**
+Replaced with the Frobenius norm identity:
+
+```
+‖Yr − AC‖² = ‖Yr‖² − 2·sum(C ⊙ (Aᵀ·Yr)) + sum((AᵀA·C) ⊙ C)
+```
+
+Computed via three small intermediates (`AtYr`, `AtA`, `AC_norm_sq`). Peak memory
+is now O(n·T) instead of O(pixels·T).
+
+#### S3 — Dead `dims_native` assignment in `mode_plane_split` (~line 1261)
+
+**Problem:**
+`dims_native = sample_shape[1:]` was assigned but never referenced.
+
+**Fix:**
+Line removed entirely.
+
+---
+
+## 2026-06-17
+
+### Pre-compute motion correction once before Bayesian tuning
+
+**Problem:**
+Motion correction (piecewise-rigid, `pw_rigid=True`) was being re-run inside every
+Bayesian trial via `run_cnmf(..., do_mc=True)`. With `n_calls=10`, this meant 11 MC
+runs per tune dataset (10 trials + 1 post-tune re-run) even though MC output is
+identical across trials — only CNMF hyperparameters (`gSig`, `min_corr`, `rf`, etc.)
+vary.
+
+**Changes:**
+- Added `run_motion_correction(fname_mmap)` function: calls `MotionCorrect` directly
+  with `BASE_PARAMS` MC settings (`max_shifts`, `strides`, `overlaps`,
+  `max_deviation_rigid`, `pw_rigid`), saves corrected movie, returns corrected memmap
+  path.
+- Added `from caiman.motion_correction import MotionCorrect` import.
+- `bayesian_tune()` objective: changed `run_cnmf(tp, mmap_path)` to
+  `run_cnmf(tp, mmap_path, do_mc=False)` — caller now pre-MCs the mmap.
+- All four mode functions (`time-split`, `plane-split`, `file-plane-split`,
+  `file-split`): call `run_motion_correction(tune_mmap)` once before
+  `bayesian_tune()`, then pass `mc_tune_mmap` to `bayesian_tune()` and to the
+  post-tune re-run with `do_mc=False`.
+- `test_cnmf()` is unchanged — each test dataset is fitted exactly once so MC there
+  runs once with no redundancy.
+
+**Expected speedup:**
+`(n_calls - 1) + 1 = n_calls` fewer MC runs per tune dataset.
+With default `n_calls=10`: 10 fewer MC runs per mode invocation.
+Estimated wall-clock reduction: 30–60% depending on movie length and resolution.
