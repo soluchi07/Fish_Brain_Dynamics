@@ -751,13 +751,13 @@ def run_cnmf(params_override: dict, fname_mmap: str,
     p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
     opts = params_module.CNMFParams(params_dict=p)
-    cnmf_obj = cnmf_module.CNMF(n_processes=N_WORKERS, params=opts)
+    cnmf_obj = cnmf_module.CNMF(n_processes=N_WORKERS, dview=DVIEW, params=opts)
 
     t0 = time.time()
     try:
         _label = "MC + CNMF init" if do_mc else "CNMF init (no MC)"
         print(f"  [fit_file starting — {_label}]", flush=True)
-        cnmf_obj.fit_file(motion_correct=do_mc, dview=DVIEW)
+        cnmf_obj.fit_file(motion_correct=do_mc)
         print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
             try:
@@ -1485,7 +1485,7 @@ try:
     MODES[ARGS.mode]()
 finally:
     elapsed_min = (time.time() - t_start) / 60.0
-    _cluster.stop_cluster(dview=DVIEW)
+    _cluster.stop_server(dview=DVIEW)
 
 print(f"\n{'='*70}")
 print(f"DONE  |  {ARGS.mode}  |  {ARGS.run_name}  |  {elapsed_min:.1f} min")

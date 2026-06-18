@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-06-18 (3)
+
+### CaImAn API fixes — `dview` placement and cluster teardown
+
+**Problem:**
+Two API mismatches with the installed CaImAn version caused every `run_cnmf` call
+to fail with `CNMF failed: CNMF.fit_file() got an unexpected keyword argument 'dview'`,
+and the cluster teardown to crash with
+`AttributeError: module 'caiman.cluster' has no attribute 'stop_cluster'`.
+All 10 Bayesian trials returned `raw=0 kept=0 composite=-inf`.
+
+**Root cause (confirmed against CaImAn source):**
+- `fit_file(motion_correct, indices)` has no `dview` parameter. The CNMF object
+  reads `self.dview` internally — dview must be passed to the constructor, not
+  `fit_file`.
+- `caiman.cluster` exposes `stop_server`, not `stop_cluster`.
+
+**Changes:**
+- `CNMF(n_processes=N_WORKERS, params=opts)` →
+  `CNMF(n_processes=N_WORKERS, dview=DVIEW, params=opts)` — dview now set on the
+  object at construction so `fit_file` picks it up via `self.dview`.
+- `cnmf_obj.fit_file(motion_correct=do_mc, dview=DVIEW)` →
+  `cnmf_obj.fit_file(motion_correct=do_mc)` — invalid kwarg removed.
+- `_cluster.stop_cluster(dview=DVIEW)` →
+  `_cluster.stop_server(dview=DVIEW)` — correct function name.
+
+---
+
 ## 2026-06-18 (2)
 
 ### `--n-workers` wired to cluster pool; NUMA-safe default
