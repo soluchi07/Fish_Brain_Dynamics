@@ -266,7 +266,8 @@ def read_n_planes(filepath: str) -> int:
             raw = fh["metadata"][()]
             meta = json.loads(raw)
             return int(meta["metaData"]["stack"]["n"])
-    except Exception:
+    except Exception as e:
+        print(f"  WARNING: read_n_planes failed ({e}); defaulting to 1 (treating as single-plane)")
         return 1
 
 
