@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-06-18 (2)
+
+### `--n-workers` wired to cluster pool; NUMA-safe default
+
+**Problem:**
+`N_WORKERS` was set to `os.cpu_count() - 1` (95 on the target machine) and passed
+only to `CNMF(n_processes=...)`, which CaImAn ignores when a `dview` is provided.
+`setup_cluster` was hardcoded to `n_processes=40`. The result: `--n-workers` was a
+dead flag that changed nothing, and the header `workers=` line was misleading.
+
+**Changes:**
+- Default formula changed from `os.cpu_count() - 1` to
+  `(os.cpu_count() // 2 // 10) * 10` — largest multiple of 10 ≤ half the logical
+  CPU count. On the 96-core target: `96 // 2 = 48 → 40`. Keeps all workers on one
+  NUMA node (48 physical cores per socket) avoiding cross-socket memory traffic.
+- `setup_cluster(n_processes=N_WORKERS)` — cluster pool now tracks `N_WORKERS`
+  instead of hardcoded 40. This is the change that makes `--n-workers` functional:
+  passing `--n-workers N` now controls the actual cluster pool size.
+- `--n-workers` help text updated to reflect the new default and scope.
+- `--pin-cpus` behaviour unchanged — pinned-core count still takes priority over
+  the formula when cores are explicitly pinned.
+
+### `read_n_planes` silent failure now logged
+
+**Problem:**
+`read_n_planes` caught all exceptions and returned 1 with no output. A wrong
+metadata key path (`meta["stack"]["n"]` instead of `meta["metaData"]["stack"]["n"]`)
+caused the 144321 dataset to be silently misdetected as `single-movie`, feeding
+7-plane interleaved frames raw into CNMF and producing 1 kept neuron across a
+743-minute run.
+
+**Change:**
+`except Exception as e` now prints
+`WARNING: read_n_planes failed (<reason>); defaulting to 1 (treating as single-plane)`
+before returning 1. Future metadata format mismatches will be immediately visible
+in the run log instead of silently corrupting format detection.
+
+---
+
 ## 2026-06-18
 
 ### Persistent CaImAn cluster across Bayesian trials (A1–A4)

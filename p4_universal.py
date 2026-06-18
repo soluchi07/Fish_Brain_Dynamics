@@ -128,7 +128,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--n-calls", type=int, default=10)
     p.add_argument("--n-initial", type=int, default=5)
     p.add_argument("--n-workers", type=int, default=None,
-                   help="CPU workers for CNMF patch processing (default: --pin-cpus count, else 64)")
+                   help="CPU workers for cluster pool (default: --pin-cpus count, "
+                        "else largest multiple of 10 <= cpu_count // 2)")
     p.add_argument("--pin-cpus", type=str, default=None,
                    help="CPU cores to pin to, e.g. '0-31' or '0-15,32-47' (Linux only)")
     p.add_argument("--tune-p", type=int, default=1, choices=[1, 2],
@@ -197,7 +198,7 @@ if ARGS.n_workers is not None:
 elif _pinned_cores:
     N_WORKERS = len(_pinned_cores)
 else:
-    N_WORKERS = os.cpu_count() - 1
+    N_WORKERS = (os.cpu_count() // 2 // 10) * 10
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -1476,7 +1477,7 @@ MODES = {
 
 import caiman.cluster as _cluster
 _, _dview, _ = _cluster.setup_cluster(
-    backend="local", n_processes=40, single_thread=False
+    backend="local", n_processes=N_WORKERS, single_thread=False
 )
 DVIEW = _dview
 t_start = time.time()
