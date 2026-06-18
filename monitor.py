@@ -30,8 +30,10 @@ for line in sys.stdin:
             f.write(f"Alert! Found {TARGET_STRING2} in line: {line} at time {datetime.now().time()}\n")
     elif TARGET_STRING3 in line:
         with open(f"logs/{output_file}", "a") as f:
-            f.write(f"Alert! Found {TARGET_STRING2} in line: {line} at time {datetime.now().time()}\n")
-    
+            f.write(f"Alert! Found {TARGET_STRING3} in line: {line} at time {datetime.now().time()}\n")
+    elif '[' in line and ']' in line:
+        with open(f"logs/{output_file}", "a") as f:
+            f.write(f"Alert! Found line: {line} at time {datetime.now().time()}\n")
 
 with open(f"logs/{output_file}", "a") as f:
     f.write(f"Monitoring ended at {datetime.now().time()}\n")

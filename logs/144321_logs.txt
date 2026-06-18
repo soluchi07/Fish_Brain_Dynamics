@@ -82,27 +82,3 @@ DONE  |  time-split  |  20iv26_144321_time_split_full  |  743.1 min
 ======================================================================
 
 Monitoring ended at 10:06:19.948045
-Monitoring started at 17:01:14.864168
-Alert! Found fit_file done in line: Time split: tune frames 0-349 (350), test frames 350-699 (350)
- at time 17:11:44.052168
-Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
- at time 17:12:53.239587
-Alert! Found fit_file done in line:   [fit_file done]
- at time 17:51:22.384189
-Alert! Found fit_file starting — MC first, then CNMF init in line:   Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(10), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — MC first, then CNMF init]
- at time 17:51:42.730427
-Alert! Found fit_file done in line:   [fit_file done]
- at time 18:28:54.352153
-Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
- at time 18:29:24.609934
-Alert! Found fit_file done in line:   [fit_file done]
- at time 19:07:38.474050
-Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
- at time 19:07:46.659855
-Alert! Found fit_file done in line:   [fit_file done]
- at time 19:40:28.828565
-Alert! Found fit_file starting — MC first, then CNMF init in line:   [fit_file starting — MC first, then CNMF init]
- at time 19:42:28.913826
-Alert! Found fit_file done in line:   [fit_file done]
- at time 21:42:13.914766
-Monitoring ended at 21:43:11.927131
