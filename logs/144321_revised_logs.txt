@@ -177,3 +177,74 @@ Alert! Found line:   [MC done in 257s] -> full_movie_d1_2048_d2_2048_d3_1_order_
  at time 14:52:37.561988
 Alert! Found line:   [fit_file starting — CNMF init (no MC)]
  at time 14:52:37.585508
+Alert! Found line:     CNMF failed: SVD did not converge in Linear Least Squares
+ at time 15:10:49.848383
+Alert! Found line:   Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=1092s
+ at time 15:10:49.863560
+Alert! Found line: 
+ at time 15:10:49.865783
+Alert! Found line: Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/20iv26_144321_time_split_v2/
+ at time 15:10:49.865892
+Alert! Found line: Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv
+ at time 15:10:49.873508
+Alert! Found line: 
+ at time 15:10:50.015428
+Alert! Found line: ======================================================================
+ at time 15:10:50.015504
+Alert! Found line: DONE  |  time-split  |  20iv26_144321_time_split_v2  |  47.6 min
+ at time 15:10:50.015543
+Alert! Found line: ======================================================================
+ at time 15:10:50.015572
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019233
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019397
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019472
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019536
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019599
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019734
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019807
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019869
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019929
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.019989
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020049
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020108
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020169
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020228
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020288
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020347
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020406
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020492
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020564
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020623
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020700
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020758
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020818
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020877
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020935
+Alert! Found line:  ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 15:10:51.020991
+Monitoring ended at 15:10:51.333326
