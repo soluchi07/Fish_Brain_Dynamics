@@ -1,0 +1,59 @@
+Monitoring started at 23:50:42.234799
+====================================================================== at time 23:50:47.081875
+p4_universal.py  |  mode=time-split  |  run=regression_test6 at time 23:50:47.082005
+====================================================================== at time 23:50:47.082082
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/regression_test6 at time 23:50:47.082148
+Resolution : full at time 23:50:47.082211
+Brain mask : ON at time 23:50:47.082272
+Quality    : ON at time 23:50:47.082332
+dF/F       : percentile=8.0  bleach_correct=ON (T>=100) at time 23:50:47.082393
+Trials     : n_calls=2  n_initial=2 at time 23:50:47.082452
+CPU pin    : unpinned  workers=40 at time 23:50:47.082510
+ at time 23:50:47.084888
+--- TIME-SPLIT mode --- at time 23:50:47.084997
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 23:50:47.088306
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 23:50:47.088414
+Auto-detected n_planes=7 from metadata at time 23:50:47.089366
+Interleaved: z=3/7 planes -> 700 frames at time 23:50:47.089434
+ at time 23:56:30.303537
+[preprocess movie]  input shape=(700, 2048, 2048) at time 23:56:30.303741
+Brain mask coverage: 24.2% of frame at time 00:00:59.969792
+ at time 00:01:13.794801
+Time split: tune frames 0-349 (350), test frames 350-699 (350) at time 00:01:13.794947
+ at time 00:02:32.890877
+[Pre-computing motion correction on tune half] at time 00:02:32.891014
+[motion correction — running once for all Bayesian trials] at time 00:02:32.891094
+[MC done in 861s] -> tune_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap at time 00:16:53.789547
+ at time 00:16:53.804400
+============================================================ at time 00:16:53.804522
+BAYESIAN TUNE (time_split) at time 00:16:53.804596
+============================================================ at time 00:16:53.804697
+Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)] at time 00:16:53.821541
+CNMF failed: SVD did not converge in Linear Least Squares at time 00:17:26.525633
+raw=  0 kept=  0 composite=-inf t=33s at time 00:17:26.532745
+Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(10), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)] at time 00:17:26.538919
+CNMF failed: SVD did not converge in Linear Least Squares at time 00:17:59.074203
+raw=  0 kept=  0 composite=-inf t=33s at time 00:17:59.081340
+ at time 00:17:59.134809
+Best params (time_split): at time 00:17:59.134920
+gSig: 14 at time 00:17:59.134991
+gSig_filt: 6 at time 00:17:59.135057
+min_corr: 0.7728918500954693 at time 00:17:59.135120
+min_pnr: 9 at time 00:17:59.135181
+rf: 160 at time 00:17:59.135240
+stride: 80 at time 00:17:59.135302
+p: 1 at time 00:17:59.135363
+merge_thr: 0.85 at time 00:17:59.135424
+ at time 00:18:00.014827
+Re-running best params on tune half... at time 00:18:00.014947
+[fit_file starting — CNMF init (no MC)] at time 00:18:00.020300
+CNMF failed: SVD did not converge in Linear Least Squares at time 00:18:30.626878
+ at time 00:18:30.634031
+============================================================ at time 00:18:30.634153
+TEST: test_half (frames 350-699) at time 00:18:30.634238
+============================================================ at time 00:18:30.634304
+[motion correction — running once for all Bayesian trials] at time 00:18:30.634371
+[MC done in 878s] -> test_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap at time 00:33:08.800126
+[fit_file starting — CNMF init (no MC)] at time 00:33:08.818766
+CNMF failed: SVD did not converge in Linear Least Squares at time 00:33:39.660745
+Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=31s at time 00:33:39.667759
