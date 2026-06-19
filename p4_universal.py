@@ -72,8 +72,6 @@ import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
 
-from threadpoolctl import threadpool_limits
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESULTS_ROOT = SCRIPT_DIR / "results"
 
@@ -700,7 +698,6 @@ def get_base_params() -> dict:
 SEARCH_SPACE = get_search_space()
 PARAM_NAMES = [s.name for s in SEARCH_SPACE]
 BASE_PARAMS = get_base_params()
-DVIEW = None  # replaced by persistent pool when setup_cluster() runs
 
 
 # =============================================================================
@@ -721,7 +718,6 @@ def run_motion_correction(fname_mmap: str) -> str:
     t0 = time.time()
     mc = MotionCorrect(
         [fname_mmap],
-        dview=DVIEW,
         max_shifts=BASE_PARAMS["max_shifts"],
         strides=BASE_PARAMS["strides"],
         overlaps=BASE_PARAMS["overlaps"],
@@ -759,8 +755,7 @@ def run_cnmf(params_override: dict, fname_mmap: str,
     try:
         _label = "MC + CNMF init" if do_mc else "CNMF init (no MC)"
         print(f"  [fit_file starting — {_label}]", flush=True)
-        with threadpool_limits(limits=N_WORKERS):
-            cnmf_obj.fit_file(motion_correct=do_mc)
+        cnmf_obj.fit_file(motion_correct=do_mc)
         print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
             try:
@@ -768,7 +763,7 @@ def run_cnmf(params_override: dict, fname_mmap: str,
                 Yr, dims, T_loc = caiman.mmapping.load_memmap(effective_mmap)
                 images = np.reshape(Yr.T, [T_loc] + list(dims), order="F")
                 cnmf_obj.estimates.evaluate_components(
-                    imgs=images, params=cnmf_obj.params, dview=DVIEW)
+                    imgs=images, params=cnmf_obj.params)
                 cnmf_obj.estimates.select_components(use_object=True)
             except Exception:
                 pass
@@ -1478,23 +1473,9 @@ MODES = {
     "file-split": mode_file_split,
 }
 
-import caiman.cluster as _cluster
-_devnull_fd = os.open(os.devnull, os.O_WRONLY)
-_orig_stderr_fd = os.dup(2)
-os.dup2(_devnull_fd, 2)
-os.close(_devnull_fd)
-_, _dview, _ = _cluster.setup_cluster(
-    backend="local", n_processes=N_WORKERS, single_thread=False
-)
-os.dup2(_orig_stderr_fd, 2)
-os.close(_orig_stderr_fd)
-DVIEW = _dview
 t_start = time.time()
-try:
-    MODES[ARGS.mode]()
-finally:
-    elapsed_min = (time.time() - t_start) / 60.0
-    _cluster.stop_server(dview=DVIEW)
+MODES[ARGS.mode]()
+elapsed_min = (time.time() - t_start) / 60.0
 
 print(f"\n{'='*70}")
 print(f"DONE  |  {ARGS.mode}  |  {ARGS.run_name}  |  {elapsed_min:.1f} min")

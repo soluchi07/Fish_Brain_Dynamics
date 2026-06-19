@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-06-18 (7)
+
+### Revert persistent cluster — remove all cluster scaffolding
+
+**Problem:**
+All CNMF trials returned `raw=0 kept=0 composite=-inf` at full resolution (2048×2048)
+regardless of parameter combination, resolution step, worker count, nb value, or masking.
+The SVD and concatenation errors introduced by the cluster have not been resolved after
+five fix attempts. Pre-cluster runs on the same dataset produced 2509, 482, and 168 kept
+neurons without any SVD failures.
+
+**Decision:**
+Remove the persistent cluster entirely. The stated benefit (eliminating pool-setup overhead
+across Bayesian trials) was estimated at 1–3 min per full run — not worth the debugging cost
+and the ongoing 0-neuron failure mode.
+
+**Changes reverted:**
+- `from threadpoolctl import threadpool_limits` import removed
+- `DVIEW = None` global sentinel removed
+- `dview=DVIEW` removed from `MotionCorrect` constructor
+- `with threadpool_limits(limits=N_WORKERS):` wrapper removed from `fit_file` call
+- `dview=DVIEW` removed from `evaluate_components` call
+- `import caiman.cluster`, fd-2 redirect, `setup_cluster`, `stop_server`, and
+  `try/finally` scaffolding removed from MAIN block; replaced with a plain
+  `t_start / MODES[ARGS.mode]() / elapsed_min` sequence
+
+**Retained from cluster era (independent improvements):**
+- `nb=1, nb_patch=0` in `BASE_PARAMS` — silences the gnb=0 CaImAn auto-override
+
+---
+
 ## 2026-06-18 (6)
 
 ### Fix concatenation error introduced by `nb_patch=1`
