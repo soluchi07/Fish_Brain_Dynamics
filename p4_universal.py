@@ -286,7 +286,7 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
 
     tp_files = sorted(
         glob.glob(str(folder / "tp-*_ch-*_st-*_obj-*_cam-*.lux.h5")),
-        key=lambda p: int(m.group(1)) if (m := re.search(r"tp-0-(\d+)", p)) else 0,
+        key=lambda p: int(re.search(r"tp-0-(\d+)", p).group(1)),
     )
     if tp_files:
         with h5py.File(tp_files[0], "r") as fh:
@@ -296,7 +296,7 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
     # Broaden glob to catch both *.lux.h5 and *.lux-NNN.h5 naming
     cam_files = sorted(
         glob.glob(str(folder / "Cam_long_*.lux*.h5")),
-        key=lambda p: int(m.group(1)) if (m := re.search(r"Cam_long_(\d+)", p)) else 0,
+        key=lambda p: int(re.search(r"Cam_long_(\d+)", p).group(1)),
     )
     if cam_files:
         with h5py.File(cam_files[0], "r") as fh:
@@ -494,14 +494,14 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
     t = np.arange(T, dtype=np.float64)
     bleach_correct = (not ARGS.no_bleach_correct) and (T >= 100)
 
-    def _double_exp(t, a, tau1, b, tau2):
-        return a * np.exp(-t / tau1) + b * np.exp(-t / tau2)
-
     for i in range(N):
         F = traces[i].astype(np.float64)
 
         if bleach_correct:
             try:
+                def _double_exp(t, a, tau1, b, tau2):
+                    return a * np.exp(-t / tau1) + b * np.exp(-t / tau2)
+
                 F_range = float(F.max() - F.min())
                 p0 = [F_range * 0.5, T * 0.3, F_range * 0.3, T * 0.1]
                 bounds = ([0, 1, 0, 1], [np.inf, T * 10, np.inf, T * 10])
@@ -753,14 +753,12 @@ def run_cnmf(params_override: dict, fname_mmap: str,
 
     t0 = time.time()
     try:
-        _label = "MC + CNMF init" if do_mc else "CNMF init (no MC)"
-        print(f"  [fit_file starting — {_label}]", flush=True)
+        print("  [fit_file starting — MC first, then CNMF init]", flush=True)
         cnmf_obj.fit_file(motion_correct=do_mc)
         print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
             try:
-                effective_mmap = cnmf_obj.params.data.get('fnames', [fname_mmap])[0]
-                Yr, dims, T_loc = caiman.mmapping.load_memmap(effective_mmap)
+                Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_mmap)
                 images = np.reshape(Yr.T, [T_loc] + list(dims), order="F")
                 cnmf_obj.estimates.evaluate_components(
                     imgs=images, params=cnmf_obj.params)
@@ -801,8 +799,6 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
     rej_circ = 0
     rej_area = 0
     rej_mask = 0
-    rej_small = 0
-
     for i in range(n):
         fp = np.asarray(A[:, i].todense()).flatten().reshape(H, W)
         if fp.max() <= 0:
@@ -811,7 +807,7 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
         binary = fp > (fp.max() * 0.2)
         area = int(binary.sum())
         if area < 5:
-            rej_small += 1
+            rej_circ += 1
             continue
 
         # Circularity = 4*pi*area / perimeter^2
@@ -841,7 +837,6 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
         keep.append(i)
 
     counts["circularity_rejected"] = rej_circ
-    counts["small_rejected"] = rej_small
     counts["max_area_rejected"] = rej_area
     counts["in_mask_rejected"] = rej_mask
     counts["final"] = len(keep)
@@ -880,18 +875,13 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], mask: np.ndarray,
     A = cnmf_obj.estimates.A[:, keep]
     C = cnmf_obj.estimates.C[keep, :]
 
+    Y_hat = A @ C
     b = getattr(cnmf_obj.estimates, "b", None)
     f_bg = getattr(cnmf_obj.estimates, "f", None)
-    Yr_bg = Yr
     if b is not None and f_bg is not None and b.shape[1] > 0:
-        Yr_bg = Yr - b @ f_bg  # nb=0 in BASE_PARAMS; branch kept for correctness
-    Yr_norm = float(np.linalg.norm(Yr_bg, "fro"))
-    AtYr = np.array(A.T @ Yr_bg)              # (n, T) — sparse × memmap
-    cross = 2.0 * float(np.sum(C * AtYr))
-    AtA = np.array((A.T @ A).todense())       # (n, n) — small
-    AC_norm_sq = float(np.sum((AtA @ C) * C))
-    residual_sq = max(Yr_norm ** 2 - cross + AC_norm_sq, 0.0)
-    recon_error = float(np.sqrt(residual_sq) / (Yr_norm + 1e-9))
+        Y_hat = Y_hat + b @ f_bg
+    recon_error = float(
+        np.linalg.norm(Yr - Y_hat, "fro") / (np.linalg.norm(Yr, "fro") + 1e-9))
 
     H_val, W_val = dims
     comps = []
@@ -1050,9 +1040,8 @@ def test_cnmf(best_params: dict, mmap_path: str, data: np.ndarray,
     """Apply tuned params to test data, run filters, save plots and traces."""
     print(f"\n{'='*60}\nTEST: {label}\n{'='*60}")
 
-    mc_mmap = run_motion_correction(mmap_path)
-    Yr, _, _ = caiman.mmapping.load_memmap(mc_mmap)
-    cnmf_obj, rt = run_cnmf(best_params, mc_mmap, do_mc=False)
+    Yr, _, _ = caiman.mmapping.load_memmap(mmap_path)
+    cnmf_obj, rt = run_cnmf(best_params, mmap_path)
 
     stability = 0.0
     if tune_A is not None and cnmf_obj is not None:
@@ -1270,6 +1259,7 @@ def mode_plane_split():
     if tune_z >= Z:
         print(f"ERROR: --tune-z {tune_z} >= Z={Z}")
         sys.exit(1)
+    dims_native = sample_shape[1:]
     print(f"\nZ={Z}; tune on z={tune_z}, test on z=0..{Z-1}\\{{tune_z}}")
 
     tune_raw = _load_plane(tune_z)

@@ -2,6 +2,53 @@
 
 ---
 
+## 2026-06-19
+
+### Revert W1–W5 and S1–S3 to isolate SVD failure cause
+
+Reverted the following changes from `a465917` to determine empirically whether
+any of them affect CNMF detection (specifically the full-resolution SVD failure):
+
+| ID | What was reverted |
+|----|-------------------|
+| W1 | `test_cnmf`: removed pre-MC step; reverted to `run_cnmf(best_params, mmap_path)` with `do_mc=True` |
+| W2 | `evaluate_components`: reverted from `cnmf_obj.params.data.get('fnames', ...)` back to `fname_mmap` |
+| W3 | `quality_filter`: removed `rej_small` counter; `area < 5` again increments `rej_circ` |
+| W4 | `detect_format`: reverted walrus-operator guards back to direct `.group(1)` calls |
+| W5 | `run_cnmf`: reverted dynamic log label back to hardcoded `"MC first, then CNMF init"` |
+| S1 | `compute_dff`: moved `_double_exp` back inside the loop |
+| S2 | `score_run`: reverted Frobenius identity back to dense `Y_hat = A @ C` materialisation |
+| S3 | `mode_plane_split`: restored dead `dims_native = sample_shape[1:]` assignment |
+
+C1 and C2 (centroid OOB fix, dF/F sign fix) were NOT reverted.
+
+---
+
+## 2026-06-18 (8)
+
+### Revert `nb=1` — global background component suppresses signal at low brain coverage
+
+**Problem:**
+After the cluster revert (entry 7), all trials still returned raw=0, kept=0 in ~28s.
+28 seconds at 2048×2048 means CNMF-E's corr_pnr initialization found zero seed pixels —
+it never ran the actual factorization.
+
+**Root cause:**
+`nb=1` adds a global low-rank background component that is fitted via SVD across all pixels
+before corr_pnr seeds neurons. At 24.2% brain coverage (75.8% zeroed pixels), this single
+component captures most of the movie's variance and removes it from the residual. corr_pnr
+sees a flat, near-zero residual and finds no candidate pixels above min_corr / min_pnr.
+
+`nb=0` is the correct setting for CNMF-E with the ring model. The gnb=0 CaImAn warning
+(`gnb=0, hence setting keys nb_patch and low_rank_background in group patch automatically`)
+is informational — it confirms CaImAn is properly routing to ring-model-only mode. The
+pre-cluster `144321` run with nb=0 produced 2/15 neurons at full resolution.
+
+**Fix:**
+- `"nb": 1` → `"nb": 0` in `BASE_PARAMS` (reverted to original value)
+
+---
+
 ## 2026-06-18 (7)
 
 ### Revert persistent cluster — remove all cluster scaffolding
