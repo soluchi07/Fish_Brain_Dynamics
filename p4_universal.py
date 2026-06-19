@@ -678,7 +678,7 @@ def get_base_params() -> dict:
         "decay_time": 1.0,
         "method_init": "corr_pnr",
         "K": None,
-        "nb": 1,
+        "nb": 0,
         "nb_patch": 0,
         "center_psf": True,
         "ring_size_factor": 1.4,
