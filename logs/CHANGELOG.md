@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-06-18 (6)
+
+### Fix concatenation error introduced by `nb_patch=1`
+
+**Problem:**
+After the `nb=0 → nb=1` fix in entry (5), every CNMF trial failed with:
+```
+CNMF failed: all the input array dimensions except for the concatenation axis must
+match exactly, but along dimension 1, the array at index 0 has size 350 and the
+array at index 1 has size 1
+```
+Note: the SVD error was gone — `nb=1` fixed that correctly.
+
+**Root cause:**
+With `nb_patch=1`, CaImAn adds a low-rank background temporal trace per patch
+(shape `(1, T_patch)`). Patches that contain no neurons (the majority at 2048×2048
+with only 24.2% brain coverage) initialize their background trace as `(1, 1)` instead
+of `(1, T_patch)`. When CaImAn assembles patch results, it tries to concatenate neural
+traces of shape `(n, 350)` with background traces of shape `(1, 1)` — the time axis
+mismatches, causing the axis-1 shape error.
+
+**Fix:**
+- `"nb_patch": 1` → `"nb_patch": 0` in `BASE_PARAMS`
+
+With `nb_patch=0`, patches output no per-patch background component (they rely on
+the ring model for local background). The global `nb=1` background component is still
+estimated after patch assembly from well-shaped data. Empty patches no longer produce
+malformed `(1, 1)` background arrays.
+
+---
+
 ## 2026-06-18 (5)
 
 ### Fix SVD failure: `nb=0` passes `k=0` to `scipy.sparse.linalg.svds`

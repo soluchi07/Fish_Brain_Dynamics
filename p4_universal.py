@@ -681,7 +681,7 @@ def get_base_params() -> dict:
         "method_init": "corr_pnr",
         "K": None,
         "nb": 1,
-        "nb_patch": 1,
+        "nb_patch": 0,
         "center_psf": True,
         "ring_size_factor": 1.4,
         "merge_thr": 0.85,
