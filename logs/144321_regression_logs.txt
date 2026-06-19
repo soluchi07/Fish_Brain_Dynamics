@@ -1,0 +1,168 @@
+Monitoring started at 15:28:07.963593
+======================================================================
+ at time 15:28:13.003252
+p4_universal.py  |  mode=time-split  |  run=regression_test
+ at time 15:28:13.003422
+======================================================================
+ at time 15:28:13.003504
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/regression_test
+ at time 15:28:13.003576
+Resolution : full
+ at time 15:28:13.003642
+Brain mask : OFF
+ at time 15:28:13.003745
+Quality    : ON
+ at time 15:28:13.003812
+dF/F       : percentile=8.0  bleach_correct=ON (T>=100)
+ at time 15:28:13.003877
+Trials     : n_calls=2  n_initial=2
+ at time 15:28:13.003942
+CPU pin    : unpinned  workers=40
+ at time 15:28:13.004006
+
+ at time 15:28:13.319267
+--- TIME-SPLIT mode ---
+ at time 15:28:13.319415
+  Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom
+ at time 15:28:13.327496
+  Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048))
+ at time 15:28:13.327619
+  Auto-detected n_planes=7 from metadata
+ at time 15:28:13.328645
+  Interleaved: z=3/7 planes -> 700 frames
+ at time 15:28:13.328765
+
+ at time 15:33:57.481159
+[preprocess movie]  input shape=(700, 2048, 2048)
+ at time 15:33:57.481320
+
+ at time 15:38:09.358032
+Time split: tune frames 0-349 (350), test frames 350-699 (350)
+ at time 15:38:09.358147
+
+ at time 15:39:28.758996
+[Pre-computing motion correction on tune half]
+ at time 15:39:28.759139
+  [motion correction — running once for all Bayesian trials]
+ at time 15:39:28.759223
+  [MC done in 155s] -> tune_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap
+ at time 15:42:03.548166
+
+ at time 15:42:03.552907
+============================================================
+ at time 15:42:03.553024
+BAYESIAN TUNE (time_split)
+ at time 15:42:03.553099
+============================================================
+ at time 15:42:03.553164
+  Trial  1: {'gSig': np.int64(14), 'gSig_filt': np.int64(6), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 15:42:03.575016
+    CNMF failed: SVD did not converge in Linear Least Squares
+ at time 15:44:36.014353
+raw=  0 kept=  0 composite=-inf t=152s
+ at time 15:44:36.022866
+  Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(10), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 160, 'stride': 80, 'p': 1} ...   [fit_file starting — CNMF init (no MC)]
+ at time 15:44:36.036423
+    CNMF failed: SVD did not converge in Linear Least Squares
+ at time 15:45:21.387047
+raw=  0 kept=  0 composite=-inf t=45s
+ at time 15:45:21.395422
+
+ at time 15:45:21.457443
+Best params (time_split):
+ at time 15:45:21.457558
+  gSig: 14
+ at time 15:45:21.457630
+  gSig_filt: 6
+ at time 15:45:21.457741
+  min_corr: 0.7728918500954693
+ at time 15:45:21.457806
+  min_pnr: 9
+ at time 15:45:21.457868
+  rf: 160
+ at time 15:45:21.457929
+  stride: 80
+ at time 15:45:21.457988
+  p: 1
+ at time 15:45:21.458048
+  merge_thr: 0.85
+ at time 15:45:21.458109
+
+ at time 15:45:22.366891
+Re-running best params on tune half...
+ at time 15:45:22.367015
+  [fit_file starting — CNMF init (no MC)]
+ at time 15:45:22.372643
+    CNMF failed: SVD did not converge in Linear Least Squares
+ at time 15:47:55.714157
+
+ at time 15:47:55.722522
+============================================================
+ at time 15:47:55.722642
+TEST: test_half (frames 350-699)
+ at time 15:47:55.722759
+============================================================
+ at time 15:47:55.722827
+  [motion correction — running once for all Bayesian trials]
+ at time 15:47:55.722894
+  [MC done in 154s] -> test_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap
+ at time 15:50:30.128149
+  [fit_file starting — CNMF init (no MC)]
+ at time 15:50:30.150051
+    CNMF failed: SVD did not converge in Linear Least Squares
+ at time 15:51:13.780999
+  Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=44s
+ at time 15:51:13.789854
+
+ at time 15:52:54.184308
+============================================================
+ at time 15:52:54.184462
+TEST: full_movie
+ at time 15:52:54.184542
+============================================================
+ at time 15:52:54.184608
+  [motion correction — running once for all Bayesian trials]
+ at time 15:52:54.184713
+  [MC done in 256s] -> full_movie_d1_2048_d2_2048_d3_1_order_C_frames_700_els__d1_2048_d2_2048_d3_1_order_F_frames_700.mmap
+ at time 15:57:10.674388
+  [fit_file starting — CNMF init (no MC)]
+ at time 15:57:10.697936
+    CNMF failed: SVD did not converge in Linear Least Squares
+ at time 16:15:45.325410
+  Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=1115s
+ at time 16:15:45.339968
+
+ at time 16:15:45.342217
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/regression_test/
+ at time 16:15:45.342293
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv
+ at time 16:15:45.350383
+
+ at time 16:15:45.476394
+======================================================================
+ at time 16:15:45.476456
+DONE  |  time-split  |  regression_test  |  47.5 min
+ at time 16:15:45.476481
+======================================================================
+ at time 16:15:45.476510
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431120
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431272
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431349
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431416
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431486
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431548
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431609
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431716
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431783
+ ** On entry to DLASCL parameter number  4 had an illegal value
+ at time 16:15:46.431843
+Monitoring ended at 16:15:46.745443

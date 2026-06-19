@@ -1,0 +1,78 @@
+Monitoring started at 15:54:17.772840
+====================================================================== at time 15:54:24.998173
+p4_universal.py  |  mode=time-split  |  run=regression_test2 at time 15:54:24.998371
+====================================================================== at time 15:54:24.998459
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/regression_test2 at time 15:54:24.998534
+Resolution : 1024 at time 15:54:24.998607
+Brain mask : OFF at time 15:54:24.998746
+Quality    : ON at time 15:54:24.998829
+dF/F       : percentile=8.0  bleach_correct=ON (T>=100) at time 15:54:24.998903
+Trials     : n_calls=2  n_initial=2 at time 15:54:24.998968
+CPU pin    : unpinned  workers=40 at time 15:54:24.999040
+ at time 15:54:25.983739
+--- TIME-SPLIT mode --- at time 15:54:25.983982
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_144321-20260614T141833Z-3-002/2026-04-20_144321/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 15:54:25.997326
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 15:54:25.997490
+Auto-detected n_planes=7 from metadata at time 15:54:25.999891
+Interleaved: z=3/7 planes -> 700 frames at time 15:54:26.000049
+ at time 16:00:24.683042
+[preprocess movie]  input shape=(700, 2048, 2048) at time 16:00:24.683197
+Downsampling -> (1024, 1024) at time 16:00:24.683281
+ at time 16:02:36.937924
+Time split: tune frames 0-349 (350), test frames 350-699 (350) at time 16:02:36.938079
+ at time 16:02:53.470027
+[Pre-computing motion correction on tune half] at time 16:02:53.470173
+[motion correction — running once for all Bayesian trials] at time 16:02:53.470263
+[MC done in 31s] -> tune_half_d1_1024_d2_1024_d3_1_order_C_frames_350_els__d1_1024_d2_1024_d3_1_order_F_frames_350.mmap at time 16:03:24.771527
+ at time 16:03:24.774957
+============================================================ at time 16:03:24.775080
+BAYESIAN TUNE (time_split) at time 16:03:24.775160
+============================================================ at time 16:03:24.775232
+Trial  1: {'gSig': np.int64(9), 'gSig_filt': np.int64(3), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 80, 'stride': 40, 'p': 1} ...   [fit_file starting — CNMF init (no MC)] at time 16:03:24.796065
+[fit_file done] at time 16:05:38.856490
+raw=  0 kept=  0 composite=-inf t=134s at time 16:05:38.856658
+Trial  2: {'gSig': np.int64(5), 'gSig_filt': np.int64(5), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 120, 'stride': 60, 'p': 1} ...   [fit_file starting — CNMF init (no MC)] at time 16:05:38.871603
+[fit_file done] at time 16:06:35.777928
+raw=  0 kept=  0 composite=-inf t=57s at time 16:06:35.778088
+ at time 16:06:35.845963
+Best params (time_split): at time 16:06:35.846094
+gSig: 9 at time 16:06:35.846173
+gSig_filt: 3 at time 16:06:35.846252
+min_corr: 0.7728918500954693 at time 16:06:35.846323
+min_pnr: 9 at time 16:06:35.846391
+rf: 80 at time 16:06:35.846457
+stride: 40 at time 16:06:35.846525
+p: 1 at time 16:06:35.846593
+merge_thr: 0.85 at time 16:06:35.846682
+ at time 16:06:36.689433
+Re-running best params on tune half... at time 16:06:36.689568
+[fit_file starting — CNMF init (no MC)] at time 16:06:36.695378
+[fit_file done] at time 16:08:50.648511
+ at time 16:08:50.648790
+============================================================ at time 16:08:50.648870
+TEST: test_half (frames 350-699) at time 16:08:50.648936
+============================================================ at time 16:08:50.648999
+[motion correction — running once for all Bayesian trials] at time 16:08:50.649066
+[MC done in 31s] -> test_half_d1_1024_d2_1024_d3_1_order_C_frames_350_els__d1_1024_d2_1024_d3_1_order_F_frames_350.mmap at time 16:09:21.549816
+[fit_file starting — CNMF init (no MC)] at time 16:09:21.559751
+CNMF failed: SVD did not converge in Linear Least Squares at time 16:10:59.940490
+Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=98s at time 16:10:59.944755
+ at time 16:11:21.959940
+============================================================ at time 16:11:21.960079
+TEST: full_movie at time 16:11:21.960158
+============================================================ at time 16:11:21.960246
+[motion correction — running once for all Bayesian trials] at time 16:11:21.960316
+[MC done in 51s] -> full_movie_d1_1024_d2_1024_d3_1_order_C_frames_700_els__d1_1024_d2_1024_d3_1_order_F_frames_700.mmap at time 16:12:13.142748
+[fit_file starting — CNMF init (no MC)] at time 16:12:13.154749
+[fit_file done] at time 16:15:08.583930
+Raw neurons: 0  kept: 0  composite: -inf stability: 0.000  t=175s at time 16:15:08.584081
+ at time 16:15:08.586929
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/regression_test2/ at time 16:15:08.587042
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 16:15:08.594252
+ at time 16:15:08.681272
+====================================================================== at time 16:15:08.681392
+DONE  |  time-split  |  regression_test2  |  20.7 min at time 16:15:08.681456
+====================================================================== at time 16:15:08.681510
+** On entry to DLASCL parameter number  4 had an illegal value at time 16:15:09.763916
+** On entry to DLASCL parameter number  4 had an illegal value at time 16:15:09.764057
+Monitoring ended at 16:15:10.001956
