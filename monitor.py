@@ -1,4 +1,5 @@
 import sys
+import os
 from datetime import datetime
 import argparse
 
@@ -7,31 +8,28 @@ parser.add_argument("--filename", default=f"{datetime.now().strftime('%Y-%m-%d_%
 args = parser.parse_args()
 output_file = args.filename
 
-# Define your target string
 SKIPPED_STRING = "Unable to solve directly, using least squares instead."
-output_stack = []
-start_time = datetime.now().time()
+
+os.makedirs("logs", exist_ok=True)
+
+trigger_count = 0
+
 with open(f"logs/{output_file}", "a") as f:
-    f.write(f"Monitoring started at {start_time}\n")
+    f.write(f"Monitoring started at {datetime.now().time()}\n")
 
-# Read line-by-line from the terminal stream
-for line in sys.stdin:
-    # Print the output back to your screen so you don't lose sight of it
-    sys.stdout.write(line)
-    sys.stdout.flush()
+    for line in sys.stdin:
+        sys.stdout.write(line)
+        sys.stdout.flush()
 
-    # Trigger condition
-    if SKIPPED_STRING in line:
-        if output_stack:
-            continue  # Skip logging if the line is already in the output stack
+        if SKIPPED_STRING in line:
+            trigger_count += 1
         else:
-            with open(f"logs/{output_file}", "a") as f:
-                f.write(f"Alert! Found {SKIPPED_STRING} in line: {line.strip()} at time {datetime.now().time()}\n")
-                output_stack.append(line)
-    else:
-        with open(f"logs/{output_file}", "a") as f:
+            if trigger_count > 0:
+                f.write(f"Alert! '{SKIPPED_STRING}' fired {trigger_count}x — last at {datetime.now().time()}\n")
+                trigger_count = 0
             f.write(f"{line.strip()} at time {datetime.now().time()}\n")
-        output_stack.clear()  # Clear the stack if the line does not contain the target string
 
-with open(f"logs/{output_file}", "a") as f:
+    if trigger_count > 0:
+        f.write(f"Alert! '{SKIPPED_STRING}' fired {trigger_count}x — last at {datetime.now().time()}\n")
+
     f.write(f"Monitoring ended at {datetime.now().time()}\n")
