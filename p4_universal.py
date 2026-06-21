@@ -51,13 +51,14 @@ Usage examples:
       --run-name forced --format multi-cam --resolution 512 --n-calls 10
 """
 
+from __future__ import annotations
+
 import os
 os.environ["OMP_NUM_THREADS"]      = "1"
 os.environ["MKL_NUM_THREADS"]      = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"]  = "1"
 
-from __future__ import annotations
 
 import argparse
 import glob
