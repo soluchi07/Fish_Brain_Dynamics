@@ -54,12 +54,6 @@ Usage examples:
 from __future__ import annotations
 
 import os
-os.environ["OMP_NUM_THREADS"]      = "1"
-os.environ["MKL_NUM_THREADS"]      = "1"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["NUMEXPR_NUM_THREADS"]  = "1"
-
-
 import argparse
 import glob
 import json
@@ -721,6 +715,15 @@ def precompute_mc(fname_mmap: str) -> str:
 
     Called once before the Bayesian optimization loop so MC is not repeated
     per trial (MC params are constant across trials).
+
+    CaImAn names the MC output by appending to the input filename, so the
+    output ends up with two 'order_X' substrings, e.g.:
+      ...order_C_frames_350_els__d1_..._order_F_frames_350.mmap
+    CaImAn's load_memmap uses re.search and hits 'order_C' (from the input)
+    first, but the file is actually F-order — causing scrambled data and SVD
+    failure when fit_file(motion_correct=False) loads it. We fix this by
+    force-loading the raw MC output as F-order and writing a clean, unambiguously
+    named C-order mmap that load_memmap will parse correctly.
     """
     mc_keys = ('max_shifts', 'strides', 'overlaps', 'max_deviation_rigid', 'pw_rigid')
     mc_params = {k: BASE_PARAMS[k] for k in mc_keys if k in BASE_PARAMS}
@@ -729,9 +732,23 @@ def precompute_mc(fname_mmap: str) -> str:
     mc = MotionCorrect([fname_mmap], dview=None, **mc_params)
     mc.motion_correct(save_movie=True)
     pw = BASE_PARAMS.get('pw_rigid', True)
-    mc_path = mc.fname_tot_els[-1] if pw else mc.fname_tot_rig[-1]
-    print(f"  [MC done in {time.time()-t0:.1f}s → {Path(mc_path).name}]", flush=True)
-    return mc_path
+    mc_raw = mc.fname_tot_els[-1] if pw else mc.fname_tot_rig[-1]
+
+    # Parse the true output dimensions from the filename (last d1/d2/d3/frames match).
+    m = re.search(r'd1_(\d+)_d2_(\d+)_d3_(\d+).*frames_(\d+)\.mmap$', mc_raw)
+    d1, d2, d3, T = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))
+
+    # Force-load as F-order (the true MC output format) and write a clean C-order
+    # mmap with an unambiguous single-'order' filename.
+    out_path = str(Path(mc_raw).parent / f'Yr_mc_d1_{d1}_d2_{d2}_d3_{d3}_order_C_frames_{T}.mmap')
+    src = np.memmap(mc_raw,   dtype=np.float32, mode='r',  shape=(d1 * d2 * d3, T), order='F')
+    dst = np.memmap(out_path, dtype=np.float32, mode='w+', shape=(d1 * d2 * d3, T), order='C')
+    np.copyto(dst, src)
+    dst[~np.isfinite(dst)] = 0   # zero NaN/Inf border pixels left by MC
+    del dst                       # flush to disk
+
+    print(f"  [MC done in {time.time()-t0:.1f}s → {Path(out_path).name}]", flush=True)
+    return out_path
 
 
 def run_cnmf(params_override: dict, fname_mmap: str,
