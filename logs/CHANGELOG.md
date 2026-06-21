@@ -2,6 +2,108 @@
 
 ---
 
+## 2026-06-21
+
+### Pre-compute motion correction once inside `bayesian_tune`
+
+**Problem:**
+Motion correction was re-run inside every Bayesian trial via `run_cnmf(tp, mmap_path)`
+with the default `do_mc=True`. MC parameters live in `BASE_PARAMS` and are constant
+across all trials — only CNMF hyperparameters (`gSig`, `gSig_filt`, `min_corr`,
+`min_pnr`, `rf`) vary. With `n_calls=10` this meant 10 identical MC runs per
+`bayesian_tune` call.
+
+Note: a 2026-06-17 entry describes a similar change where precompute was placed in the
+four mode functions. That approach required signature changes in every mode. The current
+implementation instead encapsulates the precompute inside `bayesian_tune` itself,
+which is self-contained and requires no changes to calling code.
+
+**Changes:**
+
+- `from caiman.motion_correction import MotionCorrect` added to module-level imports.
+
+- Added `precompute_mc(fname_mmap)` function (placed between `array_to_memmap` and
+  `run_cnmf`): extracts MC-relevant keys (`max_shifts`, `strides`, `overlaps`,
+  `max_deviation_rigid`, `pw_rigid`) from `BASE_PARAMS`, instantiates `MotionCorrect`
+  directly, runs `motion_correct(save_movie=True)`, and returns `mc.fname_tot_els[-1]`
+  (piecewise-rigid) or `mc.fname_tot_rig[-1]` (rigid). Prints timing to stdout.
+
+- `bayesian_tune()`: calls `precompute_mc(mmap_path)` once before `gp_minimize`.
+  The objective function now calls `run_cnmf(tp, mc_mmap, do_mc=False)` using the
+  pre-computed mmap. If `precompute_mc` raises, falls back to `mc_mmap = mmap_path`
+  with `do_mc=True` (per-trial MC) and prints a warning — no silent failures.
+
+- `run_cnmf()`: restored dynamic log label (reverted at 2026-06-19 as part of W5
+  blanket revert, now re-applied independently):
+  `"MC first, then CNMF init"` when `do_mc=True`,
+  `"CNMF init (MC skipped — precomputed)"` when `do_mc=False`.
+
+**Scope:**
+`test_cnmf` and the post-tune `run_cnmf` calls in the mode functions each run once
+per dataset — no redundancy there, left unchanged.
+
+**Expected speedup:**
+`(n_calls - 1)` fewer MC runs per `bayesian_tune` call. With default `n_calls=10`:
+9 fewer MC runs. Estimated wall-clock reduction: 30–60% depending on movie size.
+
+---
+
+### Fix BLAS threading and cap full-resolution gSig search space
+
+**Motivation:**
+Run `144321_reverted_full` completed but produced near-useless results: `recon_error ≈ 1.0`
+on both test phases, `stability = 0.038` on test_half, and F0 ≤ 0 on virtually every kept
+neuron after bleach correction (values as extreme as −178,414). These three signals together
+indicate CNMF's NMF solver is producing non-physical (negative) temporal traces — a known
+symptom of multi-threaded BLAS breaking non-negativity constraints. gSig=14 was selected as
+best for the third consecutive run, amplifying instability through larger ring-background
+matrices.
+
+#### Fix 1 — BLAS env vars before all imports (lines 54–58)
+
+**Root cause:**
+BLAS reads thread-count env vars once at library load time. Setting them after `import numpy`
+has no effect — the thread pool is already initialised. The cluster-era `threadpool_limits`
+workaround was removed in the cluster revert (2026-06-19) without a replacement, leaving BLAS
+free to use all 96 logical cores.
+
+**Fix:**
+Moved `import os` to the very first line of the file and added the four thread-cap vars
+immediately after, before any other imports:
+
+```python
+import os
+os.environ["OMP_NUM_THREADS"]      = "1"
+os.environ["MKL_NUM_THREADS"]      = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"]  = "1"
+```
+
+The duplicate `import os` in the stdlib block was removed.
+
+#### Fix 2 — Cap full-resolution gSig / gSig_filt to 10 (lines 656–657)
+
+**Root cause:**
+Full-resolution search space allowed `Integer(4, 16)` for `gSig` / `gSig_filt`. At
+2048×2048 with ssub=2, gSig=14 covers neurons up to 28 px diameter in native space —
+large enough to keep ring-background matrices on the edge of numerical instability even
+after the BLAS fix.
+
+**Fix:**
+```python
+# was:
+Integer(4, 16, name="gSig"),
+Integer(4, 16, name="gSig_filt"),
+# now:
+Integer(4, 10, name="gSig"),
+Integer(4, 10, name="gSig_filt"),
+```
+
+gSig=10 at full resolution covers up to 20 px diameter in native space. The 512 and 1024
+search spaces were already capped at 10 and required no changes.
+
+---
+
 ## 2026-06-19
 
 ### Revert W1–W5 and S1–S3 to isolate SVD failure cause

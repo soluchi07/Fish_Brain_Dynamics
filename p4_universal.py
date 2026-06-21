@@ -51,13 +51,18 @@ Usage examples:
       --run-name forced --format multi-cam --resolution 512 --n-calls 10
 """
 
+import os
+os.environ["OMP_NUM_THREADS"]      = "1"
+os.environ["MKL_NUM_THREADS"]      = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"]  = "1"
+
 from __future__ import annotations
 
 import argparse
 import glob
 import json
 import re
-import os
 import sys
 import time
 import warnings
@@ -227,6 +232,7 @@ import caiman.mmapping
 import caiman.base.movies
 from caiman.source_extraction.cnmf import cnmf as cnmf_module
 from caiman.source_extraction.cnmf import params as params_module
+from caiman.motion_correction import MotionCorrect
 
 if not hasattr(cm, "load"):
     cm.load = caiman.base.movies.load
@@ -648,8 +654,8 @@ def get_search_space() -> list:
             Categorical([50, 80, 120, 160], name="rf"),
         ]
     return [
-        Integer(4, 16, name="gSig"),
-        Integer(4, 16, name="gSig_filt"),
+        Integer(4, 10, name="gSig"),
+        Integer(4, 10, name="gSig_filt"),
         Real(0.5, 0.85, name="min_corr"),
         Integer(5, 12, name="min_pnr"),
         Categorical([100, 160, 240], name="rf"),
@@ -709,6 +715,24 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
     )
 
 
+def precompute_mc(fname_mmap: str) -> str:
+    """Run motion correction once on the input mmap and return the MC'd output path.
+
+    Called once before the Bayesian optimization loop so MC is not repeated
+    per trial (MC params are constant across trials).
+    """
+    mc_keys = ('max_shifts', 'strides', 'overlaps', 'max_deviation_rigid', 'pw_rigid')
+    mc_params = {k: BASE_PARAMS[k] for k in mc_keys if k in BASE_PARAMS}
+    t0 = time.time()
+    print("  [precomputing motion correction — runs once for all trials]", flush=True)
+    mc = MotionCorrect([fname_mmap], dview=None, **mc_params)
+    mc.motion_correct(save_movie=True)
+    pw = BASE_PARAMS.get('pw_rigid', True)
+    mc_path = mc.fname_tot_els[-1] if pw else mc.fname_tot_rig[-1]
+    print(f"  [MC done in {time.time()-t0:.1f}s → {Path(mc_path).name}]", flush=True)
+    return mc_path
+
+
 def run_cnmf(params_override: dict, fname_mmap: str,
              do_mc: bool = True, do_filter_caiman: bool = True):
     """Run CNMF + CaImAn's built-in evaluate_components / select_components."""
@@ -731,7 +755,8 @@ def run_cnmf(params_override: dict, fname_mmap: str,
 
     t0 = time.time()
     try:
-        print("  [fit_file starting — MC first, then CNMF init]", flush=True)
+        label = "MC first, then CNMF init" if do_mc else "CNMF init (MC skipped — precomputed)"
+        print(f"  [fit_file starting — {label}]", flush=True)
         cnmf_obj.fit_file(motion_correct=do_mc)
         print("  [fit_file done]", flush=True)
         if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
@@ -921,6 +946,15 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int],
     trial_log: list[dict] = []
     counts_log: list[dict] = []
 
+    # MC params are constant across trials — run once and reuse the output mmap
+    try:
+        mc_mmap = precompute_mc(mmap_path)
+        mc_precomputed = True
+    except Exception as exc:
+        print(f"  [WARNING: MC precompute failed ({exc}), falling back to per-trial MC]", flush=True)
+        mc_mmap = mmap_path
+        mc_precomputed = False
+
     def objective(params):
         tp = dict(zip(PARAM_NAMES, params))
         tp["stride"] = tp["rf"] // 2
@@ -928,7 +962,7 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int],
         num = len(trial_log) + 1
         print(f"  Trial {num:2d}: {tp} ...", end=" ", flush=True)
 
-        cnmf_obj, rt = run_cnmf(tp, mmap_path)
+        cnmf_obj, rt = run_cnmf(tp, mc_mmap, do_mc=not mc_precomputed)
         metrics, _, counts = score_run(cnmf_obj, Yr, dims, mask, gSig=int(tp["gSig"]))
         metrics.update(tp)
         metrics["runtime_s"] = round(rt, 1)
