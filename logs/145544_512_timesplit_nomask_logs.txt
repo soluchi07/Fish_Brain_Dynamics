@@ -1,0 +1,188 @@
+Monitoring started at 16:35:42.105817
+====================================================================== at time 16:35:46.982772
+p4_universal.py  |  mode=time-split  |  run=145544_512_timesplit_nomask at time 16:35:46.982818
+====================================================================== at time 16:35:46.982836
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_512_timesplit_nomask at time 16:35:46.982851
+Resolution : 512 at time 16:35:46.982864
+Brain mask : OFF at time 16:35:46.982878
+Quality    : ON at time 16:35:46.982891
+Trials     : n_calls=10  n_initial=5 at time 16:35:46.982904
+CPU pin    : unpinned  workers=95 at time 16:35:46.982916
+ at time 16:35:46.985694
+--- TIME-SPLIT mode --- at time 16:35:46.985722
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 16:35:46.989276
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 16:35:46.989304
+Auto-detected n_planes=7 from metadata at time 16:35:46.990421
+Interleaved: z=3/7 planes -> 700 frames at time 16:35:46.990437
+ at time 16:41:32.379477
+[preprocess movie]  input shape=(700, 2048, 2048) at time 16:41:32.379528
+Downsampling -> (512, 512) at time 16:41:32.379550
+ at time 16:42:53.470176
+Time split: tune frames 0-349 (350), test frames 350-699 (350) at time 16:42:53.470217
+[precomputing motion correction — runs once for all trials] at time 16:42:55.749485
+[MC done in 55.7s → Yr_mc_d1_512_d2_512_d3_1_order_C_frames_350.mmap] at time 16:43:51.456857
+ at time 16:43:51.458341
+============================================================ at time 16:43:51.458371
+BAYESIAN TUNE (time_split) at time 16:43:51.458386
+============================================================ at time 16:43:51.458402
+Trial  1: {'gSig': np.int64(4), 'gSig_filt': np.int64(2), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 40, 'stride': 20, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 16:43:51.475872
+[fit_file done] at time 17:12:50.516476
+*** Variable cnn_preds has not the same number of components as A *** at time 17:12:51.104447
+raw=145 kept=110 composite=-0.4028 t=1740s at time 17:12:53.100997
+Trial  2: {'gSig': np.int64(2), 'gSig_filt': np.int64(2), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 60, 'stride': 30, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:12:53.107322
+[fit_file done] at time 17:45:17.041748
+*** Variable cnn_preds has not the same number of components as A *** at time 17:45:18.053510
+raw=255 kept=117 composite=-0.3578 t=1945s at time 17:45:20.179905
+Trial  3: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.8284934481555126, 'min_pnr': np.int64(5), 'rf': 80, 'stride': 40, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:45:20.185790
+[fit_file done] at time 17:59:57.221107
+*** Variable cnn_preds has not the same number of components as A *** at time 17:59:57.768539
+raw=184 kept= 64 composite=-0.3495 t=878s at time 17:59:59.193069
+Trial  4: {'gSig': np.int64(4), 'gSig_filt': np.int64(3), 'min_corr': 0.5024732068269011, 'min_pnr': np.int64(5), 'rf': 60, 'stride': 30, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:59:59.199129
+[fit_file done] at time 18:55:23.830741
+*** Variable cnn_preds has not the same number of components as A *** at time 18:55:25.185622
+raw=359 kept=328 composite=-0.3727 t=3326s at time 18:55:29.967756
+Trial  5: {'gSig': np.int64(3), 'gSig_filt': np.int64(1), 'min_corr': 0.8408144315945107, 'min_pnr': np.int64(7), 'rf': 25, 'stride': 12, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 18:55:29.973717
+[fit_file done] at time 19:21:53.887355
+*** Variable cnn_preds has not the same number of components as A *** at time 19:21:54.573820
+raw=189 kept=124 composite=-0.3730 t=1585s at time 19:21:56.721440
+Trial  6: {'gSig': np.int64(2), 'gSig_filt': np.int64(4), 'min_corr': 0.7484073472648898, 'min_pnr': np.int64(5), 'rf': np.int64(25), 'stride': np.int64(12), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 19:21:56.867998
+[fit_file done] at time 19:46:23.233779
+*** Variable cnn_preds has not the same number of components as A *** at time 19:46:24.002045
+raw=215 kept=103 composite=-0.3655 t=1467s at time 19:46:25.913007
+Trial  7: {'gSig': np.int64(5), 'gSig_filt': np.int64(2), 'min_corr': 0.6624828745425461, 'min_pnr': np.int64(11), 'rf': np.int64(40), 'stride': np.int64(20), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 19:46:26.000993
+[fit_file done] at time 20:13:48.153428
+*** Variable cnn_preds has not the same number of components as A *** at time 20:13:48.715387
+raw=146 kept=123 composite=-0.3821 t=1643s at time 20:13:50.882931
+Trial  8: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.8253342828823136, 'min_pnr': np.int64(12), 'rf': np.int64(80), 'stride': np.int64(40), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 20:13:50.988648
+[fit_file done] at time 20:32:57.313777
+*** Variable cnn_preds has not the same number of components as A *** at time 20:32:57.711242
+raw= 93 kept= 69 composite=-0.3947 t=1147s at time 20:32:59.161287
+Trial  9: {'gSig': np.int64(2), 'gSig_filt': np.int64(4), 'min_corr': 0.7925770300910795, 'min_pnr': np.int64(12), 'rf': np.int64(80), 'stride': np.int64(40), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 20:32:59.339785
+[fit_file done] at time 20:39:36.097974
+*** Variable cnn_preds has not the same number of components as A *** at time 20:39:36.332344
+raw= 89 kept= 23 composite=-0.3152 t=397s at time 20:39:37.122283
+Trial 10: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.8444601136698213, 'min_pnr': np.int64(12), 'rf': np.int64(40), 'stride': np.int64(20), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 20:39:37.251018
+[fit_file done] at time 20:46:17.952534
+*** Variable cnn_preds has not the same number of components as A *** at time 20:46:18.166047
+raw= 80 kept= 17 composite=-0.2961 t=401s at time 20:46:18.854186
+ at time 20:46:19.010610
+Best params (time_split): at time 20:46:19.010647
+gSig: 2 at time 20:46:19.010703
+gSig_filt: 3 at time 20:46:19.010719
+min_corr: 0.8444601136698213 at time 20:46:19.010730
+min_pnr: 12 at time 20:46:19.010743
+rf: 40 at time 20:46:19.010755
+stride: 20 at time 20:46:19.010767
+p: 1 at time 20:46:19.010779
+merge_thr: 0.85 at time 20:46:19.010791
+ at time 20:46:19.935984
+Re-running best params on tune half... at time 20:46:19.936019
+[fit_file starting — MC first, then CNMF init] at time 20:46:19.940933
+[fit_file done] at time 20:56:07.216571
+*** Variable cnn_preds has not the same number of components as A *** at time 20:56:07.490594
+ at time 20:56:07.662380
+============================================================ at time 20:56:07.662418
+TEST: test_half (frames 350-699) at time 20:56:07.662432
+============================================================ at time 20:56:07.662450
+[fit_file starting — MC first, then CNMF init] at time 20:56:07.667646
+[fit_file done] at time 21:01:26.486785
+*** Variable cnn_preds has not the same number of components as A *** at time 21:01:26.662046
+Raw neurons: 52  kept: 21  composite: -0.1685 stability: 0.095  t=319s at time 21:01:27.464852
+WARNING: neuron 0 F0=-336.0790 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.130385
+WARNING: neuron 1 F0=-48.6018 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.339071
+WARNING: neuron 2 F0=-528.6895 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.393430
+WARNING: neuron 3 F0=-17.7875 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.406773
+WARNING: neuron 4 F0=-83.4978 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.413350
+WARNING: neuron 5 F0=-168.1992 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.421921
+WARNING: neuron 6 F0=-1.7502 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.430714
+WARNING: neuron 7 F0=-56.8380 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.518943
+WARNING: neuron 8 F0=-16.8146 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.758159
+WARNING: neuron 9 F0=-98.5016 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.769147
+WARNING: neuron 10 F0=-177.4888 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.806343
+WARNING: neuron 11 F0=-86.5005 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:28.813486
+WARNING: neuron 13 F0=-83.4355 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:32.216935
+WARNING: neuron 14 F0=-40.5733 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:32.817828
+WARNING: neuron 15 F0=-75.6335 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:33.077219
+WARNING: neuron 18 F0=-10.9421 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:39.489592
+WARNING: neuron 20 F0=-114.1976 <= 0 after bleach correction; clamping to 1e-6 at time 21:01:43.335782
+dF/F: percentile=8.0  bleach_correct=True at time 21:01:43.872111
+ at time 21:01:48.741989
+============================================================ at time 21:01:48.742042
+TEST: full_movie at time 21:01:48.742059
+============================================================ at time 21:01:48.742076
+[fit_file starting — MC first, then CNMF init] at time 21:01:48.747533
+[fit_file done] at time 21:24:59.747992
+*** Variable cnn_preds has not the same number of components as A *** at time 21:25:00.451240
+Raw neurons: 161  kept: 66  composite: +0.4271 stability: 0.821  t=1392s at time 21:25:02.567256
+WARNING: neuron 0 F0=-1614.3796 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.197753
+WARNING: neuron 1 F0=-1118.7773 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.226039
+WARNING: neuron 2 F0=-267.0996 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.240139
+WARNING: neuron 3 F0=-0.2251 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.249979
+WARNING: neuron 4 F0=-594.3193 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.260639
+WARNING: neuron 5 F0=-2147.7844 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:04.266917
+WARNING: neuron 7 F0=-2251.6298 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:06.316854
+WARNING: neuron 8 F0=-68.5189 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:06.326655
+WARNING: neuron 9 F0=-17.0248 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.494446
+WARNING: neuron 10 F0=-0.4484 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.503228
+WARNING: neuron 11 F0=-15.8781 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.509582
+WARNING: neuron 13 F0=-357.9938 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.525194
+WARNING: neuron 14 F0=-591.6828 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.531975
+WARNING: neuron 15 F0=-250.0009 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.539135
+WARNING: neuron 16 F0=-1950.1814 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.546520
+WARNING: neuron 17 F0=-4449.2231 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.554553
+WARNING: neuron 18 F0=-1341.2773 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:08.563162
+WARNING: neuron 19 F0=-70.7280 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.083362
+WARNING: neuron 20 F0=-257.4951 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.395647
+WARNING: neuron 21 F0=-14.0626 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.423286
+WARNING: neuron 22 F0=-52.8232 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.440887
+WARNING: neuron 23 F0=-1.1965 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.451465
+WARNING: neuron 24 F0=-1576.2988 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.463968
+WARNING: neuron 25 F0=-0.0908 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.472895
+WARNING: neuron 26 F0=-2098.5619 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.480120
+WARNING: neuron 27 F0=-1840.8362 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.488509
+WARNING: neuron 28 F0=-11.2504 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.498649
+WARNING: neuron 29 F0=-503.0754 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:09.506611
+WARNING: neuron 30 F0=-379.2465 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.052884
+WARNING: neuron 31 F0=-2471.9971 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.060032
+WARNING: neuron 32 F0=-4138.8469 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.068846
+WARNING: neuron 33 F0=-2049.9828 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.075651
+WARNING: neuron 34 F0=-733.1355 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.082040
+WARNING: neuron 35 F0=-67.4286 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:11.090597
+WARNING: neuron 36 F0=-241.6098 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.139078
+WARNING: neuron 37 F0=-2721.7835 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.146760
+WARNING: neuron 38 F0=-1959.0279 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.158961
+WARNING: neuron 39 F0=-2665.9756 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.179352
+WARNING: neuron 40 F0=-1542.0065 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.188208
+WARNING: neuron 41 F0=-2214.0480 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.228212
+WARNING: neuron 42 F0=-9.2447 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.235943
+WARNING: neuron 43 F0=-226.3772 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.246952
+WARNING: neuron 44 F0=-21.9406 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:13.258291
+WARNING: neuron 46 F0=-2943.1724 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:15.394399
+WARNING: neuron 47 F0=-42.6152 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:15.408639
+WARNING: neuron 48 F0=-71.2967 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:15.567367
+WARNING: neuron 49 F0=-182.6348 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.032310
+WARNING: neuron 50 F0=-2517.1133 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.042287
+WARNING: neuron 51 F0=-2280.2208 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.049563
+WARNING: neuron 52 F0=-2640.6903 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.057179
+WARNING: neuron 53 F0=-1444.5167 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.065821
+WARNING: neuron 54 F0=-459.5268 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.080983
+WARNING: neuron 55 F0=-0.3253 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.090843
+WARNING: neuron 56 F0=-247.2716 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.104515
+WARNING: neuron 57 F0=-8.8065 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:16.119866
+WARNING: neuron 59 F0=-94.0464 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:19.202834
+WARNING: neuron 60 F0=-44.5939 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:19.214106
+WARNING: neuron 62 F0=-26.3369 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:19.465361
+WARNING: neuron 63 F0=-61.5325 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:20.403310
+WARNING: neuron 64 F0=-0.0028 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:20.410260
+WARNING: neuron 65 F0=-979.1150 <= 0 after bleach correction; clamping to 1e-6 at time 21:25:20.429842
+dF/F: percentile=8.0  bleach_correct=True at time 21:25:20.922567
+ at time 21:25:20.923268
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_512_timesplit_nomask/ at time 21:25:20.923301
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 21:25:20.924789
+ at time 21:25:20.965129
+====================================================================== at time 21:25:20.965160
+DONE  |  time-split  |  145544_512_timesplit_nomask  |  289.6 min at time 21:25:20.965176
+====================================================================== at time 21:25:20.965188
+Monitoring ended at 21:25:22.027803
+
+4.83 hours
