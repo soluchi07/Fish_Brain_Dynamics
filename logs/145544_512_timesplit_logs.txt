@@ -1,0 +1,110 @@
+Monitoring started at 16:27:03.216700
+====================================================================== at time 16:27:08.021492
+p4_universal.py  |  mode=time-split  |  run=145544_512_timesplit at time 16:27:08.021551
+====================================================================== at time 16:27:08.021571
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_512_timesplit at time 16:27:08.021587
+Resolution : 512 at time 16:27:08.021601
+Brain mask : ON at time 16:27:08.021614
+Quality    : ON at time 16:27:08.021629
+Trials     : n_calls=10  n_initial=5 at time 16:27:08.021644
+CPU pin    : unpinned  workers=95 at time 16:27:08.021656
+ at time 16:27:08.024458
+--- TIME-SPLIT mode --- at time 16:27:08.024487
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 16:27:08.027964
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 16:27:08.027994
+Auto-detected n_planes=7 from metadata at time 16:27:08.029127
+Interleaved: z=3/7 planes -> 700 frames at time 16:27:08.029151
+ at time 16:32:51.437157
+[preprocess movie]  input shape=(700, 2048, 2048) at time 16:32:51.437206
+Downsampling -> (512, 512) at time 16:32:51.437223
+Brain mask coverage: 19.2% of frame at time 16:34:12.859506
+ at time 16:34:13.645535
+Time split: tune frames 0-349 (350), test frames 350-699 (350) at time 16:34:13.645585
+[precomputing motion correction — runs once for all trials] at time 16:34:16.221797
+[MC done in 58.5s → Yr_mc_d1_512_d2_512_d3_1_order_C_frames_350.mmap] at time 16:35:14.749470
+ at time 16:35:14.752443
+============================================================ at time 16:35:14.752474
+BAYESIAN TUNE (time_split) at time 16:35:14.752487
+============================================================ at time 16:35:14.752505
+Trial  1: {'gSig': np.int64(4), 'gSig_filt': np.int64(2), 'min_corr': 0.7728918500954693, 'min_pnr': np.int64(9), 'rf': 40, 'stride': 20, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 16:35:14.773754
+[fit_file done] at time 16:43:47.178089
+*** Variable cnn_preds has not the same number of components as A *** at time 16:43:47.356522
+raw= 30 kept=  8 composite=-0.4356 t=513s at time 16:43:47.913482
+Trial  2: {'gSig': np.int64(2), 'gSig_filt': np.int64(2), 'min_corr': 0.6167980138986576, 'min_pnr': np.int64(6), 'rf': 60, 'stride': 30, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 16:43:47.919822
+[fit_file done] at time 16:53:12.847782
+*** Variable cnn_preds has not the same number of components as A *** at time 16:53:13.091829
+raw= 44 kept=  5 composite=-0.3966 t=565s at time 16:53:13.600596
+Trial  3: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.8284934481555126, 'min_pnr': np.int64(5), 'rf': 80, 'stride': 40, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 16:53:13.606612
+[fit_file done] at time 16:58:29.594892
+*** Variable cnn_preds has not the same number of components as A *** at time 16:58:29.761965
+raw= 39 kept=  2 composite=-0.4335 t=316s at time 16:58:30.228359
+Trial  4: {'gSig': np.int64(4), 'gSig_filt': np.int64(3), 'min_corr': 0.5024732068269011, 'min_pnr': np.int64(5), 'rf': 60, 'stride': 30, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 16:58:30.234330
+[fit_file done] at time 17:16:25.039713
+*** Variable cnn_preds has not the same number of components as A *** at time 17:16:25.371536
+raw= 58 kept= 16 composite=-0.4250 t=1075s at time 17:16:26.069598
+Trial  5: {'gSig': np.int64(3), 'gSig_filt': np.int64(1), 'min_corr': 0.8408144315945107, 'min_pnr': np.int64(7), 'rf': 25, 'stride': 12, 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:16:26.075628
+[fit_file done] at time 17:24:43.321291
+*** Variable cnn_preds has not the same number of components as A *** at time 17:24:43.546121
+raw= 35 kept=  3 composite=-0.4484 t=497s at time 17:24:44.025980
+Trial  6: {'gSig': np.int64(3), 'gSig_filt': np.int64(1), 'min_corr': 0.6931415272418592, 'min_pnr': np.int64(6), 'rf': np.int64(60), 'stride': np.int64(30), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:24:44.224304
+[fit_file done] at time 17:35:20.710494
+*** Variable cnn_preds has not the same number of components as A *** at time 17:35:20.950017
+raw= 44 kept= 14 composite=-0.4516 t=637s at time 17:35:21.601623
+Trial  7: {'gSig': np.int64(2), 'gSig_filt': np.int64(2), 'min_corr': 0.6003821088944635, 'min_pnr': np.int64(6), 'rf': np.int64(80), 'stride': np.int64(40), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:35:21.784917
+[fit_file done] at time 17:43:21.357921
+*** Variable cnn_preds has not the same number of components as A *** at time 17:43:21.621921
+raw= 41 kept=  5 composite=-0.3988 t=480s at time 17:43:22.130299
+Trial  8: {'gSig': np.int64(3), 'gSig_filt': np.int64(2), 'min_corr': 0.654945279303144, 'min_pnr': np.int64(6), 'rf': np.int64(60), 'stride': np.int64(30), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:43:22.269063
+[fit_file done] at time 17:54:30.382955
+*** Variable cnn_preds has not the same number of components as A *** at time 17:54:30.648953
+raw= 39 kept= 12 composite=-0.4147 t=668s at time 17:54:31.267278
+Trial  9: {'gSig': np.int64(3), 'gSig_filt': np.int64(4), 'min_corr': 0.7482873398012023, 'min_pnr': np.int64(6), 'rf': np.int64(40), 'stride': np.int64(20), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 17:54:31.414474
+[fit_file done] at time 18:04:14.172697
+*** Variable cnn_preds has not the same number of components as A *** at time 18:04:14.462518
+raw= 37 kept=  8 composite=-0.4197 t=583s at time 18:04:15.024528
+Trial 10: {'gSig': np.int64(5), 'gSig_filt': np.int64(4), 'min_corr': 0.5573355432877971, 'min_pnr': np.int64(12), 'rf': np.int64(25), 'stride': np.int64(12), 'p': 1} ...   [fit_file starting — CNMF init (MC skipped — precomputed)] at time 18:04:15.355114
+[fit_file done] at time 18:11:22.510008
+*** Variable cnn_preds has not the same number of components as A *** at time 18:11:22.655632
+raw= 17 kept=  3 composite=-0.4068 t=427s at time 18:11:23.122994
+ at time 18:11:23.275385
+Best params (time_split): at time 18:11:23.275414
+gSig: 2 at time 18:11:23.275420
+gSig_filt: 2 at time 18:11:23.275425
+min_corr: 0.6167980138986576 at time 18:11:23.275429
+min_pnr: 6 at time 18:11:23.275440
+rf: 60 at time 18:11:23.275445
+stride: 30 at time 18:11:23.275450
+p: 1 at time 18:11:23.275455
+merge_thr: 0.85 at time 18:11:23.275460
+ at time 18:11:24.215239
+Re-running best params on tune half... at time 18:11:24.215274
+[fit_file starting — MC first, then CNMF init] at time 18:11:24.220170
+[fit_file done] at time 18:28:09.498462
+*** Variable cnn_preds has not the same number of components as A *** at time 18:28:09.912370
+ at time 18:28:10.022060
+============================================================ at time 18:28:10.022108
+TEST: test_half (frames 350-699) at time 18:28:10.022124
+============================================================ at time 18:28:10.022138
+[fit_file starting — MC first, then CNMF init] at time 18:28:10.027328
+[fit_file done] at time 18:43:28.144495
+*** Variable cnn_preds has not the same number of components as A *** at time 18:43:28.470329
+Raw neurons: 20  kept: 2  composite: +0.0927 stability: 0.500  t=918s at time 18:43:28.945754
+dF/F: percentile=8.0  bleach_correct=True at time 18:43:29.535144
+ at time 18:43:34.404419
+============================================================ at time 18:43:34.404472
+TEST: full_movie at time 18:43:34.404491
+============================================================ at time 18:43:34.404506
+[fit_file starting — MC first, then CNMF init] at time 18:43:34.409838
+[fit_file done] at time 19:07:07.988601
+*** Variable cnn_preds has not the same number of components as A *** at time 19:07:08.357111
+Raw neurons: 39  kept: 3  composite: -0.1556 stability: 0.333  t=1414s at time 19:07:09.223641
+WARNING: neuron 0 F0=-2084.2389 <= 0 after bleach correction; clamping to 1e-6 at time 19:07:09.674413
+dF/F: percentile=8.0  bleach_correct=True at time 19:07:12.110755
+ at time 19:07:12.111154
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_512_timesplit/ at time 19:07:12.111174
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 19:07:12.112685
+ at time 19:07:12.148139
+====================================================================== at time 19:07:12.148171
+DONE  |  time-split  |  145544_512_timesplit  |  160.1 min at time 19:07:12.148185
+====================================================================== at time 19:07:12.148199
+Monitoring ended at 19:07:13.159622
