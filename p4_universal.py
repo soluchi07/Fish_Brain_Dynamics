@@ -145,12 +145,21 @@ def parse_args() -> argparse.Namespace:
                    help="Reject components with trace SNR below this")
     p.add_argument("--no-quality-filters", action="store_true",
                    help="Disable post-hoc quality filters (debug only)")
+    p.add_argument("--soft-mask-margin", type=int, default=15,
+                   help="Distance (px) outside the hard brain mask within which "
+                        "components are still kept. 0 = hard boundary (default: 15). "
+                        "Only effective when --no-mask is NOT set.")
 
     # dF/F
     p.add_argument("--no-bleach-correct", action="store_true",
                    help="Skip double-exponential photobleaching correction (default: ON for T>=100)")
     p.add_argument("--dff-percentile", type=float, default=8.0,
                    help="Percentile used for F0 baseline in dF/F (default: 8)")
+    # Temp files
+    p.add_argument("--keep-temp", action="store_true",
+                   help="Keep intermediate .tif files in _work/ after memmap creation (default: clean up)")
+
+    return p.parse_args()
 
     return p.parse_args()
 
@@ -215,8 +224,10 @@ import pandas as pd
 import tifffile
 import skimage.transform
 from skimage.morphology import convex_hull_image, binary_closing, binary_opening, disk, remove_small_objects
+from skimage.measure import perimeter
 from skimage.filters import threshold_otsu
 from scipy.optimize import linear_sum_assignment, curve_fit
+from scipy.ndimage import distance_transform_edt
 from skopt import gp_minimize
 from skopt.space import Integer, Real, Categorical
 from skopt.plots import plot_convergence
@@ -331,20 +342,30 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
     raise FileNotFoundError(f"No recognizable .lux*.h5 / .h5 files in {folder}")
 
 
-def discover(folder: Path, override: Optional[str] = None
-             ) -> tuple[str, list[str], tuple]:
-    """Detect or override format. Print result. Auto-populates ARGS.n_planes for interleaved."""
+def discover(folder: Path, override: Optional[str] = None,
+             n_planes_override: Optional[int] = None
+             ) -> tuple[str, list[str], tuple, Optional[int]]:
+    """Detect or override format. Print result. Returns (fmt, files, shape, n_planes_detected).
+
+    n_planes_detected is set only for interleaved format when detected from
+    metadata; otherwise None. Callers should use a locally-scoped variable
+    rather than relying on global ARGS.n_planes being populated.
+    """
     fmt, files, shape = detect_format(folder)
     if override and override != fmt:
         print(f"  Format override: detected={fmt} -> using={override}")
         fmt = override
+    detected_n_planes: Optional[int] = None
+    if fmt == "interleaved":
+        if n_planes_override is not None:
+            detected_n_planes = n_planes_override
+        else:
+            detected_n_planes = read_n_planes(files[0])
+            print(f"  Auto-detected n_planes={detected_n_planes} from metadata")
     print(f"  Folder : {folder}")
     print(f"  Format : {fmt}  ({len(files)} file(s), sample shape={shape})")
-    if fmt == "interleaved" and ARGS.n_planes is None:
-        detected_z = read_n_planes(files[0])
-        print(f"  Auto-detected n_planes={detected_z} from metadata")
-        ARGS.n_planes = detected_z
-    return fmt, files, shape
+    return fmt, files, shape, detected_n_planes
+
 
 
 # =============================================================================
@@ -472,7 +493,7 @@ def downsample(data: np.ndarray, target_h: int, target_w: int) -> np.ndarray:
 
 def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Subtract per-column temporal+row median (light-sheet stripe artifact)."""
-    col_median = np.median(data, axis=(0, 1), keepdims=True)
+    col_median = np.median(data, axis=(0, 2), keepdims=True)
     cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
     return cleaned, col_median
 
@@ -501,14 +522,23 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
         if bleach_correct:
             try:
                 F_range = float(F.max() - F.min())
+                if F_range < 1e-6:
+                    raise ValueError("flat trace, cannot fit bleach")
                 p0 = [F_range * 0.5, T * 0.3, F_range * 0.3, T * 0.1]
                 bounds = ([0, 1, 0, 1], [np.inf, T * 10, np.inf, T * 10])
                 popt, _ = curve_fit(_double_exp, t, F - F.min(), p0=p0,
                                     bounds=bounds, maxfev=5000)
                 trend = _double_exp(t, *popt)
-                F = F - trend  # subtract bleach, keep residual + offset
-            except Exception:
-                pass  # fit failed; use raw F
+                # Sanity checks on the fitted trend
+                if trend[-1] > trend[0] + 0.2 * F_range:
+                    raise ValueError(f"bleach trend is increasing (end={trend[-1]:.2f} > start={trend[0]:.2f})")
+                residual = F - trend
+                if residual.min() < -0.5 * F_range:
+                    raise ValueError(f"bleach trend overshoots (residual min={residual.min():.2f} < {-0.5*F_range:.2f})")
+                F = residual  # subtract bleach, keep residual + offset
+            except Exception as exc:
+                print(f"  WARNING: bleach fit rejected for neuron {i} ({exc}); using raw trace")
+                pass  # fit failed or rejected; use raw F
 
         F0 = np.percentile(F, ARGS.dff_percentile)
         if F0 < 1e-6:
@@ -705,9 +735,15 @@ BASE_PARAMS = get_base_params()
 def array_to_memmap(array: np.ndarray, basename: Path) -> str:
     tif = str(basename) + ".tif"
     tifffile.imwrite(tif, array.astype(np.float32))
-    return caiman.mmapping.save_memmap(
+    mmap_path = caiman.mmapping.save_memmap(
         [tif], base_name=str(basename), order="C", border_to_0=0,
     )
+    if not ARGS.keep_temp:
+        try:
+            os.remove(tif)
+        except OSError:
+            pass  # best-effort cleanup
+    return mmap_path
 
 
 def precompute_mc(fname_mmap: str) -> str:
@@ -800,11 +836,11 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
     Filters applied (in order):
       1. circularity >= ARGS.min_circularity
       2. area <= ARGS.max_area_factor * pi * gSig^2
-      3. centroid inside brain mask
+      3. centroid inside brain mask (soft-boundary when --soft-mask-margin > 0)
     """
     if cnmf_obj is None or cnmf_obj.estimates.A.shape[1] == 0:
         return [], {"input": 0, "circularity": 0, "max_area": 0,
-                    "in_mask": 0, "final": 0}
+                    "in_mask": 0, "boundary_kept": 0, "final": 0}
 
     A = cnmf_obj.estimates.A
     n = A.shape[1]
@@ -820,6 +856,13 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
     rej_circ = 0
     rej_area = 0
     rej_mask = 0
+    boundary_kept = 0
+
+    # Precompute distance transform for soft mask boundary
+    dist_to_mask = None
+    soft_margin = ARGS.soft_mask_margin
+    if soft_margin > 0 and mask.shape == (H, W):
+        dist_to_mask = distance_transform_edt(mask)
 
     for i in range(n):
         fp = np.asarray(A[:, i].todense()).flatten().reshape(H, W)
@@ -832,15 +875,11 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
             rej_circ += 1
             continue
 
-        # Circularity = 4*pi*area / perimeter^2
-        # Perimeter via 4-neighbor edges
-        eroded = np.zeros_like(binary)
-        eroded[1:-1, 1:-1] = (
-            binary[1:-1, 1:-1] & binary[:-2, 1:-1] & binary[2:, 1:-1] &
-            binary[1:-1, :-2] & binary[1:-1, 2:]
-        )
-        perimeter = max(int((binary & ~eroded).sum()), 1)
-        circularity = 4 * np.pi * area / (perimeter * perimeter)
+        # Circularity via skimage.measure.perimeter (chain-code approximation
+        # of the true Euclidean perimeter, more accurate than the boundary-pixel
+        # count for small components).
+        perim_val = max(int(perimeter(binary)), 1)
+        circularity = 4 * np.pi * area / (perim_val * perim_val)
 
         if circularity < ARGS.min_circularity:
             rej_circ += 1
@@ -853,14 +892,23 @@ def quality_filter(cnmf_obj, dims: tuple[int, int], mask: np.ndarray,
         ys, xs = np.nonzero(binary)
         cy, cx = int(ys.mean()), int(xs.mean())
         if 0 <= cy < H and 0 <= cx < W and not mask[cy, cx]:
-            rej_mask += 1
-            continue
+            if dist_to_mask is not None:
+                dist = dist_to_mask[cy, cx]
+                if dist > soft_margin:
+                    rej_mask += 1
+                    continue
+                else:
+                    boundary_kept += 1
+            else:
+                rej_mask += 1
+                continue
 
         keep.append(i)
 
     counts["circularity_rejected"] = rej_circ
     counts["max_area_rejected"] = rej_area
     counts["in_mask_rejected"] = rej_mask
+    counts["boundary_kept"] = boundary_kept
     counts["final"] = len(keep)
     return keep, counts
 
@@ -897,13 +945,29 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], mask: np.ndarray,
     A = cnmf_obj.estimates.A[:, keep]
     C = cnmf_obj.estimates.C[keep, :]
 
-    Y_hat = A @ C
+    # Reconstruction error via Frobenius norm identity - avoids materialising
+    # the (pixels x frames) dense reconstruction matrix (~11 GB at full res).
+    #   ||Y - A@C||^2_F = ||Y||^2_F - 2*trace(C^T * A^T * Y) + ||A@C||^2_F
+    # All intermediates are (n x T) or (n x n) - at most a few MB.
+    Yr_norm_sq = float(np.linalg.norm(Yr, "fro") ** 2)
+    AtYr = A.T @ Yr                     # (n x T) dense
+    AtA = A.T @ A                       # (n x n) sparse
+    recon_norm_sq = Yr_norm_sq - 2.0 * float(np.sum(C * AtYr))                     + float(np.sum(C * (AtA @ C)))
+
     b = getattr(cnmf_obj.estimates, "b", None)
     f_bg = getattr(cnmf_obj.estimates, "f", None)
     if b is not None and f_bg is not None and b.shape[1] > 0:
-        Y_hat = Y_hat + b @ f_bg
-    recon_error = float(
-        np.linalg.norm(Yr - Y_hat, "fro") / (np.linalg.norm(Yr, "fro") + 1e-9))
+        # Background term   ||b*f_bg||^2_F = sum(f_bg * (b^T * b * f_bg))
+        bt_plus = b.T @ b
+        bg_norm_sq = float(np.sum(f_bg * (bt_plus @ f_bg)))
+        # Cross-term  2*trace(C^T * A^T * b * f_bg) = 2*sum( (A^T*b) * (C*f_bg^T) )
+        Atb = A.T @ b                    # (n x nb) dense
+        CfbgT = C @ f_bg.T               # (n x nb) dense
+        cross = 2.0 * float(np.sum(Atb * CfbgT))
+        recon_norm_sq += bg_norm_sq + cross
+
+    recon_norm_sq = max(recon_norm_sq, 0.0)
+    recon_error = float(np.sqrt(recon_norm_sq / max(Yr_norm_sq, 1e-9)))
 
     H_val, W_val = dims
     comps = []
@@ -1156,6 +1220,7 @@ def save_summary(mode: str, best_params: dict, test_results: dict,
         "brain_mask": not ARGS.no_mask,
         "stripe_removal": not ARGS.no_stripe,
         "quality_filters": not ARGS.no_quality_filters,
+        "soft_mask_margin": ARGS.soft_mask_margin,
         "n_calls": ARGS.n_calls,
         "best_params": best_params,
         "format_info": fmt_info,
@@ -1176,13 +1241,32 @@ def save_summary(mode: str, best_params: dict, test_results: dict,
 
     # Append master CSV
     master = RESULTS_ROOT / "all_runs.csv"
-    headline_test = next(iter(test_results.values()), None) if test_results else None
+    # Use the held-out test result as the canonical headline row.
+    # Priority order: "test_file" > "test_half" > first non-tune key > first key.
+    # This ensures cross-validation results (not the full-movie re-run) are
+    # recorded in the aggregate table.
+    prefs = ["test_file", "test_half"]
+    headline_key = None
+    for k in prefs:
+        if k in test_results:
+            headline_key = k
+            break
+    if headline_key is None:
+        # Fallback: exclude keys containing "tune" and pick the first remaining
+        for k, v in test_results.items():
+            if "tune" not in k and isinstance(v, dict):
+                headline_key = k
+                break
+    if headline_key is None:
+        headline_key = next(iter(test_results.keys()), None)
+    headline_test = test_results.get(headline_key)
     if isinstance(headline_test, dict):
         row = {
             "run_name": ARGS.run_name,
             "mode": mode,
             "resolution": ARGS.resolution,
             "brain_mask": not ARGS.no_mask,
+            "test_key": headline_key,
             "n_neurons_kept": headline_test.get("n_neurons", 0),
             "n_neurons_raw": headline_test.get("n_neurons_pre", 0),
             "composite_score": headline_test.get("composite_score", float("nan")),
@@ -1208,20 +1292,20 @@ def save_summary(mode: str, best_params: dict, test_results: dict,
 def mode_time_split():
     """Tune on first half of frames, test on second half. Same file/Z."""
     print(f"\n--- TIME-SPLIT mode ---")
-    fmt, files, sample_shape = discover(ARGS.data_dir, ARGS.format_override)
+    fmt, files, sample_shape, _nplanes = discover(ARGS.data_dir, ARGS.format_override)
 
     z_index = ARGS.z_index
     if fmt == "multi-tp":
         Z = sample_shape[0]
         z_index = Z // 2 if z_index is None else z_index
     elif fmt == "interleaved" and z_index is None:
-        z_index = ARGS.n_planes // 2
+        z_index = (_nplanes if _nplanes is not None else ARGS.n_planes) // 2
     elif ARGS.n_planes and z_index is None:
         z_index = ARGS.n_planes // 2
 
     raw = load_movie(ARGS.data_dir, fmt, files, sample_shape,
                      z_index=z_index, max_frames=ARGS.max_frames,
-                     n_planes=ARGS.n_planes)
+                     n_planes=_nplanes if _nplanes is not None else ARGS.n_planes)
     data, mask, prep_info = preprocess_movie(raw, label="movie")
 
     T_full = data.shape[0]
@@ -1257,17 +1341,17 @@ def mode_time_split():
     save_summary("time-split", best_params,
                  {"test_half": test_metrics, "full_movie": full_metrics},
                  fmt_info,
-                 extra={"z_index": z_index, "n_planes": ARGS.n_planes,
+                 extra={"z_index": z_index, "n_planes": _nplanes if _nplanes is not None else ARGS.n_planes,
                         "T_total": T_full, "data_dir": str(ARGS.data_dir)})
 
 
 def mode_plane_split():
     """Tune on one Z, test on every other Z. Supports multi-tp and interleaved formats."""
     print(f"\n--- PLANE-SPLIT mode ---")
-    fmt, files, sample_shape = discover(ARGS.data_dir, ARGS.format_override)
+    fmt, files, sample_shape, _nplanes = discover(ARGS.data_dir, ARGS.format_override)
 
     if fmt == "interleaved":
-        Z = ARGS.n_planes  # auto-populated by discover()
+        Z = _nplanes if _nplanes is not None else ARGS.n_planes
         def _load_plane(z):
             return load_plane_interleaved(files[0], z, Z)
     elif fmt == "multi-tp":
@@ -1335,15 +1419,15 @@ def mode_file_plane_split():
     """Tune on file A z, test on file B same z."""
     print(f"\n--- FILE-PLANE-SPLIT mode ---")
     print("\nTune dataset:")
-    fmt_t, tune_files, shape_t = discover(ARGS.tune_dir, ARGS.format_override)
+    fmt_t, tune_files, shape_t, _nplanes_t = discover(ARGS.tune_dir, ARGS.format_override)
     print("\nTest dataset:")
-    fmt_te, test_files, shape_te = discover(ARGS.test_dir, ARGS.format_override)
+    fmt_te, test_files, shape_te, _nplanes_te = discover(ARGS.test_dir, ARGS.format_override)
 
     z_index = ARGS.z_index
     if fmt_t == "multi-tp" and z_index is None:
         z_index = shape_t[0] // 2
     elif fmt_t == "interleaved" and z_index is None:
-        z_index = ARGS.n_planes // 2
+        z_index = (_nplanes_t if _nplanes_t is not None else ARGS.n_planes) // 2
     elif ARGS.n_planes and z_index is None:
         z_index = ARGS.n_planes // 2
     if z_index is None:
@@ -1353,7 +1437,7 @@ def mode_file_plane_split():
     print("\n[Loading tune]")
     tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
                           z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes)
     tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label="tune")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1367,7 +1451,7 @@ def mode_file_plane_split():
     print("\n[Loading test]")
     test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
                           z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes)
     test_data, test_mask, prep_info_test = preprocess_movie(test_raw, label="test")
     test_mmap = array_to_memmap(test_data, WORK_DIR / "test")
 
@@ -1391,14 +1475,14 @@ def mode_file_split():
     """Tune on file A (one Z), test on file B at every Z if multi-tp; else single test."""
     print(f"\n--- FILE-SPLIT mode ---")
     print("\nTune dataset:")
-    fmt_t, tune_files, shape_t = discover(ARGS.tune_dir, ARGS.format_override)
+    fmt_t, tune_files, shape_t, _nplanes_t = discover(ARGS.tune_dir, ARGS.format_override)
     print("\nTest dataset:")
-    fmt_te, test_files, shape_te = discover(ARGS.test_dir, ARGS.format_override)
+    fmt_te, test_files, shape_te, _nplanes_te = discover(ARGS.test_dir, ARGS.format_override)
 
     if fmt_t == "multi-tp":
         tune_z = shape_t[0] // 2
     elif fmt_t == "interleaved":
-        tune_z = ARGS.n_planes // 2
+        tune_z = (_nplanes_t if _nplanes_t is not None else ARGS.n_planes) // 2
     else:
         tune_z = 0
     print(f"\nTuning on tune-file z={tune_z}")
@@ -1406,7 +1490,7 @@ def mode_file_split():
     print("\n[Loading tune]")
     tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
                           z_index=tune_z, max_frames=ARGS.max_frames,
-                          n_planes=ARGS.n_planes)
+                          n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes)
     tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1421,11 +1505,11 @@ def mode_file_split():
         Z_te = shape_te[0]
         z_iter = range(Z_te)
     elif fmt_te == "interleaved":
-        Z_te = ARGS.n_planes
+        Z_te = _nplanes_te if _nplanes_te is not None else ARGS.n_planes
         z_iter = range(Z_te)
     else:
         Z_te = 1
-        _z0 = ARGS.z_index if ARGS.z_index is not None else (ARGS.n_planes // 2 if ARGS.n_planes else 0)
+        _z0 = ARGS.z_index if ARGS.z_index is not None else ((_nplanes_te if _nplanes_te is not None else ARGS.n_planes) // 2 if (_nplanes_te is not None or ARGS.n_planes) else 0)
         z_iter = [_z0]
 
     all_metrics = {}
@@ -1439,7 +1523,7 @@ def mode_file_split():
         else:
             test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
                                   z_index=z, max_frames=ARGS.max_frames,
-                                  n_planes=ARGS.n_planes)
+                                  n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes)
         test_data, test_mask, _ = preprocess_movie(test_raw, label=label)
         test_mmap = array_to_memmap(test_data, WORK_DIR / label)
         m = test_cnmf(

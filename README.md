@@ -111,6 +111,8 @@ Format can also be overridden via `--format`.
 ### Brain mask preprocessing
 An Otsu-threshold brain mask is computed from the mean image, cleaned with morphological opening/closing, and applied before CNMF to zero out dark periphery pixels. This prevents CNMF from initialising components in regions the biology team flagged as outside the imaging plane. Disabled with `--no-mask`.
 
+The mask is **hard** during preprocessing (pixels are zeroed to keep CNMF fast), but the quality filter uses a **soft boundary** controlled by `--soft-mask-margin` (default: 15 px). Components whose centroids fall just outside the hard mask edge but within this margin are still kept. This prevents the Otsu mask from falsely rejecting legitimate neurons near the brain boundary. Set `--soft-mask-margin 0` to reproduce the original hard-rejection behavior.
+
 ### Quality filters inside Bayesian tuning
 p3 ran quality filters only post-hoc. p4 applies them **inside every Bayesian trial**: the composite score that the optimizer maximises is computed on the **filtered** neuron count, not the raw count. This means the optimizer is rewarded for finding real neurons rather than accumulating noise blobs.
 
