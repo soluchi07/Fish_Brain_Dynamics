@@ -8,7 +8,7 @@ can be run on its own, without going through a full time-split / plane-split
 or the quality-filter thresholds change.
 
 It reuses the same format auto-detection, preprocessing (resolution, stripe
-removal, brain mask), CNMF runner, quality filters, and composite score as
+removal), CNMF runner, quality filters, and composite score as
 p4_universal.py, so parameters tuned here are directly compatible with it.
 
 Supported input formats (auto-detected):
@@ -370,7 +370,7 @@ def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
 
 
 def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dict]:
-    """Full preprocessing pipeline. Returns (preprocessed_movie, mask, metadata_dict)."""
+    """Full preprocessing pipeline. Returns (preprocessed_movie, metadata_dict)."""
     info = {"original_shape": tuple(data.shape)}
     print(f"\n[preprocess {label}]  input shape={data.shape}")
 
@@ -427,6 +427,7 @@ def get_search_space() -> list:
             Integer(2, 5, name="gSig"),
             Integer(1, 4, name="gSig_filt"),
             Real(0.5, 0.85, name="min_corr"),
+            Real(0.2, 0.3, name="decay_time"),
             Integer(5, 12, name="min_pnr"),
             Categorical([25, 40, 60, 80], name="rf"),
         ]
@@ -435,6 +436,7 @@ def get_search_space() -> list:
             Integer(4, 10, name="gSig"),
             Integer(2, 8, name="gSig_filt"),
             Real(0.5, 0.85, name="min_corr"),
+            Real(0.2, 0.3, name="decay_time"),
             Integer(5, 12, name="min_pnr"),
             Categorical([50, 80, 120, 160], name="rf"),
         ]
@@ -442,6 +444,7 @@ def get_search_space() -> list:
         Integer(4, 10, name="gSig"),
         Integer(4, 10, name="gSig_filt"),
         Real(0.5, 0.85, name="min_corr"),
+        Real(0.2, 0.3, name="decay_time"),
         Integer(5, 12, name="min_pnr"),
         Categorical([100, 160, 240], name="rf"),
     ]
@@ -462,7 +465,29 @@ def get_base_params() -> dict:
         ssub = 2  # subsample 2x to cut init time ~16x on large FOV
 
     return {
-        "fr": 30,
+        "data": {
+            "fr": 5,              # TODO: verify per-trial from time_stamps, NOT 5
+            "decay_time": 0.25,     # GCaMP8m; consider ~0.22-0.3 range for tuning
+            "dxy": [0.208, 0.208]
+        },
+        "init": {
+            "method_init": "corr_pnr",
+            "nb": 0,
+            "rolling_sum": True,
+            "ssub": ssub,            
+            "tsub": 1                
+        },
+        "preprocess": {"p": 1},
+        "temporal": {"p": 1},
+        "quality": {
+            "min_SNR": ARGS.min_snr_trace,
+            "rval_thr": 0.85,
+            "use_cnn": True,   # validate against your data; disable if rejecting good components
+            "min_cnn_thr": 0.99
+        }
+    }
+    return {
+        "fr": 5,
         "decay_time": 1.0,
         "method_init": "corr_pnr",
         "K": None,
@@ -570,6 +595,12 @@ def run_cnmf(params_override: dict, fname_mmap: str,
          don't hold up under a second, independent fit get a chance to be
          re-evaluated/merged/dropped by CaImAn internally, so this acts as
          an additional validation pass before we score the run.
+
+    Returns (cnmf_obj, elapsed_seconds, fname_used), where fname_used is the
+    path of the mmap that was actually fit (i.e. the motion-corrected one,
+    if do_mc was True) — this is the mmap callers must reload Yr from when
+    scoring the run, so scoring never accidentally compares the fitted
+    model against pre-registration data.
     """
     p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
     for key in ("gSig", "gSig_filt"):
@@ -643,16 +674,39 @@ def run_cnmf(params_override: dict, fname_mmap: str,
             except Exception as refit_exc:
                 print(f"  [refit failed, keeping pre-refit estimates: {refit_exc}]", flush=True)
 
-        return cnmf_obj, time.time() - t0
+        return cnmf_obj, time.time() - t0, fname_to_use
     except Exception as exc:
         print(f"    CNMF failed: {exc}")
-        return None, time.time() - t0
+        return None, time.time() - t0, None
     finally:
         if cluster is not None:
             try:
                 caiman.stop_server(dview=cluster)
             except Exception:
                 pass
+
+
+def load_yr_for_scoring(fname_used: Optional[str], fallback_Yr):
+    """
+    Reload Yr from the exact mmap a CNMF run was fit on, so scoring never
+    compares AC against a different (e.g. pre-motion-correction) movie than
+    the one the model was actually fit to.
+
+    Falls back to `fallback_Yr` if fname_used is missing or fails to load;
+    this is safe because score_run() only reaches the point of using Yr
+    when cnmf_obj is non-None with accepted components — if run_cnmf itself
+    failed (fname_used is None), score_run returns its sentinel without
+    touching Yr at all.
+    """
+    if fname_used is None:
+        return fallback_Yr
+    try:
+        Yr_used, _, _ = caiman.mmapping.load_memmap(fname_used)
+        return Yr_used
+    except Exception as exc:
+        print(f"  [WARNING: could not reload registered mmap '{fname_used}' for scoring "
+              f"({exc}); falling back to pre-registration Yr]", flush=True)
+        return fallback_Yr
 
 
 def score_run(cnmf_obj, Yr, dims: tuple[int, int]) -> dict:
@@ -739,7 +793,7 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int]) -> dict:
 def bayesian_tune(mmap_path: str, dims: tuple[int, int], tag: str = "tune"
                   ) -> tuple[dict, pd.DataFrame]:
     """Run Bayesian search. Returns (best_params, trials_df)."""
-    Yr, _, _ = caiman.mmapping.load_memmap(mmap_path)
+    Yr_unregistered, _, _ = caiman.mmapping.load_memmap(mmap_path)
     trial_log: list[dict] = []
 
     # MC params are constant across trials — run once and reuse the output mmap
@@ -758,8 +812,15 @@ def bayesian_tune(mmap_path: str, dims: tuple[int, int], tag: str = "tune"
         num = len(trial_log) + 1
         print(f"  Trial {num:2d}: {tp} ...", end=" ", flush=True)
 
-        cnmf_obj, rt = run_cnmf(tp, mc_mmap, do_mc=not mc_precomputed)
-        metrics = score_run(cnmf_obj, Yr, dims)
+        cnmf_obj, rt, fname_used = run_cnmf(tp, mc_mmap, do_mc=not mc_precomputed)
+        # Score against the mmap CNMF actually fit on (post-MC when do_mc=True,
+        # or the precomputed registered mmap when mc_precomputed=True) rather
+        # than the pre-registration Yr_unregistered loaded above — otherwise a
+        # pixel-shift mismatch between the fitted data and the scored data can
+        # blow up recon_error by orders of magnitude independent of how good
+        # the trial's parameters actually are.
+        Yr_scored = load_yr_for_scoring(fname_used, Yr_unregistered)
+        metrics = score_run(cnmf_obj, Yr_scored, dims)
         metrics.update(tp)
         metrics["runtime_s"] = round(rt, 1)
         trial_log.append(metrics)
@@ -840,12 +901,12 @@ def main():
     raw = load_movie(ARGS.data_dir, fmt, files, sample_shape,
                      z_index=z_index, max_frames=ARGS.max_frames,
                      n_planes=_nplanes if _nplanes is not None else ARGS.n_planes)
-    data, mask, prep_info = preprocess_movie(raw, label="calib")
+    data, prep_info = preprocess_movie(raw, label="calib")
 
     dims = data.shape[1:]
     mmap_path = array_to_memmap(data, WORK_DIR / "calib_movie")
 
-    best_params, trials_df, counts_log = bayesian_tune(mmap_path, dims, mask, tag="calib")
+    best_params, trials_df = bayesian_tune(mmap_path, dims, tag="calib")
 
     summary = {
         "run_name": ARGS.run_name,
