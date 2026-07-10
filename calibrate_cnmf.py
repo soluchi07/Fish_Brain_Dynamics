@@ -427,7 +427,6 @@ def get_search_space() -> list:
             Integer(2, 5, name="gSig"),
             Integer(1, 4, name="gSig_filt"),
             Real(0.5, 0.85, name="min_corr"),
-            Real(0.2, 0.3, name="decay_time"),
             Integer(5, 12, name="min_pnr"),
             Categorical([25, 40, 60, 80], name="rf"),
         ]
@@ -436,7 +435,6 @@ def get_search_space() -> list:
             Integer(4, 10, name="gSig"),
             Integer(2, 8, name="gSig_filt"),
             Real(0.5, 0.85, name="min_corr"),
-            Real(0.2, 0.3, name="decay_time"),
             Integer(5, 12, name="min_pnr"),
             Categorical([50, 80, 120, 160], name="rf"),
         ]
@@ -444,51 +442,37 @@ def get_search_space() -> list:
         Integer(4, 10, name="gSig"),
         Integer(4, 10, name="gSig_filt"),
         Real(0.5, 0.85, name="min_corr"),
-        Real(0.2, 0.3, name="decay_time"),
         Integer(5, 12, name="min_pnr"),
-        Categorical([100, 160, 240], name="rf"),
+        # Floor raised from 100 to 160: rf=100 on a 2048x2048 canvas creates
+        # ~1700 overlapping patches, and on longer recordings (more raw
+        # corr_pnr candidates before merging) patch-consolidation inside
+        # fit_file() can try to densify a huge (pixels x components) matrix
+        # and blow past available RAM. Fewer, larger patches avoid this.
+        Categorical([160, 200, 240], name="rf"),
     ]
 
 
 def get_base_params() -> dict:
     if ARGS.resolution == "512":
         mc = dict(max_shifts=(3, 3), strides=(48, 48),
-                  overlaps=(24, 24), max_deviation_rigid=2)
+                  overlaps=(24, 24), max_deviation_rigid=2, border_nan="copy")
         ssub = 1
     elif ARGS.resolution == "1024":
         mc = dict(max_shifts=(6, 6), strides=(96, 96),
-                  overlaps=(48, 48), max_deviation_rigid=3)
+                  overlaps=(48, 48), max_deviation_rigid=3, border_nan="copy")
         ssub = 1
     else:
         mc = dict(max_shifts=(12, 12), strides=(192, 192),
-                  overlaps=(96, 96), max_deviation_rigid=3)
+                  overlaps=(96, 96), max_deviation_rigid=3, border_nan="copy")
         ssub = 2  # subsample 2x to cut init time ~16x on large FOV
 
     return {
-        "data": {
-            "fr": 5,              # TODO: verify per-trial from time_stamps, NOT 5
-            "decay_time": 0.25,     # GCaMP8m; consider ~0.22-0.3 range for tuning
-            "dxy": [0.208, 0.208]
-        },
-        "init": {
-            "method_init": "corr_pnr",
-            "nb": 0,
-            "rolling_sum": True,
-            "ssub": ssub,            
-            "tsub": 1                
-        },
-        "preprocess": {"p": 1},
-        "temporal": {"p": 1},
-        "quality": {
-            "min_SNR": ARGS.min_snr_trace,
-            "rval_thr": 0.85,
-            "use_cnn": True,   # validate against your data; disable if rejecting good components
-            "min_cnn_thr": 0.99
-        }
-    }
-    return {
-        "fr": 5,
-        "decay_time": 1.0,
+        # TODO: this MUST match the "fr" used in p4_universal.py's
+        # get_base_params() and the real acquisition frame rate — a mismatch
+        # here means params are calibrated against one timescale and deployed
+        # against another.
+        "fr": 30,
+        "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
         "method_init": "corr_pnr",
         "K": None,
         "nb": 0,

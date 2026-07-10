@@ -134,8 +134,10 @@ def parse_args() -> argparse.Namespace:
                    help="Path to best_params.json produced by calibrate_cnmf.py "
                         "(default: best_params.json in the script's root directory)")
     p.add_argument("--n-workers", type=int, default=None,
-                   help="CPU workers for CNMF patch processing")
-    
+                   help="CPU workers for CNMF patch processing (default: --pin-cpus count, else cpu_count - 1)")
+    p.add_argument("--pin-cpus", type=str, default=None,
+                   help="CPU cores to pin to, e.g. '0-31' or '0-15,32-47' (Linux only)")
+
     # Quality filter thresholds
     p.add_argument("--min-snr-trace", type=float, default=1.5,
                    help="Reject components with trace SNR below this (used by CaImAn's "
@@ -153,6 +155,19 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
+def parse_cpu_spec(spec: str) -> set:
+    """Parse '0-31', '0,2,4', or '0-15,32-47' into a set of core indices."""
+    cores: set = set()
+    for part in spec.split(","):
+        part = part.strip()
+        if "-" in part:
+            lo, hi = part.split("-", 1)
+            cores.update(range(int(lo), int(hi) + 1))
+        else:
+            cores.add(int(part))
+    return cores
+
+
 ARGS = parse_args()
 
 # Validate args per mode
@@ -165,9 +180,24 @@ elif ARGS.mode in ("file-plane-split", "file-split"):
         print(f"ERROR: --tune-dir and --test-dir required for mode {ARGS.mode}", file=sys.stderr)
         sys.exit(1)
 
+_pinned_cores: set = set()
+if ARGS.pin_cpus:
+    _pinned_cores = parse_cpu_spec(ARGS.pin_cpus)
+    try:
+        os.sched_setaffinity(0, _pinned_cores)
+    except AttributeError:
+        print("WARNING: os.sched_setaffinity not available on this OS — --pin-cpus ignored.")
+        _pinned_cores = set()
+    except PermissionError:
+        print("WARNING: Permission denied for sched_setaffinity — --pin-cpus ignored.")
+        _pinned_cores = set()
 
-N_WORKERS = ARGS.n_workers
-
+if ARGS.n_workers is not None:
+    N_WORKERS = ARGS.n_workers
+elif _pinned_cores:
+    N_WORKERS = len(_pinned_cores)
+else:
+    N_WORKERS = os.cpu_count() - 1
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -243,7 +273,8 @@ print("=" * 70)
 print(f"Output dir : {OUTPUT_DIR}")
 print(f"Resolution : {ARGS.resolution}")
 print(f"Best params: {BEST_PARAMS_PATH}")
-print(f"Workers={N_WORKERS}")
+_cpu_pin_str = f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
+print(f"CPU pin    : {_cpu_pin_str}  workers={N_WORKERS}")
 if ARGS.n_planes:
     _default_z = ARGS.z_index if ARGS.z_index is not None else ARGS.n_planes // 2
     print(f"Z-planes   : {ARGS.n_planes} interleaved  (extracting z={_default_z})")
@@ -463,7 +494,7 @@ def load_plane_interleaved(filepath: str, z_index: int, n_planes: int) -> np.nda
 
 
 # =============================================================================
-# PREPROCESSING
+# PREPROCESSING  (brain mask removed — full frame used as-is)
 # =============================================================================
 
 def downsample(data: np.ndarray, target_h: int, target_w: int) -> np.ndarray:
@@ -538,6 +569,7 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
 def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dict]:
     """
     Preprocessing pipeline: resolution + optional stripe removal.
+    No brain mask is applied — the full frame is used as-is.
     Returns (preprocessed_movie, metadata_dict).
     """
     info = {"original_shape": tuple(data.shape)}
@@ -594,11 +626,11 @@ def get_base_params() -> dict:
     else:
         mc = dict(max_shifts=(12, 12), strides=(192, 192),
                   overlaps=(96, 96), max_deviation_rigid=3, border_nan="copy")
-        ssub = 2
+        ssub = 2  # subsample 2x to cut init time ~16x on large FOV
 
     return {
-        "fr": 5,
-        "decay_time": 1.0,
+        "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
+        "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
         "method_init": "corr_pnr",
         "K": None,
         "nb": 0,
@@ -642,33 +674,9 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
             pass  # best-effort cleanup
     return mmap_path
 
-def run_cnmf(params_override: dict,
-             fname_mmap: str,
-             do_mc: bool =True,
-             do_filter_caiman: bool =True,
-             do_refit: bool =True):
-    """
-    Run CNMF using the explicit pipeline:
-
-        Motion correction
-            ↓
-        CNMF.fit(images)
-            ↓
-        evaluate_components()
-            ↓
-        select_components()
-            ↓
-        CNMF.refit(images)
-
-    Returns
-    -------
-    cnmf_obj : CNMF
-        Final (optionally refit) CNMF model.
-    elapsed_time : float
-    """
-
+def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
+    """Stage: build CNMFParams from overrides. Normalizes gSig/gSig_filt to int tuples."""
     p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
-
     for key in ("gSig", "gSig_filt"):
         val = p.get(key)
         if val is None:
@@ -678,161 +686,166 @@ def run_cnmf(params_override: dict,
         else:
             p[key] = (int(val), int(val))
 
-    g = p["gSig"]
-
     if "gSiz" not in params_override:
-        p["gSiz"] = (4 * int(g[0]) + 1,
-                     4 * int(g[1]) + 1)
+        g = p["gSig"]
+        p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
-    opts = params_module.CNMFParams(params_dict=p)
+    return params_module.CNMFParams(params_dict=p)
 
-    cluster = None
-    n_processes = 1
 
+def _setup_cluster():
+    """Stage: start multiprocessing cluster. Falls back to single-threaded on failure."""
     try:
         _, cluster, n_processes = caiman.cluster.setup_cluster(
-            backend="multiprocessing",
-            n_processes=N_WORKERS,
-            single_thread=False,
+            backend="multiprocessing", n_processes=N_WORKERS, single_thread=False
         )
+        return cluster, n_processes
     except Exception as exc:
-        print(f"[cluster setup failed: {exc}]")
+        print(f"  [STAGE:cluster_setup] failed, running single-threaded: {exc}", flush=True)
+        return None, 1
+
+
+def _motion_correct(fname_mmap: str, opts, cluster) -> str:
+    """Stage: motion correction. Raises on failure — caller decides how to handle."""
+    print("  [STAGE:motion_correction] starting", flush=True)
+    mc = MotionCorrect([fname_mmap], dview=cluster, **opts.get_group("motion"))
+    mc.motion_correct(save_movie=True)
+    fname_to_use = mc.mmap_file[0] if isinstance(mc.mmap_file, list) else mc.mmap_file
+    print(f"  [STAGE:motion_correction] done -> {fname_to_use}", flush=True)
+    return fname_to_use
+
+
+def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
+    """Stage: core CNMF fit. Raises on failure — this is the critical path."""
+    opts.change_params({"fnames": [fname_to_use]})
+    cnmf_obj = cnmf_module.CNMF(n_processes=n_processes, params=opts, dview=cluster)
+
+    print("  [STAGE:fit_file] starting", flush=True)
+    cnmf_obj.fit_file(motion_correct=False)
+    print(f"  [STAGE:fit_file] done -> {cnmf_obj.estimates.A.shape[1]} components", flush=True)
+    return cnmf_obj
+
+
+def _reload_images(fname_to_use: str):
+    """Stage: reload the mmap actually fit, for evaluate/refit. Returns None on failure
+    (non-fatal — evaluate/refit are simply skipped downstream)."""
+    try:
+        Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_to_use)
+        return np.reshape(Yr.T, [T_loc] + list(dims), order="F")
+    except Exception as exc:
+        print(f"  [STAGE:reload_images] failed, evaluate/refit will be skipped: {exc}", flush=True)
+        return None
+
+
+def _evaluate_and_select(cnmf_obj, images, cluster):
+    """Stage: CaImAn's own component evaluation (SNR/spatial/CNN). Non-fatal on failure —
+    keeps whatever components existed before this stage."""
+    try:
+        print("  [STAGE:evaluate_components] starting", flush=True)
+        cnmf_obj.estimates.evaluate_components(imgs=images, params=cnmf_obj.params, dview=cluster)
+        cnmf_obj.estimates.select_components(use_object=True)
+        print(f"  [STAGE:evaluate_components] done -> {cnmf_obj.estimates.A.shape[1]} components remain", flush=True)
+    except Exception as exc:
+        print(f"  [STAGE:evaluate_components] failed, keeping unfiltered components: {exc}", flush=True)
+
+
+def _refit(cnmf_obj, images, cluster):
+    """Stage: second-pass validation refit. Non-fatal on failure — keeps pre-refit estimates."""
+    try:
+        print("  [STAGE:refit] starting — second-pass validation of accepted neurons", flush=True)
+        refit_obj = cnmf_obj.refit(images, dview=cluster)
+        print(f"  [STAGE:refit] done -> {refit_obj.estimates.A.shape[1]} neurons remain", flush=True)
+        return refit_obj
+    except Exception as exc:
+        print(f"  [STAGE:refit] failed, keeping pre-refit estimates: {exc}", flush=True)
+        return cnmf_obj
+
+
+def run_cnmf(params_override: dict, fname_mmap: str,
+             do_mc: bool = True, do_filter_caiman: bool = True,
+             do_refit: bool = True):
+    """
+    Run CNMF, then validate found neurons in two passes:
+      1. CaImAn's own evaluate_components / select_components (SNR, spatial
+         consistency, CNN if enabled).
+      2. cnmf_model.refit() — re-runs the full CNMF fit seeded with the
+         accepted spatial/temporal components, re-estimating traces and
+         re-deriving background against the actual data. This acts as an
+         additional, independent validation pass before we score the run.
+
+    Returns (cnmf_obj, elapsed_seconds, fname_used), where fname_used is the
+    path of the mmap that was actually fit (the motion-corrected one, when
+    do_mc is True). Callers must reload Yr from this path when scoring —
+    not from the pre-motion-correction mmap that was originally passed in —
+    otherwise recon_error is computed against misaligned data and comes out
+    close to 1 regardless of fit quality.
+
+    On failure, the exception is caught and printed with a [STAGE:...] tag
+    identifying exactly which step raised it, and (None, elapsed, None) is
+    returned. Only cluster_setup, evaluate_components, and refit are
+    non-fatal by design (they degrade gracefully); motion_correction and
+    fit_file are fatal because downstream stages depend on their output.
+    """
+    opts = _prep_params(params_override, fname_mmap)
+    cluster, n_processes = _setup_cluster()
 
     t0 = time.time()
-
     try:
-
-        ############################################################
-        # Motion correction
-        ############################################################
-
         fname_to_use = fname_mmap
-
         if do_mc:
-
-            print("[motion correction starting]", flush=True)
-
-            mc = MotionCorrect(
-                [fname_mmap],
-                dview=cluster,
-                **opts.get_group("motion")
-            )
-
-            mc.motion_correct(save_movie=True)
-
-            fname_to_use = (
-                mc.mmap_file[0]
-                if isinstance(mc.mmap_file, list)
-                else mc.mmap_file
-            )
-
-            print(f"[motion correction finished -> {fname_to_use}]")
-
+            fname_to_use = _motion_correct(fname_mmap, opts, cluster)
         else:
-            print("[motion correction skipped]")
+            print("  [STAGE:motion_correction] skipped — using precomputed mmap", flush=True)
 
-        ############################################################
-        # Load corrected movie
-        ############################################################
+        cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
-        Yr, dims, T = caiman.mmapping.load_memmap(fname_to_use)
+        images = None
+        if cnmf_obj.estimates.A.shape[1] > 0:
+            images = _reload_images(fname_to_use)
 
-        images = Yr.T.reshape((T,) + dims, order="F")
+        if do_filter_caiman and images is not None:
+            _evaluate_and_select(cnmf_obj, images, cluster)
 
-        opts.change_params({"fnames": [fname_to_use]})
+        if do_refit and images is not None and cnmf_obj.estimates.A.shape[1] > 0:
+            cnmf_obj = _refit(cnmf_obj, images, cluster)
 
-        ############################################################
-        # CNMF
-        ############################################################
-
-        cnmf_obj = cnmf_module.CNMF(
-            n_processes=n_processes,
-            params=opts,
-            dview=cluster,
-        )
-
-        print("[CNMF fit starting]", flush=True)
-
-        cnmf_obj.fit(images)
-
-        print(
-            f"[CNMF fit finished -> "
-            f"{cnmf_obj.estimates.A.shape[1]} components]"
-        )
-
-        ############################################################
-        # CaImAn component evaluation
-        ############################################################
-
-        if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
-
-            try:
-
-                print("[evaluate_components]", flush=True)
-
-                cnmf_obj.estimates.evaluate_components(
-                    imgs=images,
-                    params=cnmf_obj.params,
-                    dview=cluster,
-                )
-
-                cnmf_obj.estimates.select_components(
-                    use_object=True
-                )
-
-                print(
-                    f"[accepted "
-                    f"{cnmf_obj.estimates.A.shape[1]} neurons]"
-                )
-
-            except Exception as exc:
-                print(f"[evaluation failed: {exc}]")
-
-        ############################################################
-        # Refit
-        ############################################################
-
-        if (
-            do_refit
-            and cnmf_obj.estimates.A.shape[1] > 0
-        ):
-
-            try:
-
-                print("[refit starting]", flush=True)
-
-                cnmf_obj = cnmf_obj.refit(
-                    images,
-                    dview=cluster,
-                )
-
-                print(
-                    f"[refit complete -> "
-                    f"{cnmf_obj.estimates.A.shape[1]} neurons]"
-                )
-
-            except Exception as exc:
-                print(f"[refit failed: {exc}]")
-
-        ############################################################
-        # Return model
-        ############################################################
-
-        return cnmf_obj, time.time() - t0
+        return cnmf_obj, time.time() - t0, fname_to_use
 
     except Exception as exc:
-
-        print(f"CNMF failed: {exc}")
-
-        return None, time.time() - t0
-
+        # Only _motion_correct and _fit_cnmf raise past this point (fatal stages).
+        # The printed message already carries a [STAGE:...] tag from inside those
+        # functions where the exception originated; if not, tag it here.
+        print(f"    CNMF failed: {exc}", flush=True)
+        return None, time.time() - t0, None
     finally:
-
         if cluster is not None:
             try:
                 caiman.stop_server(dview=cluster)
             except Exception:
                 pass
+
+def load_yr_for_scoring(fname_used: Optional[str], fallback_Yr):
+    """
+    Reload Yr from the exact mmap a CNMF run was fit on, so scoring never
+    compares AC against a different (e.g. pre-motion-correction) movie than
+    the one the model was actually fit to.
+
+    Falls back to `fallback_Yr` if fname_used is missing or fails to load;
+    this is safe because score_run() only reaches the point of using Yr
+    when cnmf_obj is non-None with accepted components — if run_cnmf itself
+    failed (fname_used is None), score_run returns its sentinel without
+    touching Yr at all.
+    """
+    if fname_used is None:
+        return fallback_Yr
+    try:
+        Yr_used, _, _ = caiman.mmapping.load_memmap(fname_used)
+        return Yr_used
+    except Exception as exc:
+        print(f"  [WARNING: could not reload registered mmap '{fname_used}' for scoring "
+              f"({exc}); falling back to pre-registration Yr]", flush=True)
+        return fallback_Yr
+
 
 def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> dict:
     """
@@ -942,8 +955,13 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
     """
     print(f"\n{'='*60}\nTEST: {label}\n{'='*60}")
 
-    Yr, _, _ = caiman.mmapping.load_memmap(mmap_path)
-    cnmf_obj, rt = run_cnmf(params, mmap_path)
+    Yr_unregistered, _, _ = caiman.mmapping.load_memmap(mmap_path)
+    cnmf_obj, rt, fname_used = run_cnmf(params, mmap_path)
+    # Score against the mmap CNMF actually fit on (post motion-correction),
+    # not the pre-registration Yr_unregistered loaded above — otherwise a
+    # pixel-shift mismatch between the fitted data and the scored data
+    # drives recon_error to ~1 independent of how good the fit actually is.
+    Yr = load_yr_for_scoring(fname_used, Yr_unregistered)
 
     stability = 0.0
     if tune_A is not None and cnmf_obj is not None and cnmf_obj.estimates.A.shape[1] > 0:
@@ -1114,7 +1132,7 @@ def mode_time_split():
     test_mmap = array_to_memmap(data[mid:], WORK_DIR / "test_half")
 
     print("\nRunning CNMF with configured params on reference half (for stability)...")
-    cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+    cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     test_metrics = test_cnmf(
@@ -1171,7 +1189,7 @@ def mode_plane_split():
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
 
     print(f"\nRunning CNMF with configured params on z={tune_z} (reference for stability)...")
-    cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+    cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     all_metrics = {}
@@ -1231,7 +1249,7 @@ def mode_file_plane_split():
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
     print("\nRunning CNMF with configured params on reference file (for stability)...")
-    cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+    cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     print("\n[Loading test]")
@@ -1283,7 +1301,7 @@ def mode_file_split():
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
     print("\nRunning CNMF with configured params on reference file (for stability)...")
-    cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+    cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     if fmt_te == "multi-tp":

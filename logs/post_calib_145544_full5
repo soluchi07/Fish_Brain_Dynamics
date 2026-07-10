@@ -1,0 +1,75 @@
+Monitoring started at 08:56:09.046853
+====================================================================== at time 08:56:14.156608
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_full2 at time 08:56:14.156700
+====================================================================== at time 08:56:14.156720
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_full2 at time 08:56:14.156735
+Resolution : full at time 08:56:14.156757
+Best params: results/calib_20iv26_full2/calibration_summary.json at time 08:56:14.156771
+CPU pin    : unpinned  workers=95 at time 08:56:14.156784
+Loaded best params from results/calib_20iv26_full2/calibration_summary.json: at time 08:56:14.156816
+gSig: 4 at time 08:56:14.156830
+gSig_filt: 4 at time 08:56:14.156843
+min_corr: 0.5 at time 08:56:14.156856
+min_pnr: 12 at time 08:56:14.156869
+rf: 160 at time 08:56:14.156883
+stride: 80 at time 08:56:14.156895
+p: 1 at time 08:56:14.156908
+merge_thr: 0.85 at time 08:56:14.156921
+ at time 08:56:14.156935
+--- TIME-SPLIT mode --- at time 08:56:14.156948
+Auto-detected n_planes=7 from metadata at time 08:56:14.161646
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 08:56:14.161696
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 08:56:14.161712
+Interleaved: z=3/7 planes -> 700 frames at time 08:56:14.161725
+ at time 09:02:10.411098
+[preprocess movie]  input shape=(700, 2048, 2048) at time 09:02:10.411140
+ at time 09:02:47.334134
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 09:02:47.334175
+ at time 09:04:05.830242
+Running CNMF with configured params on reference half (for stability)... at time 09:04:05.830281
+[motion correction starting] at time 09:04:11.204440
+[motion correction done -> /home/abl-dell/caiman_data/temp/tune_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap] at time 09:09:43.793960
+[fit_file starting] at time 09:09:43.799742
+[fit_file done] at time 09:15:04.262634
+*** Variable cnn_preds has not the same number of components as A *** at time 09:15:08.328271
+[refit starting — second-pass validation of accepted neurons] at time 09:15:08.328745
+[refit done -> 758 neurons remain] at time 09:17:16.683489
+ at time 09:17:18.259103
+============================================================ at time 09:17:18.259152
+TEST: test_half (frames 350-699) at time 09:17:18.259177
+============================================================ at time 09:17:18.259199
+[motion correction starting] at time 09:17:24.852630
+[motion correction done -> /home/abl-dell/caiman_data/temp/test_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap] at time 09:22:58.600422
+[fit_file starting] at time 09:22:58.607063
+[fit_file done] at time 09:26:22.682853
+*** Variable cnn_preds has not the same number of components as A *** at time 09:26:24.783295
+[refit starting — second-pass validation of accepted neurons] at time 09:26:24.784243
+[refit done -> 196 neurons remain] at time 09:27:32.035443
+Neurons: 196  composite: -0.2932  stability: 0.158  t=607s at time 09:27:52.934229
+WARNING: neuron 43 F0=-64.6627 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.941175
+WARNING: neuron 51 F0=-55.0272 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.941531
+WARNING: neuron 56 F0=-1.6375 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.941813
+WARNING: neuron 61 F0=-28.3880 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.942086
+WARNING: neuron 64 F0=-38.2215 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.942263
+WARNING: neuron 75 F0=-61.1752 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.942874
+WARNING: neuron 77 F0=-0.3065 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.942992
+WARNING: neuron 94 F0=-54.8695 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.943922
+WARNING: neuron 136 F0=-10.2102 <= 0 after bleach correction; clamping to 1e-6 at time 09:28:34.946231
+dF/F: percentile=8.0  bleach_correct=False at time 09:28:35.464443
+ at time 09:30:16.979213
+============================================================ at time 09:30:16.979265
+TEST: full_movie at time 09:30:16.979282
+============================================================ at time 09:30:16.979294
+[motion correction starting] at time 09:30:32.557771
+[motion correction done -> /home/abl-dell/caiman_data/temp/full_movie_d1_2048_d2_2048_d3_1_order_C_frames_700_els__d1_2048_d2_2048_d3_1_order_F_frames_700.mmap] at time 09:36:44.087049
+[fit_file starting] at time 09:36:44.108900
+CNMF failed: Unable to allocate 845. GiB for an array with shape (4194304, 27037) and data type float64 at time 13:37:04.515890
+Neurons: 0  composite: -inf  stability: 0.000  t=14792s at time 13:37:06.482719
+ at time 13:37:06.484327
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_full2/ at time 13:37:06.484347
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 13:37:06.492797
+ at time 13:37:06.597134
+====================================================================== at time 13:37:06.597176
+DONE  |  time-split  |  145544_timesplit_full2  |  280.9 min at time 13:37:06.597193
+====================================================================== at time 13:37:06.597199
+Monitoring ended at 13:37:08.584227

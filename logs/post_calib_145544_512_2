@@ -1,0 +1,60 @@
+Monitoring started at 21:00:20.276382
+====================================================================== at time 21:00:25.119172
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512 at time 21:00:25.119217
+====================================================================== at time 21:00:25.119237
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512 at time 21:00:25.119254
+Resolution : 512 at time 21:00:25.119275
+Best params: results/calib_20iv26_512/calibration_summary.json at time 21:00:25.119290
+CPU pin    : unpinned  workers=95 at time 21:00:25.119304
+Loaded best params from results/calib_20iv26_512/calibration_summary.json: at time 21:00:25.119336
+gSig: 3 at time 21:00:25.119349
+gSig_filt: 4 at time 21:00:25.119362
+min_corr: 0.5118676301124861 at time 21:00:25.119374
+min_pnr: 12 at time 21:00:25.119388
+rf: 80 at time 21:00:25.119400
+stride: 40 at time 21:00:25.119412
+p: 1 at time 21:00:25.119424
+merge_thr: 0.85 at time 21:00:25.119437
+ at time 21:00:25.119452
+--- TIME-SPLIT mode --- at time 21:00:25.119465
+Auto-detected n_planes=7 from metadata at time 21:00:25.124189
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 21:00:25.124222
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 21:00:25.124238
+Interleaved: z=3/7 planes -> 700 frames at time 21:00:25.124252
+ at time 21:06:18.520313
+[preprocess movie]  input shape=(700, 2048, 2048) at time 21:06:18.520360
+Downsampling -> (512, 512) at time 21:06:18.520379
+ at time 21:07:42.855230
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 21:07:42.855274
+ at time 21:07:45.237907
+Running CNMF with configured params on reference half (for stability)... at time 21:07:45.237961
+[STAGE:motion_correction] starting at time 21:07:49.950280
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/tune_half_d1_512_d2_512_d3_1_order_C_frames_350_els__d1_512_d2_512_d3_1_order_F_frames_350.mmap at time 21:08:11.624717
+[STAGE:fit_file] starting at time 21:08:11.630262
+CNMF failed: Input y contains NaN. at time 21:13:33.374375
+ at time 21:13:33.847599
+============================================================ at time 21:13:33.847641
+TEST: test_half (frames 350-699) at time 21:13:33.847703
+============================================================ at time 21:13:33.847720
+[STAGE:motion_correction] starting at time 21:13:38.490153
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/test_half_d1_512_d2_512_d3_1_order_C_frames_350_els__d1_512_d2_512_d3_1_order_F_frames_350.mmap at time 21:13:59.723142
+[STAGE:fit_file] starting at time 21:13:59.729990
+CNMF failed: Input y contains NaN. at time 21:15:33.098278
+Neurons: 0  composite: -inf  stability: 0.000  t=115s at time 21:15:33.511085
+ at time 21:15:38.435058
+============================================================ at time 21:15:38.435110
+TEST: full_movie at time 21:15:38.435131
+============================================================ at time 21:15:38.435146
+[STAGE:motion_correction] starting at time 21:15:43.267603
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/full_movie_d1_512_d2_512_d3_1_order_C_frames_700_els__d1_512_d2_512_d3_1_order_F_frames_700.mmap at time 21:16:06.041187
+[STAGE:fit_file] starting at time 21:16:06.048566
+CNMF failed: Input y contains NaN. at time 21:22:21.877783
+Neurons: 0  composite: -inf  stability: 0.000  t=399s at time 21:22:22.462303
+ at time 21:22:22.463471
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512/ at time 21:22:22.463504
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 21:22:22.472307
+ at time 21:22:22.472335
+====================================================================== at time 21:22:22.472350
+DONE  |  time-split  |  145544_timesplit_512  |  22.0 min at time 21:22:22.472366
+====================================================================== at time 21:22:22.472382
+Monitoring ended at 21:22:23.744647

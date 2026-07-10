@@ -1,0 +1,121 @@
+Monitoring started at 10:26:14.007991
+====================================================================== at time 10:26:18.846155
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_full at time 10:26:18.846208
+====================================================================== at time 10:26:18.846227
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_full at time 10:26:18.846242
+Resolution : full at time 10:26:18.846262
+Best params: results/calib_20iv26_full/calibration_summary.json at time 10:26:18.846277
+Workers=None at time 10:26:18.846290
+Loaded best params from results/calib_20iv26_full/calibration_summary.json: at time 10:26:18.846322
+gSig: 4 at time 10:26:18.846336
+gSig_filt: 10 at time 10:26:18.846348
+min_corr: 0.5 at time 10:26:18.846360
+min_pnr: 12 at time 10:26:18.846373
+rf: 100 at time 10:26:18.846386
+stride: 50 at time 10:26:18.846398
+p: 1 at time 10:26:18.846410
+merge_thr: 0.85 at time 10:26:18.846422
+ at time 10:26:18.846437
+--- TIME-SPLIT mode --- at time 10:26:18.846450
+Auto-detected n_planes=7 from metadata at time 10:26:18.850992
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 10:26:18.851025
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 10:26:18.851041
+Interleaved: z=3/7 planes -> 700 frames at time 10:26:18.851055
+ at time 10:32:07.028357
+[preprocess movie]  input shape=(700, 2048, 2048) at time 10:32:07.028398
+ at time 10:32:43.934775
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 10:32:43.934816
+ at time 10:33:59.909731
+Running CNMF with configured params on reference half (for stability)... at time 10:33:59.909788
+[motion correction starting] at time 10:34:06.778210
+[motion correction done -> /home/abl-dell/caiman_data/temp/tune_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap] at time 10:39:34.680748
+[fit_file starting] at time 10:39:34.688638
+[fit_file done] at time 10:45:45.743170
+*** Variable cnn_preds has not the same number of components as A *** at time 10:45:49.627389
+[refit starting — second-pass validation of accepted neurons] at time 10:45:49.627814
+[refit done -> 763 neurons remain] at time 10:47:53.582357
+ at time 10:47:54.835038
+============================================================ at time 10:47:54.835074
+TEST: test_half (frames 350-699) at time 10:47:54.835085
+============================================================ at time 10:47:54.835096
+[motion correction starting] at time 10:48:02.243017
+[motion correction done -> /home/abl-dell/caiman_data/temp/test_half_d1_2048_d2_2048_d3_1_order_C_frames_350_els__d1_2048_d2_2048_d3_1_order_F_frames_350.mmap] at time 10:53:22.824831
+[fit_file starting] at time 10:53:22.831530
+[fit_file done] at time 10:56:30.654462
+*** Variable cnn_preds has not the same number of components as A *** at time 10:56:32.503986
+[refit starting — second-pass validation of accepted neurons] at time 10:56:32.504575
+[refit done -> 162 neurons remain] at time 10:57:36.240245
+Neurons: 162  composite: -0.2718  stability: 0.173  t=574s at time 10:57:53.882500
+WARNING: neuron 4 F0=-725.2214 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:29.507446
+WARNING: bleach fit rejected for neuron 5 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:31.374253
+WARNING: bleach fit rejected for neuron 6 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:33.234928
+WARNING: bleach fit rejected for neuron 9 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:35.423655
+WARNING: neuron 15 F0=-671.3993 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:35.801105
+WARNING: bleach fit rejected for neuron 17 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:37.670955
+WARNING: neuron 23 F0=-848.3893 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:38.136976
+WARNING: neuron 24 F0=-860.4998 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:38.157378
+WARNING: neuron 28 F0=-990.0152 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:38.209910
+WARNING: neuron 32 F0=-1207.9125 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:39.067099
+WARNING: neuron 34 F0=-17.6001 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:40.341526
+WARNING: bleach fit rejected for neuron 38 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:42.254424
+WARNING: neuron 39 F0=-821.0089 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.261476
+WARNING: neuron 43 F0=-956.2406 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.289744
+WARNING: neuron 44 F0=-1122.3325 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.298066
+WARNING: neuron 45 F0=-448.6694 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.313265
+WARNING: neuron 47 F0=-848.8843 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.334690
+WARNING: neuron 50 F0=-976.1781 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.454841
+WARNING: neuron 51 F0=-1451.3988 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.466402
+WARNING: neuron 52 F0=-723.7028 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:42.473348
+WARNING: neuron 55 F0=-1480.2077 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:43.945787
+WARNING: neuron 56 F0=-1305.0411 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:43.950380
+WARNING: neuron 58 F0=-600.7525 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:43.966131
+WARNING: bleach fit rejected for neuron 60 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:45.765795
+WARNING: neuron 62 F0=-874.1914 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:47.526630
+WARNING: neuron 63 F0=-1146.7941 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:47.551118
+WARNING: bleach fit rejected for neuron 66 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:49.439134
+WARNING: neuron 67 F0=-805.4763 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:51.122381
+WARNING: neuron 69 F0=-176.6948 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:51.172801
+WARNING: bleach fit rejected for neuron 74 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:54.038514
+WARNING: neuron 74 F0=-51.0797 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:54.038580
+WARNING: neuron 75 F0=-361.4250 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:54.044728
+WARNING: neuron 78 F0=-790.5247 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:56.518170
+WARNING: neuron 80 F0=-827.5548 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:56.537736
+WARNING: neuron 81 F0=-748.4557 <= 0 after bleach correction; clamping to 1e-6 at time 10:58:56.552478
+WARNING: bleach fit rejected for neuron 83 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:58:58.451285
+WARNING: neuron 85 F0=-131.2500 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:00.257552
+WARNING: bleach fit rejected for neuron 88 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:59:02.163201
+WARNING: bleach fit rejected for neuron 93 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:59:04.675775
+WARNING: neuron 98 F0=-1361.5348 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:04.777298
+WARNING: neuron 105 F0=-740.9052 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:04.910782
+WARNING: bleach fit rejected for neuron 108 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:59:07.548735
+WARNING: neuron 110 F0=-1292.0502 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:07.560099
+WARNING: neuron 113 F0=-306.4482 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:07.594843
+WARNING: neuron 115 F0=-2509.6698 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:07.643504
+WARNING: neuron 123 F0=-595.7750 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:07.728750
+WARNING: bleach fit rejected for neuron 125 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:59:10.011398
+WARNING: neuron 125 F0=-80.6832 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:10.011463
+WARNING: neuron 130 F0=-795.1574 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:11.557211
+WARNING: neuron 142 F0=-960.4356 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:14.457841
+WARNING: bleach fit rejected for neuron 151 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 10:59:17.457891
+WARNING: neuron 154 F0=-1176.1605 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:17.722297
+WARNING: neuron 155 F0=-352.5377 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:17.742386
+WARNING: neuron 156 F0=-1578.0602 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:17.751490
+WARNING: neuron 161 F0=-781.1635 <= 0 after bleach correction; clamping to 1e-6 at time 10:59:18.245441
+dF/F: percentile=8.0  bleach_correct=True at time 10:59:18.758588
+ at time 11:00:56.781805
+============================================================ at time 11:00:56.781847
+TEST: full_movie at time 11:00:56.781868
+============================================================ at time 11:00:56.781883
+[motion correction starting] at time 11:01:11.735134
+[motion correction done -> /home/abl-dell/caiman_data/temp/full_movie_d1_2048_d2_2048_d3_1_order_C_frames_700_els__d1_2048_d2_2048_d3_1_order_F_frames_700.mmap] at time 11:07:58.553881
+[fit_file starting] at time 11:07:58.561327
+CNMF failed: Unable to allocate 838. GiB for an array with shape (4194304, 26805) and data type float64 at time 11:51:41.869061
+Neurons: 0  composite: -inf  stability: 0.000  t=3030s at time 11:51:43.789252
+ at time 11:51:43.789969
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_full/ at time 11:51:43.789991
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 11:51:43.794065
+ at time 11:51:43.873254
+====================================================================== at time 11:51:43.873287
+DONE  |  time-split  |  145544_timesplit_full  |  85.4 min at time 11:51:43.873305
+====================================================================== at time 11:51:43.873320
+Monitoring ended at 11:51:45.516338
