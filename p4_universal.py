@@ -692,18 +692,16 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
 
     return params_module.CNMFParams(params_dict=p)
 
-
 def _setup_cluster():
     """Stage: start multiprocessing cluster. Falls back to single-threaded on failure."""
     try:
-        _, cluster, n_processes = caiman.cluster.setup_cluster(
+        _, cluster, n_processes = cm.cluster.setup_cluster(
             backend="multiprocessing", n_processes=N_WORKERS, single_thread=False
         )
         return cluster, n_processes
     except Exception as exc:
         print(f"  [STAGE:cluster_setup] failed, running single-threaded: {exc}", flush=True)
         return None, 1
-
 
 def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     """Stage: motion correction. Raises on failure — caller decides how to handle."""
@@ -714,17 +712,20 @@ def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     print(f"  [STAGE:motion_correction] done -> {fname_to_use}", flush=True)
     return fname_to_use
 
-
 def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
     """Stage: core CNMF fit. Raises on failure — this is the critical path."""
-    opts.change_params({"fnames": [fname_to_use]})
+    opts.change_params({'fnames': [fname_to_use]})
+    
+    images = cm.load(fname_to_use)
     cnmf_obj = cnmf_module.CNMF(n_processes=n_processes, params=opts, dview=cluster)
-
-    print("  [STAGE:fit_file] starting", flush=True)
-    cnmf_obj.fit_file(motion_correct=False)
-    print(f"  [STAGE:fit_file] done -> {cnmf_obj.estimates.A.shape[1]} components", flush=True)
+    
+    print('[STAGE:fit] starting', flush=True)
+    cnmf_obj.fit(images)
+    
+    n_components = cnmf_obj.estimates.A.shape[1] if cnmf_obj.estimates.A is not None else 0
+    print(f'[STAGE:fit] done -> {n_components} components', flush=True)
+    
     return cnmf_obj
-
 
 def _reload_images(fname_to_use: str):
     """Stage: reload the mmap actually fit, for evaluate/refit. Returns None on failure
@@ -735,7 +736,6 @@ def _reload_images(fname_to_use: str):
     except Exception as exc:
         print(f"  [STAGE:reload_images] failed, evaluate/refit will be skipped: {exc}", flush=True)
         return None
-
 
 def _evaluate_and_select(cnmf_obj, images, cluster):
     """Stage: CaImAn's own component evaluation (SNR/spatial/CNN). Non-fatal on failure —
@@ -796,7 +796,10 @@ def run_cnmf(params_override: dict, fname_mmap: str,
             fname_to_use = _motion_correct(fname_mmap, opts, cluster)
         else:
             print("  [STAGE:motion_correction] skipped — using precomputed mmap", flush=True)
-
+        
+        cm.stop_server(dview=cluster)
+        cluster, n_processes = _setup_cluster()
+        
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
         images = None
