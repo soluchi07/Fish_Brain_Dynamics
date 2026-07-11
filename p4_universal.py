@@ -68,6 +68,7 @@ from typing import Optional
 sys.stdout.reconfigure(line_buffering=True)
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -82,75 +83,140 @@ except:
     pass
 
 
-
 # =============================================================================
 # CLI
 # =============================================================================
 
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Universal CNMF pipeline using fixed, pre-calibrated parameters, "
-                     "with refit-based validation and 4 cross-validation modes.",
+        "with refit-based validation and 4 cross-validation modes.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    p.add_argument("--mode", required=True,
-                   choices=["time-split", "plane-split", "file-plane-split", "file-split"])
-    p.add_argument("--run-name", required=True, help="Output folder name under results/")
+    p.add_argument(
+        "--mode",
+        required=True,
+        choices=["time-split", "plane-split", "file-plane-split", "file-split"],
+    )
+    p.add_argument(
+        "--run-name", required=True, help="Output folder name under results/"
+    )
 
     # Data sources
-    p.add_argument("--data-dir", type=Path, default=None,
-                   help="Folder for time-split, plane-split")
-    p.add_argument("--tune-dir", type=Path, default=None,
-                   help="Reference folder for file-plane-split, file-split")
-    p.add_argument("--test-dir", type=Path, default=None,
-                   help="Test folder for file-plane-split, file-split")
+    p.add_argument(
+        "--data-dir", type=Path, default=None, help="Folder for time-split, plane-split"
+    )
+    p.add_argument(
+        "--tune-dir",
+        type=Path,
+        default=None,
+        help="Reference folder for file-plane-split, file-split",
+    )
+    p.add_argument(
+        "--test-dir",
+        type=Path,
+        default=None,
+        help="Test folder for file-plane-split, file-split",
+    )
 
     # Z-plane selection
-    p.add_argument("--z-index", type=int, default=None,
-                   help="Z-plane index for time-split, file-plane-split (default: middle)")
-    p.add_argument("--tune-z", type=int, default=None,
-                   help="Reference Z-plane for plane-split (default: middle)")
-    p.add_argument("--n-planes", type=int, default=None,
-                   help="Number of Z-planes interleaved in a single-movie file "
-                        "(e.g. 7 when 700-rep x 7-plane = 4900 total frames). "
-                        "Strides the T axis: keeps frames z_index, z_index+n_planes, ... "
-                        "Pair with --z-index to pick a specific plane (default: middle).")
+    p.add_argument(
+        "--z-index",
+        type=int,
+        default=None,
+        help="Z-plane index for time-split, file-plane-split (default: middle)",
+    )
+    p.add_argument(
+        "--tune-z",
+        type=int,
+        default=None,
+        help="Reference Z-plane for plane-split (default: middle)",
+    )
+    p.add_argument(
+        "--n-planes",
+        type=int,
+        default=None,
+        help="Number of Z-planes interleaved in a single-movie file "
+        "(e.g. 7 when 700-rep x 7-plane = 4900 total frames). "
+        "Strides the T axis: keeps frames z_index, z_index+n_planes, ... "
+        "Pair with --z-index to pick a specific plane (default: middle).",
+    )
 
     # Resolution / preprocessing
-    p.add_argument("--resolution", choices=["full", "1024", "512"], default="512",
-                   help="Spatial resolution (default 512)")
-    p.add_argument("--no-stripe", action="store_true",
-                   help="Disable column-median stripe removal")
-    p.add_argument("--max-frames", type=int, default=None,
-                   help="Cap loaded frames at N (useful for huge single-movie files)")
+    p.add_argument(
+        "--resolution",
+        choices=["full", "1024", "512"],
+        default="512",
+        help="Spatial resolution (default 512)",
+    )
+    p.add_argument(
+        "--no-stripe", action="store_true", help="Disable column-median stripe removal"
+    )
+    p.add_argument(
+        "--max-frames",
+        type=int,
+        default=None,
+        help="Cap loaded frames at N (useful for huge single-movie files)",
+    )
 
     # Format override
-    p.add_argument("--format", dest="format_override",
-                   choices=["multi-tp", "multi-cam", "single-movie", "interleaved", "legacy"],
-                   default=None, help="Override auto-detect format")
+    p.add_argument(
+        "--format",
+        dest="format_override",
+        choices=["multi-tp", "multi-cam", "single-movie", "interleaved", "legacy"],
+        default=None,
+        help="Override auto-detect format",
+    )
 
     # Fixed CNMF parameters
-    p.add_argument("--best-params-path", type=Path, default=None,
-                   help="Path to best_params.json produced by calibrate_cnmf.py "
-                        "(default: best_params.json in the script's root directory)")
-    p.add_argument("--n-workers", type=int, default=None,
-                   help="CPU workers for CNMF patch processing (default: --pin-cpus count, else cpu_count - 1)")
-    p.add_argument("--pin-cpus", type=str, default=None,
-                   help="CPU cores to pin to, e.g. '0-31' or '0-15,32-47' (Linux only)")
+    p.add_argument(
+        "--best-params-path",
+        type=Path,
+        default=None,
+        help="Path to best_params.json produced by calibrate_cnmf.py "
+        "(default: best_params.json in the script's root directory)",
+    )
+    p.add_argument(
+        "--n-workers",
+        type=int,
+        default=None,
+        help="CPU workers for CNMF patch processing (default: --pin-cpus count, else cpu_count - 1)",
+    )
+    p.add_argument(
+        "--pin-cpus",
+        type=str,
+        default=None,
+        help="CPU cores to pin to, e.g. '0-31' or '0-15,32-47' (Linux only)",
+    )
 
     # Quality filter thresholds
-    p.add_argument("--min-snr-trace", type=float, default=1.5,
-                   help="Reject components with trace SNR below this (used by CaImAn's "
-                        "own evaluate_components/select_components, and by refit)")
+    p.add_argument(
+        "--min-snr-trace",
+        type=float,
+        default=1.5,
+        help="Reject components with trace SNR below this (used by CaImAn's "
+        "own evaluate_components/select_components, and by refit)",
+    )
 
     # dF/F
-    p.add_argument("--no-bleach-correct", action="store_true",
-                   help="Skip double-exponential photobleaching correction (default: ON for T>=100)")
-    p.add_argument("--dff-percentile", type=float, default=8.0,
-                   help="Percentile used for F0 baseline in dF/F (default: 8)")
+    p.add_argument(
+        "--no-bleach-correct",
+        action="store_true",
+        help="Skip double-exponential photobleaching correction (default: ON for T>=100)",
+    )
+    p.add_argument(
+        "--dff-percentile",
+        type=float,
+        default=8.0,
+        help="Percentile used for F0 baseline in dF/F (default: 8)",
+    )
     # Temp files
-    p.add_argument("--keep-temp", action="store_true",
-                   help="Keep intermediate .tif files in _work/ after memmap creation (default: clean up)")
+    p.add_argument(
+        "--keep-temp",
+        action="store_true",
+        help="Keep intermediate .tif files in _work/ after memmap creation (default: clean up)",
+    )
 
     return p.parse_args()
 
@@ -177,7 +243,10 @@ if ARGS.mode in ("time-split", "plane-split"):
         sys.exit(1)
 elif ARGS.mode in ("file-plane-split", "file-split"):
     if ARGS.tune_dir is None or ARGS.test_dir is None:
-        print(f"ERROR: --tune-dir and --test-dir required for mode {ARGS.mode}", file=sys.stderr)
+        print(
+            f"ERROR: --tune-dir and --test-dir required for mode {ARGS.mode}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
 _pinned_cores: set = set()
@@ -186,7 +255,9 @@ if ARGS.pin_cpus:
     try:
         os.sched_setaffinity(0, _pinned_cores)
     except AttributeError:
-        print("WARNING: os.sched_setaffinity not available on this OS — --pin-cpus ignored.")
+        print(
+            "WARNING: os.sched_setaffinity not available on this OS — --pin-cpus ignored."
+        )
         _pinned_cores = set()
     except PermissionError:
         print("WARNING: Permission denied for sched_setaffinity — --pin-cpus ignored.")
@@ -236,6 +307,7 @@ if not hasattr(cm, "paths"):
 # FIXED CNMF PARAMETERS (loaded from best_params.json)
 # =============================================================================
 
+
 def load_best_params(path: Path) -> dict:
     """
     Load calibrated CNMF params produced by calibrate_cnmf.py.
@@ -248,13 +320,17 @@ def load_best_params(path: Path) -> dict:
     missing or unreadable.
     """
     if not path.is_file():
-        print(f"WARNING: best-params file not found at {path} — using base CNMF defaults only.")
+        print(
+            f"WARNING: best-params file not found at {path} — using base CNMF defaults only."
+        )
         return {}
     try:
         with open(path) as fh:
             raw = json.load(fh)
     except Exception as exc:
-        print(f"WARNING: failed to read best-params file at {path} ({exc}) — using base CNMF defaults only.")
+        print(
+            f"WARNING: failed to read best-params file at {path} ({exc}) — using base CNMF defaults only."
+        )
         return {}
 
     best = raw.get("best_params", raw) if isinstance(raw, dict) else {}
@@ -273,7 +349,9 @@ print("=" * 70)
 print(f"Output dir : {OUTPUT_DIR}")
 print(f"Resolution : {ARGS.resolution}")
 print(f"Best params: {BEST_PARAMS_PATH}")
-_cpu_pin_str = f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
+_cpu_pin_str = (
+    f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
+)
 print(f"CPU pin    : {_cpu_pin_str}  workers={N_WORKERS}")
 if ARGS.n_planes:
     _default_z = ARGS.z_index if ARGS.z_index is not None else ARGS.n_planes // 2
@@ -283,6 +361,7 @@ if ARGS.n_planes:
 # =============================================================================
 # FORMAT DETECTION
 # =============================================================================
+
 
 def read_n_planes(filepath: str) -> int:
     """Read n_planes from metadata["metaData"]["stack"]["n"] in a .lux*.h5 file; fall back to 1."""
@@ -294,7 +373,9 @@ def read_n_planes(filepath: str) -> int:
             meta = json.loads(raw)
             return int(meta["metaData"]["stack"]["n"])
     except Exception as e:
-        print(f"  WARNING: read_n_planes failed ({e}); defaulting to 1 (treating as single-plane)")
+        print(
+            f"  WARNING: read_n_planes failed ({e}); defaulting to 1 (treating as single-plane)"
+        )
         return 1
 
 
@@ -359,9 +440,11 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
     raise FileNotFoundError(f"No recognizable .lux*.h5 / .h5 files in {folder}")
 
 
-def discover(folder: Path, override: Optional[str] = None,
-             n_planes_override: Optional[int] = None
-             ) -> tuple[str, list[str], tuple, Optional[int]]:
+def discover(
+    folder: Path,
+    override: Optional[str] = None,
+    n_planes_override: Optional[int] = None,
+) -> tuple[str, list[str], tuple, Optional[int]]:
     """Detect or override format. Print result. Returns (fmt, files, shape, n_planes_detected).
 
     n_planes_detected is set only for interleaved format when detected from
@@ -384,15 +467,20 @@ def discover(folder: Path, override: Optional[str] = None,
     return fmt, files, shape, detected_n_planes
 
 
-
 # =============================================================================
 # UNIVERSAL LOADER
 # =============================================================================
 
-def load_movie(folder: Path, fmt: str, files: list[str], shape: tuple,
-               z_index: Optional[int] = None,
-               max_frames: Optional[int] = None,
-               n_planes: Optional[int] = None) -> np.ndarray:
+
+def load_movie(
+    folder: Path,
+    fmt: str,
+    files: list[str],
+    shape: tuple,
+    z_index: Optional[int] = None,
+    max_frames: Optional[int] = None,
+    n_planes: Optional[int] = None,
+) -> np.ndarray:
     """
     Build (T, H, W) float32 movie regardless of source format.
 
@@ -458,7 +546,9 @@ def load_movie(folder: Path, fmt: str, files: list[str], shape: tuple,
                 if max_frames:
                     indices = indices[:max_frames]
                 T = len(indices)
-                print(f"  Striding {T_full} frames by n_planes={n_planes} (z={z_index}) -> {T} time-points...")
+                print(
+                    f"  Striding {T_full} frames by n_planes={n_planes} (z={z_index}) -> {T} time-points..."
+                )
                 data = fh["Data"][indices].astype(np.float32)
             else:
                 T = T_full if max_frames is None else min(T_full, max_frames)
@@ -497,13 +587,16 @@ def load_plane_interleaved(filepath: str, z_index: int, n_planes: int) -> np.nda
 # PREPROCESSING  (brain mask removed — full frame used as-is)
 # =============================================================================
 
+
 def downsample(data: np.ndarray, target_h: int, target_w: int) -> np.ndarray:
     """Resize each frame with anti-aliasing."""
     T = data.shape[0]
     out = np.zeros((T, target_h, target_w), dtype=np.float32)
     for t in range(T):
         out[t] = skimage.transform.resize(
-            data[t], (target_h, target_w), anti_aliasing=True,
+            data[t],
+            (target_h, target_w),
+            anti_aliasing=True,
         )
     return out
 
@@ -543,23 +636,32 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
                     raise ValueError("flat trace, cannot fit bleach")
                 p0 = [F_range * 0.5, T * 0.3, F_range * 0.3, T * 0.1]
                 bounds = ([0, 1, 0, 1], [np.inf, T * 10, np.inf, T * 10])
-                popt, _ = curve_fit(_double_exp, t, F - F.min(), p0=p0,
-                                    bounds=bounds, maxfev=5000)
+                popt, _ = curve_fit(
+                    _double_exp, t, F - F.min(), p0=p0, bounds=bounds, maxfev=5000
+                )
                 trend = _double_exp(t, *popt)
                 # Sanity checks on the fitted trend
                 if trend[-1] > trend[0] + 0.2 * F_range:
-                    raise ValueError(f"bleach trend is increasing (end={trend[-1]:.2f} > start={trend[0]:.2f})")
+                    raise ValueError(
+                        f"bleach trend is increasing (end={trend[-1]:.2f} > start={trend[0]:.2f})"
+                    )
                 residual = F - trend
                 if residual.min() < -0.5 * F_range:
-                    raise ValueError(f"bleach trend overshoots (residual min={residual.min():.2f} < {-0.5*F_range:.2f})")
+                    raise ValueError(
+                        f"bleach trend overshoots (residual min={residual.min():.2f} < {-0.5*F_range:.2f})"
+                    )
                 F = residual  # subtract bleach, keep residual + offset
             except Exception as exc:
-                print(f"  WARNING: bleach fit rejected for neuron {i} ({exc}); using raw trace")
+                print(
+                    f"  WARNING: bleach fit rejected for neuron {i} ({exc}); using raw trace"
+                )
                 pass  # fit failed or rejected; use raw F
 
         F0 = np.percentile(F, ARGS.dff_percentile)
         if F0 < 1e-6:
-            print(f"  WARNING: neuron {i} F0={F0:.4f} <= 0 after bleach correction; clamping to 1e-6")
+            print(
+                f"  WARNING: neuron {i} F0={F0:.4f} <= 0 after bleach correction; clamping to 1e-6"
+            )
             F0 = 1e-6
         dff[i] = (F - F0) / F0
 
@@ -614,58 +716,106 @@ def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dic
 # CNMF CONFIG (resolution-aware base params + calibrated best params)
 # =============================================================================
 
-def get_base_params() -> dict:
+
+def get_base_params(best_params: dict = None) -> dict:
+    best = best_params or {}
     if ARGS.resolution == "512":
-        mc = dict(max_shifts=(3, 3), strides=(48, 48),
-                  overlaps=(24, 24), max_deviation_rigid=2, border_nan="copy")
+        mc = dict(
+            max_shifts=(3, 3),
+            strides=(48, 48),
+            overlaps=(24, 24),
+            max_deviation_rigid=2,
+            border_nan="copy",
+        )
         ssub = 1
     elif ARGS.resolution == "1024":
-        mc = dict(max_shifts=(6, 6), strides=(96, 96),
-                  overlaps=(48, 48), max_deviation_rigid=3, border_nan="copy")
+        mc = dict(
+            max_shifts=(6, 6),
+            strides=(96, 96),
+            overlaps=(48, 48),
+            max_deviation_rigid=3,
+            border_nan="copy",
+        )
         ssub = 1
     else:
-        mc = dict(max_shifts=(12, 12), strides=(192, 192),
-                  overlaps=(96, 96), max_deviation_rigid=3, border_nan="copy")
+        mc = dict(
+            max_shifts=(12, 12),
+            strides=(192, 192),
+            overlaps=(96, 96),
+            max_deviation_rigid=3,
+            border_nan="copy",
+        )
         ssub = 2  # subsample 2x to cut init time ~16x on large FOV
+    
+    p_value = best.get("p", 1)
 
+        # "merge_thr": 0.85,
+        # "del_duplicates": True,
     return {
-        "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
-        "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
-        "method_init": "corr_pnr",
-        "K": None,
-        "nb": 0,
-        "nb_patch": 0,
-        "center_psf": True,
-        "ring_size_factor": 1.4,
-        "merge_thr": 0.85,
-        "use_cnn": False,
-        "min_SNR": ARGS.min_snr_trace,
-        "rval_thr": 0.85,
-        "del_duplicates": True,
-        "ssub": ssub,
-        "tsub": 1,
-        "only_init": False,
-        "pw_rigid": True,
-        **mc,
+        "data": {
+            "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
+            "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
+            # "dxy": [2.0, 2.0]
+        },
+        "init": {
+            "nb": 0,
+            "nb_patch": 0,
+            "K": None,
+            "method_init": "greedy_roi",
+            "rolling_sum": True,
+            "ssub": ssub,
+            "tsub": 1,
+            "gSig": best.get("gSig", None),
+            "gSig_filt": best.get("gSig_filt", None),
+            "min_corr": best.get("min_corr", None),
+            "min_pnr": best.get("min_pnr", None),
+        },
+        "motion": {"pw_rigid": True, **mc},
+        "preprocess": {
+            "p": p_value,
+        },
+        "temporal": {
+            "p": p_value,
+        },
+        "patch": {
+            "rf": best.get("rf", None),
+            "stride": best.get("stride", None),
+            "only_init": True,
+        },
+        "merging": {
+            "merge_thr": best.get("merge_thr", None),
+        },
+        "quality": {
+            "min_SNR": 2,
+            "rval_thr": 0.85,
+            "use_cnn": True,
+            "min_cnn_thr": 0.99,
+            "cnn_lowest": 0.1,
+        },
     }
 
 
 # Base (resolution-aware) params, with the calibrated best_params.json values
 # merged on top — this is the single source of CNMF params used everywhere
 # below; there is no per-run search or override beyond this.
-BASE_PARAMS = get_base_params()
-BASE_PARAMS.update(load_best_params(BEST_PARAMS_PATH))
+LOADED_BEST_PARAMS = load_best_params(BEST_PARAMS_PATH)
+BASE_PARAMS = get_base_params(LOADED_BEST_PARAMS)
+
 
 
 # =============================================================================
 # CNMF + REFIT VALIDATION
 # =============================================================================
 
+
 def array_to_memmap(array: np.ndarray, basename: Path) -> str:
     tif = str(basename) + ".tif"
     tifffile.imwrite(tif, array.astype(np.float32))
     mmap_path = caiman.mmapping.save_memmap(
-        [tif], base_name=str(basename), order="C", border_to_0=0,
+        [tif],
+        base_name=str(basename),
+        order="C",
+        border_to_0=0,
     )
     if not ARGS.keep_temp:
         try:
@@ -673,6 +823,7 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
         except OSError:
             pass  # best-effort cleanup
     return mmap_path
+
 
 def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
     """Stage: build CNMFParams from overrides. Normalizes gSig/gSig_filt to int tuples."""
@@ -692,6 +843,7 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
 
     return params_module.CNMFParams(params_dict=p)
 
+
 def _setup_cluster():
     """Stage: start multiprocessing cluster. Falls back to single-threaded on failure."""
     try:
@@ -700,41 +852,53 @@ def _setup_cluster():
         )
         return cluster, n_processes
     except Exception as exc:
-        print(f"  [STAGE:cluster_setup] failed, running single-threaded: {exc}", flush=True)
+        print(
+            f"  [STAGE:cluster_setup] failed, running single-threaded: {exc}",
+            flush=True,
+        )
         return None, 1
+
 
 def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     """Stage: motion correction. Raises on failure — caller decides how to handle."""
     print("  [STAGE:motion_correction] starting", flush=True)
     mc = MotionCorrect([fname_mmap], dview=cluster, **opts.get_group("motion"))
     mc.motion_correct(save_movie=True)
-    fname_to_use = cm.save_memmap(mc.mmap_file, 
-                                    base_name='memmap_', 
-                                    order='C',
-                                    border_to_0=0,  # exclude borders, if that was done
-                                    dview=cluster)
+    fname_to_use = cm.save_memmap(
+        mc.mmap_file,
+        base_name="memmap_",
+        order="C",
+        border_to_0=0,  # exclude borders, if that was done
+        dview=cluster,
+    )
     print(f"  [STAGE:motion_correction] done -> {fname_to_use}", flush=True)
     return fname_to_use
 
+
 def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
     """Stage: core CNMF fit. Raises on failure — this is the critical path."""
-    opts.change_params({'fnames': [fname_to_use]})
-    
+    opts.change_params({"fnames": [fname_to_use]})
+
     Yr, dims, num_frames = cm.load_memmap(fname_to_use)
-    images = np.reshape(Yr.T, [num_frames] + list(dims), order='F') #reshape frames in standard 3d format (T x X x Y)
+    images = np.reshape(
+        Yr.T, [num_frames] + list(dims), order="F"
+    )  # reshape frames in standard 3d format (T x X x Y)
 
     # cm.stop_server(dview=cluster) # restart cluster to clean up memory in preparation for CNMF run.
     # cluster, n_processes = _setup_cluster()
 
     cnmf_obj = cnmf_module.CNMF(n_processes=n_processes, params=opts, dview=cluster)
-    
-    print('[STAGE:fit] starting', flush=True)
+
+    print("[STAGE:fit] starting", flush=True)
     cnmf_obj.fit(images)
-    
-    n_components = cnmf_obj.estimates.A.shape[1] if cnmf_obj.estimates.A is not None else 0
-    print(f'[STAGE:fit] done -> {n_components} components', flush=True)
-    
+
+    n_components = (
+        cnmf_obj.estimates.A.shape[1] if cnmf_obj.estimates.A is not None else 0
+    )
+    print(f"[STAGE:fit] done -> {n_components} components", flush=True)
+
     return cnmf_obj
+
 
 def _reload_images(fname_to_use: str):
     """Stage: reload the mmap actually fit, for evaluate/refit. Returns None on failure
@@ -743,36 +907,58 @@ def _reload_images(fname_to_use: str):
         Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_to_use)
         return np.reshape(Yr.T, [T_loc] + list(dims), order="F")
     except Exception as exc:
-        print(f"  [STAGE:reload_images] failed, evaluate/refit will be skipped: {exc}", flush=True)
+        print(
+            f"  [STAGE:reload_images] failed, evaluate/refit will be skipped: {exc}",
+            flush=True,
+        )
         return None
+
 
 def _evaluate_and_select(cnmf_obj, images, cluster):
     """Stage: CaImAn's own component evaluation (SNR/spatial/CNN). Non-fatal on failure —
     keeps whatever components existed before this stage."""
     try:
         print("  [STAGE:evaluate_components] starting", flush=True)
-        cnmf_obj.estimates.evaluate_components(imgs=images, params=cnmf_obj.params, dview=cluster)
+        cnmf_obj.estimates.evaluate_components(
+            imgs=images, params=cnmf_obj.params, dview=cluster
+        )
         cnmf_obj.estimates.select_components(use_object=True)
-        print(f"  [STAGE:evaluate_components] done -> {cnmf_obj.estimates.A.shape[1]} components remain", flush=True)
+        print(
+            f"  [STAGE:evaluate_components] done -> {cnmf_obj.estimates.A.shape[1]} components remain",
+            flush=True,
+        )
     except Exception as exc:
-        print(f"  [STAGE:evaluate_components] failed, keeping unfiltered components: {exc}", flush=True)
+        print(
+            f"  [STAGE:evaluate_components] failed, keeping unfiltered components: {exc}",
+            flush=True,
+        )
 
 
 def _refit(cnmf_obj, images, cluster):
     """Stage: second-pass validation refit. Non-fatal on failure — keeps pre-refit estimates."""
     try:
-        print("  [STAGE:refit] starting — second-pass validation of accepted neurons", flush=True)
+        print(
+            "  [STAGE:refit] starting — second-pass validation of accepted neurons",
+            flush=True,
+        )
         refit_obj = cnmf_obj.refit(images, dview=cluster)
-        print(f"  [STAGE:refit] done -> {refit_obj.estimates.A.shape[1]} neurons remain", flush=True)
+        print(
+            f"  [STAGE:refit] done -> {refit_obj.estimates.A.shape[1]} neurons remain",
+            flush=True,
+        )
         return refit_obj
     except Exception as exc:
         print(f"  [STAGE:refit] failed, keeping pre-refit estimates: {exc}", flush=True)
         return cnmf_obj
 
 
-def run_cnmf(params_override: dict, fname_mmap: str,
-             do_mc: bool = True, do_filter_caiman: bool = True,
-             do_refit: bool = True):
+def run_cnmf(
+    params_override: dict,
+    fname_mmap: str,
+    do_mc: bool = True,
+    do_filter_caiman: bool = True,
+    do_refit: bool = True,
+):
     """
     Run CNMF, then validate found neurons in two passes:
       1. CaImAn's own evaluate_components / select_components (SNR, spatial
@@ -804,11 +990,14 @@ def run_cnmf(params_override: dict, fname_mmap: str,
         if do_mc:
             fname_to_use = _motion_correct(fname_mmap, opts, cluster)
         else:
-            print("  [STAGE:motion_correction] skipped — using precomputed mmap", flush=True)
-        
+            print(
+                "  [STAGE:motion_correction] skipped — using precomputed mmap",
+                flush=True,
+            )
+
         # cm.stop_server(dview=cluster)
         # cluster, n_processes = _setup_cluster()
-        
+
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
         images = None
@@ -836,6 +1025,7 @@ def run_cnmf(params_override: dict, fname_mmap: str,
             except Exception:
                 pass
 
+
 def load_yr_for_scoring(fname_used: Optional[str], fallback_Yr):
     """
     Reload Yr from the exact mmap a CNMF run was fit on, so scoring never
@@ -854,8 +1044,11 @@ def load_yr_for_scoring(fname_used: Optional[str], fallback_Yr):
         Yr_used, _, _ = caiman.mmapping.load_memmap(fname_used)
         return Yr_used
     except Exception as exc:
-        print(f"  [WARNING: could not reload registered mmap '{fname_used}' for scoring "
-              f"({exc}); falling back to pre-registration Yr]", flush=True)
+        print(
+            f"  [WARNING: could not reload registered mmap '{fname_used}' for scoring "
+            f"({exc}); falling back to pre-registration Yr]",
+            flush=True,
+        )
         return fallback_Yr
 
 
@@ -871,9 +1064,12 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
               + 0.001*log(1 + n_neurons)   # small bonus for finding more neurons
     """
     sentinel = {
-        "n_neurons": 0, "recon_error": 1.0,
-        "spatial_compactness": 0.0, "trace_sparsity": float("inf"),
-        "stability": stability, "composite_score": -float("inf"),
+        "n_neurons": 0,
+        "recon_error": 1.0,
+        "spatial_compactness": 0.0,
+        "trace_sparsity": float("inf"),
+        "stability": stability,
+        "composite_score": -float("inf"),
     }
     if cnmf_obj is None or cnmf_obj.estimates.A.shape[1] == 0:
         return sentinel
@@ -887,9 +1083,11 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
     #   ||Y - A@C||^2_F = ||Y||^2_F - 2*trace(C^T * A^T * Y) + ||A@C||^2_F
     # All intermediates are (n x T) or (n x n) - at most a few MB.
     Yr_norm_sq = float(np.linalg.norm(Yr, "fro") ** 2)
-    AtYr = A.T @ Yr                     # (n x T) dense
-    AtA = A.T @ A                       # (n x n) sparse
-    recon_norm_sq = Yr_norm_sq - 2.0 * float(np.sum(C * AtYr)) + float(np.sum(C * (AtA @ C)))
+    AtYr = A.T @ Yr  # (n x T) dense
+    AtA = A.T @ A  # (n x n) sparse
+    recon_norm_sq = (
+        Yr_norm_sq - 2.0 * float(np.sum(C * AtYr)) + float(np.sum(C * (AtA @ C)))
+    )
 
     b = getattr(cnmf_obj.estimates, "b", None)
     f_bg = getattr(cnmf_obj.estimates, "f", None)
@@ -898,8 +1096,8 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
         bt_plus = b.T @ b
         bg_norm_sq = float(np.sum(f_bg * (bt_plus @ f_bg)))
         # Cross-term  2*trace(C^T * A^T * b * f_bg) = 2*sum( (A^T*b) * (C*f_bg^T) )
-        Atb = A.T @ b                    # (n x nb) dense
-        CfbgT = C @ f_bg.T               # (n x nb) dense
+        Atb = A.T @ b  # (n x nb) dense
+        CfbgT = C @ f_bg.T  # (n x nb) dense
         cross = 2.0 * float(np.sum(Atb * CfbgT))
         recon_norm_sq += bg_norm_sq + cross
 
@@ -956,9 +1154,15 @@ def compute_stability(A1, A2, threshold: float = 0.5) -> float:
 # TEST / VALIDATION PHASE
 # =============================================================================
 
-def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
-              dims: tuple[int, int], label: str,
-              tune_A=None) -> dict:
+
+def test_cnmf(
+    params: dict,
+    mmap_path: str,
+    data: np.ndarray,
+    dims: tuple[int, int],
+    label: str,
+    tune_A=None,
+) -> dict:
     """Run CNMF (+ refit validation) on a split, save plots/traces, and score the run.
 
     If tune_A is given (footprints from a reference/held-out split), the
@@ -976,7 +1180,11 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
     Yr = load_yr_for_scoring(fname_used, Yr_unregistered)
 
     stability = 0.0
-    if tune_A is not None and cnmf_obj is not None and cnmf_obj.estimates.A.shape[1] > 0:
+    if (
+        tune_A is not None
+        and cnmf_obj is not None
+        and cnmf_obj.estimates.A.shape[1] > 0
+    ):
         stability = compute_stability(tune_A, cnmf_obj.estimates.A)
 
     metrics = score_run(cnmf_obj, Yr, dims, stability=stability)
@@ -984,10 +1192,14 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
     metrics["runtime_s"] = round(rt, 1)
 
     n = metrics["n_neurons"]
-    print(f"  Neurons: {n}  composite: {metrics['composite_score']:+.4f}  stability: {stability:.3f}  t={rt:.0f}s")
+    print(
+        f"  Neurons: {n}  composite: {metrics['composite_score']:+.4f}  stability: {stability:.3f}  t={rt:.0f}s"
+    )
 
     if cnmf_obj is not None and n > 0:
-        safe = label.replace(" ", "_").replace("/", "_").replace("(", "").replace(")", "")
+        safe = (
+            label.replace(" ", "_").replace("/", "_").replace("(", "").replace(")", "")
+        )
         H_val, W_val = dims
 
         # Contour plot
@@ -997,10 +1209,16 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
         ax.set_title(f"{label}: {n} neurons", fontsize=10)
         ax.axis("off")
         for i in range(n):
-            fp = np.asarray(cnmf_obj.estimates.A[:, i].todense()).flatten().reshape(H_val, W_val)
+            fp = (
+                np.asarray(cnmf_obj.estimates.A[:, i].todense())
+                .flatten()
+                .reshape(H_val, W_val)
+            )
             if fp.max() == 0:
                 continue
-            ax.contour(fp, levels=[fp.max() * 0.5], colors="cyan", linewidths=0.4, alpha=0.85)
+            ax.contour(
+                fp, levels=[fp.max() * 0.5], colors="cyan", linewidths=0.4, alpha=0.85
+            )
         plt.tight_layout()
         plt.savefig(str(OUTPUT_DIR / f"contours_{safe}.png"), dpi=150)
         plt.close(fig)
@@ -1029,7 +1247,9 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
 
         np.save(str(OUTPUT_DIR / f"traces_{safe}.npy"), traces)
         np.save(str(OUTPUT_DIR / f"dff_{safe}.npy"), dff)
-        print(f"  dF/F: percentile={ARGS.dff_percentile}  bleach_correct={bleach_applied}")
+        print(
+            f"  dF/F: percentile={ARGS.dff_percentile}  bleach_correct={bleach_applied}"
+        )
 
     return metrics
 
@@ -1038,8 +1258,14 @@ def test_cnmf(params: dict, mmap_path: str, data: np.ndarray,
 # OUTPUT
 # =============================================================================
 
-def save_summary(mode: str, params: dict, test_results: dict,
-                 fmt_info: dict, extra: dict | None = None):
+
+def save_summary(
+    mode: str,
+    params: dict,
+    test_results: dict,
+    fmt_info: dict,
+    extra: dict | None = None,
+):
     summary = {
         "mode": mode,
         "run_name": ARGS.run_name,
@@ -1054,8 +1280,7 @@ def save_summary(mode: str, params: dict, test_results: dict,
     for label, m in test_results.items():
         if isinstance(m, dict):
             summary["tests"][label] = {
-                k: v for k, v in m.items()
-                if not isinstance(v, (np.ndarray,))
+                k: v for k, v in m.items() if not isinstance(v, (np.ndarray,))
             }
     if extra:
         summary.update(extra)
@@ -1112,6 +1337,7 @@ def save_summary(mode: str, params: dict, test_results: dict,
 # MODES
 # =============================================================================
 
+
 def mode_time_split():
     """Run CNMF with fixed params on the first half of frames (reference, for
     stability comparison) and test on the second half + full movie. Same file/Z."""
@@ -1127,9 +1353,15 @@ def mode_time_split():
     elif ARGS.n_planes and z_index is None:
         z_index = ARGS.n_planes // 2
 
-    raw = load_movie(ARGS.data_dir, fmt, files, sample_shape,
-                     z_index=z_index, max_frames=ARGS.max_frames,
-                     n_planes=_nplanes if _nplanes is not None else ARGS.n_planes)
+    raw = load_movie(
+        ARGS.data_dir,
+        fmt,
+        files,
+        sample_shape,
+        z_index=z_index,
+        max_frames=ARGS.max_frames,
+        n_planes=_nplanes if _nplanes is not None else ARGS.n_planes,
+    )
     data, prep_info = preprocess_movie(raw, label="movie")
 
     T_full = data.shape[0]
@@ -1137,40 +1369,62 @@ def mode_time_split():
         print(f"ERROR: only {T_full} frames; time-split needs >=4")
         sys.exit(1)
     mid = T_full // 2
-    print(f"\nTime split: reference frames 0-{mid-1} ({mid}), test frames {mid}-{T_full-1} ({T_full-mid})")
+    print(
+        f"\nTime split: reference frames 0-{mid-1} ({mid}), test frames {mid}-{T_full-1} ({T_full-mid})"
+    )
 
     dims = data.shape[1:]
     tune_mmap = array_to_memmap(data[:mid], WORK_DIR / "tune_half")
     test_mmap = array_to_memmap(data[mid:], WORK_DIR / "test_half")
 
     print("\nRunning CNMF with configured params on reference half (for stability)...")
-    params_override = {**BASE_PARAMS,
-        'is_1p': False,          # Ensure 1-photon CNMF-E mode is OFF
-        'gnb': 2,                # Use global low-rank NMF background (increase to 3 if needed)
-        'p': 1,                  # AR(1) temporal model (use p=2 for slow/parvalbumin indicators)
-        'min_SNR': 2.0,          # Filter out low-SNR background noise
-        'rval_thr': 0.85,        # Filter out spatial noise
+    params_override = {
+        **BASE_PARAMS,
+        "is_1p": False,  # Ensure 1-photon CNMF-E mode is OFF
+        "gnb": 2,  # Use global low-rank NMF background (increase to 3 if needed)
+        "p": 1,  # AR(1) temporal model (use p=2 for slow/parvalbumin indicators)
+        "min_SNR": 2.0,  # Filter out low-SNR background noise
+        "rval_thr": 0.85,  # Filter out spatial noise
     }
     cnmf_tune, _, _ = run_cnmf(params_override, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     test_metrics = test_cnmf(
-        params_override, test_mmap, data[mid:], dims,
-        label=f"test_half (frames {mid}-{T_full-1})", tune_A=tune_A,
+        params_override,
+        test_mmap,
+        data[mid:],
+        dims,
+        label=f"test_half (frames {mid}-{T_full-1})",
+        tune_A=tune_A,
     )
     full_mmap = array_to_memmap(data, WORK_DIR / "full_movie")
     full_metrics = test_cnmf(
-        params_override, full_mmap, data, dims,
-        label="full_movie", tune_A=tune_A,
+        params_override,
+        full_mmap,
+        data,
+        dims,
+        label="full_movie",
+        tune_A=tune_A,
     )
 
-    fmt_info = {"format": fmt, "n_files": len(files), "sample_shape": list(sample_shape),
-                **prep_info}
-    save_summary("time-split", params_override,
-                 {"test_half": test_metrics, "full_movie": full_metrics},
-                 fmt_info,
-                 extra={"z_index": z_index, "n_planes": _nplanes if _nplanes is not None else ARGS.n_planes,
-                        "T_total": T_full, "data_dir": str(ARGS.data_dir)})
+    fmt_info = {
+        "format": fmt,
+        "n_files": len(files),
+        "sample_shape": list(sample_shape),
+        **prep_info,
+    }
+    save_summary(
+        "time-split",
+        params_override,
+        {"test_half": test_metrics, "full_movie": full_metrics},
+        fmt_info,
+        extra={
+            "z_index": z_index,
+            "n_planes": _nplanes if _nplanes is not None else ARGS.n_planes,
+            "T_total": T_full,
+            "data_dir": str(ARGS.data_dir),
+        },
+    )
 
 
 def mode_plane_split():
@@ -1181,15 +1435,23 @@ def mode_plane_split():
 
     if fmt == "interleaved":
         Z = _nplanes if _nplanes is not None else ARGS.n_planes
+
         def _load_plane(z):
             return load_plane_interleaved(files[0], z, Z)
+
     elif fmt == "multi-tp":
         Z = sample_shape[0]
+
         def _load_plane(z):
             return load_plane_multi_tp(files, z)
+
     else:
-        print(f"ERROR: plane-split requires multi-tp or interleaved format (got {fmt}).")
-        print("Use time-split for single-plane data, or file-plane-split for cross-file.")
+        print(
+            f"ERROR: plane-split requires multi-tp or interleaved format (got {fmt})."
+        )
+        print(
+            "Use time-split for single-plane data, or file-plane-split for cross-file."
+        )
         sys.exit(2)
 
     if Z is None or Z < 2:
@@ -1207,7 +1469,9 @@ def mode_plane_split():
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
 
-    print(f"\nRunning CNMF with configured params on z={tune_z} (reference for stability)...")
+    print(
+        f"\nRunning CNMF with configured params on z={tune_z} (reference for stability)..."
+    )
     cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
@@ -1218,35 +1482,55 @@ def mode_plane_split():
         test_data, _ = preprocess_movie(test_raw, label=f"test_z{z}")
         test_mmap = array_to_memmap(test_data, WORK_DIR / f"test_z{z}")
         m = test_cnmf(
-            BASE_PARAMS, test_mmap, test_data, test_data.shape[1:],
+            BASE_PARAMS,
+            test_mmap,
+            test_data,
+            test_data.shape[1:],
             label=f"z{z}" + (" (tune)" if z == tune_z else ""),
             tune_A=tune_A if z != tune_z else None,
         )
         all_metrics[f"z{z}"] = m
 
     rows = [
-        {"z_plane": k, "n_neurons": v["n_neurons"],
-         "composite": v["composite_score"], "stability_vs_tune": v.get("stability", 0.0),
-         "recon_error": v["recon_error"]}
+        {
+            "z_plane": k,
+            "n_neurons": v["n_neurons"],
+            "composite": v["composite_score"],
+            "stability_vs_tune": v.get("stability", 0.0),
+            "recon_error": v["recon_error"],
+        }
         for k, v in all_metrics.items()
     ]
     pd.DataFrame(rows).to_csv(str(OUTPUT_DIR / "plane_split_summary.csv"), index=False)
     print("\n[plane-split summary]")
     print(pd.DataFrame(rows).to_string(index=False))
 
-    fmt_info = {"format": fmt, "n_files": len(files), "sample_shape": list(sample_shape),
-                **prep_info}
-    save_summary("plane-split", BASE_PARAMS, all_metrics, fmt_info,
-                 extra={"tune_z": tune_z, "Z": Z, "data_dir": str(ARGS.data_dir)})
+    fmt_info = {
+        "format": fmt,
+        "n_files": len(files),
+        "sample_shape": list(sample_shape),
+        **prep_info,
+    }
+    save_summary(
+        "plane-split",
+        BASE_PARAMS,
+        all_metrics,
+        fmt_info,
+        extra={"tune_z": tune_z, "Z": Z, "data_dir": str(ARGS.data_dir)},
+    )
 
 
 def mode_file_plane_split():
     """Run CNMF with fixed params on file A z (reference, for stability), test on file B same z."""
     print(f"\n--- FILE-PLANE-SPLIT mode ---")
     print("\nReference dataset:")
-    fmt_t, tune_files, shape_t, _nplanes_t = discover(ARGS.tune_dir, ARGS.format_override)
+    fmt_t, tune_files, shape_t, _nplanes_t = discover(
+        ARGS.tune_dir, ARGS.format_override
+    )
     print("\nTest dataset:")
-    fmt_te, test_files, shape_te, _nplanes_te = discover(ARGS.test_dir, ARGS.format_override)
+    fmt_te, test_files, shape_te, _nplanes_te = discover(
+        ARGS.test_dir, ARGS.format_override
+    )
 
     z_index = ARGS.z_index
     if fmt_t == "multi-tp" and z_index is None:
@@ -1260,9 +1544,15 @@ def mode_file_plane_split():
     print(f"\nUsing z={z_index}")
 
     print("\n[Loading reference]")
-    tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
-                          z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes)
+    tune_raw = load_movie(
+        ARGS.tune_dir,
+        fmt_t,
+        tune_files,
+        shape_t,
+        z_index=z_index,
+        max_frames=ARGS.max_frames,
+        n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes,
+    )
     tune_data, prep_info_tune = preprocess_movie(tune_raw, label="tune")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1272,26 +1562,52 @@ def mode_file_plane_split():
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     print("\n[Loading test]")
-    test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
-                          z_index=z_index, max_frames=ARGS.max_frames,
-                          n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes)
+    test_raw = load_movie(
+        ARGS.test_dir,
+        fmt_te,
+        test_files,
+        shape_te,
+        z_index=z_index,
+        max_frames=ARGS.max_frames,
+        n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes,
+    )
     test_data, prep_info_test = preprocess_movie(test_raw, label="test")
     test_mmap = array_to_memmap(test_data, WORK_DIR / "test")
 
     test_metrics = test_cnmf(
-        BASE_PARAMS, test_mmap, test_data, test_data.shape[1:],
-        label="test_file", tune_A=tune_A,
+        BASE_PARAMS,
+        test_mmap,
+        test_data,
+        test_data.shape[1:],
+        label="test_file",
+        tune_A=tune_A,
     )
 
-    fmt_info = {"tune": {"format": fmt_t, "n_files": len(tune_files),
-                          "sample_shape": list(shape_t), **prep_info_tune},
-                "test": {"format": fmt_te, "n_files": len(test_files),
-                          "sample_shape": list(shape_te), **prep_info_test}}
-    save_summary("file-plane-split", BASE_PARAMS, {"test_file": test_metrics},
-                 fmt_info,
-                 extra={"z_index": z_index,
-                        "tune_dir": str(ARGS.tune_dir),
-                        "test_dir": str(ARGS.test_dir)})
+    fmt_info = {
+        "tune": {
+            "format": fmt_t,
+            "n_files": len(tune_files),
+            "sample_shape": list(shape_t),
+            **prep_info_tune,
+        },
+        "test": {
+            "format": fmt_te,
+            "n_files": len(test_files),
+            "sample_shape": list(shape_te),
+            **prep_info_test,
+        },
+    }
+    save_summary(
+        "file-plane-split",
+        BASE_PARAMS,
+        {"test_file": test_metrics},
+        fmt_info,
+        extra={
+            "z_index": z_index,
+            "tune_dir": str(ARGS.tune_dir),
+            "test_dir": str(ARGS.test_dir),
+        },
+    )
 
 
 def mode_file_split():
@@ -1299,9 +1615,13 @@ def mode_file_split():
     every Z if multi-tp/interleaved; else a single test."""
     print(f"\n--- FILE-SPLIT mode ---")
     print("\nReference dataset:")
-    fmt_t, tune_files, shape_t, _nplanes_t = discover(ARGS.tune_dir, ARGS.format_override)
+    fmt_t, tune_files, shape_t, _nplanes_t = discover(
+        ARGS.tune_dir, ARGS.format_override
+    )
     print("\nTest dataset:")
-    fmt_te, test_files, shape_te, _nplanes_te = discover(ARGS.test_dir, ARGS.format_override)
+    fmt_te, test_files, shape_te, _nplanes_te = discover(
+        ARGS.test_dir, ARGS.format_override
+    )
 
     if fmt_t == "multi-tp":
         tune_z = shape_t[0] // 2
@@ -1312,9 +1632,15 @@ def mode_file_split():
     print(f"\nUsing reference-file z={tune_z}")
 
     print("\n[Loading reference]")
-    tune_raw = load_movie(ARGS.tune_dir, fmt_t, tune_files, shape_t,
-                          z_index=tune_z, max_frames=ARGS.max_frames,
-                          n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes)
+    tune_raw = load_movie(
+        ARGS.tune_dir,
+        fmt_t,
+        tune_files,
+        shape_t,
+        z_index=tune_z,
+        max_frames=ARGS.max_frames,
+        n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes,
+    )
     tune_data, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
@@ -1331,7 +1657,15 @@ def mode_file_split():
         z_iter = range(Z_te)
     else:
         Z_te = 1
-        _z0 = ARGS.z_index if ARGS.z_index is not None else ((_nplanes_te if _nplanes_te is not None else ARGS.n_planes) // 2 if (_nplanes_te is not None or ARGS.n_planes) else 0)
+        _z0 = (
+            ARGS.z_index
+            if ARGS.z_index is not None
+            else (
+                (_nplanes_te if _nplanes_te is not None else ARGS.n_planes) // 2
+                if (_nplanes_te is not None or ARGS.n_planes)
+                else 0
+            )
+        )
         z_iter = [_z0]
 
     all_metrics = {}
@@ -1343,37 +1677,69 @@ def mode_file_split():
         elif fmt_te == "interleaved":
             test_raw = load_plane_interleaved(test_files[0], z, Z_te)
         else:
-            test_raw = load_movie(ARGS.test_dir, fmt_te, test_files, shape_te,
-                                  z_index=z, max_frames=ARGS.max_frames,
-                                  n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes)
+            test_raw = load_movie(
+                ARGS.test_dir,
+                fmt_te,
+                test_files,
+                shape_te,
+                z_index=z,
+                max_frames=ARGS.max_frames,
+                n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes,
+            )
         test_data, _ = preprocess_movie(test_raw, label=label)
         test_mmap = array_to_memmap(test_data, WORK_DIR / label)
         m = test_cnmf(
-            BASE_PARAMS, test_mmap, test_data, test_data.shape[1:],
-            label=label, tune_A=tune_A,
+            BASE_PARAMS,
+            test_mmap,
+            test_data,
+            test_data.shape[1:],
+            label=label,
+            tune_A=tune_A,
         )
         all_metrics[label] = m
 
     if Z_te > 1:
         rows = [
-            {"z_plane": k, "n_neurons": v["n_neurons"],
-             "composite": v["composite_score"],
-             "stability_vs_tune": v.get("stability", 0.0),
-             "recon_error": v["recon_error"]}
+            {
+                "z_plane": k,
+                "n_neurons": v["n_neurons"],
+                "composite": v["composite_score"],
+                "stability_vs_tune": v.get("stability", 0.0),
+                "recon_error": v["recon_error"],
+            }
             for k, v in all_metrics.items()
         ]
-        pd.DataFrame(rows).to_csv(str(OUTPUT_DIR / "file_split_summary.csv"), index=False)
+        pd.DataFrame(rows).to_csv(
+            str(OUTPUT_DIR / "file_split_summary.csv"), index=False
+        )
         print("\n[file-split summary]")
         print(pd.DataFrame(rows).to_string(index=False))
 
-    fmt_info = {"tune": {"format": fmt_t, "n_files": len(tune_files),
-                          "sample_shape": list(shape_t), **prep_info_tune},
-                "test": {"format": fmt_te, "n_files": len(test_files),
-                          "sample_shape": list(shape_te)}}
-    save_summary("file-split", BASE_PARAMS, all_metrics, fmt_info,
-                 extra={"tune_dir": str(ARGS.tune_dir),
-                        "test_dir": str(ARGS.test_dir),
-                        "tune_z": tune_z, "Z_test": Z_te})
+    fmt_info = {
+        "tune": {
+            "format": fmt_t,
+            "n_files": len(tune_files),
+            "sample_shape": list(shape_t),
+            **prep_info_tune,
+        },
+        "test": {
+            "format": fmt_te,
+            "n_files": len(test_files),
+            "sample_shape": list(shape_te),
+        },
+    }
+    save_summary(
+        "file-split",
+        BASE_PARAMS,
+        all_metrics,
+        fmt_info,
+        extra={
+            "tune_dir": str(ARGS.tune_dir),
+            "test_dir": str(ARGS.test_dir),
+            "tune_z": tune_z,
+            "Z_test": Z_te,
+        },
+    )
 
 
 # =============================================================================
