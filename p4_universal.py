@@ -1144,22 +1144,29 @@ def mode_time_split():
     test_mmap = array_to_memmap(data[mid:], WORK_DIR / "test_half")
 
     print("\nRunning CNMF with configured params on reference half (for stability)...")
-    cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+    params_override = {**BASE_PARAMS,
+        'is_1p': False,          # Ensure 1-photon CNMF-E mode is OFF
+        'gnb': 2,                # Use global low-rank NMF background (increase to 3 if needed)
+        'p': 1,                  # AR(1) temporal model (use p=2 for slow/parvalbumin indicators)
+        'min_SNR': 2.0,          # Filter out low-SNR background noise
+        'rval_thr': 0.85,        # Filter out spatial noise
+    }
+    cnmf_tune, _, _ = run_cnmf(params_override, tune_mmap)
     tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
 
     test_metrics = test_cnmf(
-        BASE_PARAMS, test_mmap, data[mid:], dims,
+        params_override, test_mmap, data[mid:], dims,
         label=f"test_half (frames {mid}-{T_full-1})", tune_A=tune_A,
     )
     full_mmap = array_to_memmap(data, WORK_DIR / "full_movie")
     full_metrics = test_cnmf(
-        BASE_PARAMS, full_mmap, data, dims,
+        params_override, full_mmap, data, dims,
         label="full_movie", tune_A=tune_A,
     )
 
     fmt_info = {"format": fmt, "n_files": len(files), "sample_shape": list(sample_shape),
                 **prep_info}
-    save_summary("time-split", BASE_PARAMS,
+    save_summary("time-split", params_override,
                  {"test_half": test_metrics, "full_movie": full_metrics},
                  fmt_info,
                  extra={"z_index": z_index, "n_planes": _nplanes if _nplanes is not None else ARGS.n_planes,
