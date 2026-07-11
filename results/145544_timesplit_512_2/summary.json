@@ -1,6 +1,6 @@
 {
   "mode": "time-split",
-  "run_name": "145544_timesplit_512",
+  "run_name": "145544_timesplit_512_2",
   "resolution": "512",
   "stripe_removal": true,
   "min_snr_trace": 1.5,
@@ -78,7 +78,7 @@
       "stability": 0.11239860950173812,
       "composite_score": -0.26569770527602127,
       "label": "test_half (frames 350-699)",
-      "runtime_s": 2987.0
+      "runtime_s": 3033.7
     },
     "full_movie": {
       "n_neurons": 4661,
@@ -88,7 +88,7 @@
       "stability": 0.025782155272305908,
       "composite_score": -0.4197465135871933,
       "label": "full_movie",
-      "runtime_s": 2011.2
+      "runtime_s": 2001.2
     }
   },
   "z_index": 3,

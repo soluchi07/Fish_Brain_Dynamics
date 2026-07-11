@@ -38,7 +38,7 @@
     "rf": 80.0,
     "stride": 40.0,
     "p": 1.0,
-    "runtime_s": 237.5
+    "runtime_s": 235.9
   },
   "preprocessing": {
     "original_shape": [

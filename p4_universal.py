@@ -708,7 +708,11 @@ def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     print("  [STAGE:motion_correction] starting", flush=True)
     mc = MotionCorrect([fname_mmap], dview=cluster, **opts.get_group("motion"))
     mc.motion_correct(save_movie=True)
-    fname_to_use = mc.mmap_file[0] if isinstance(mc.mmap_file, list) else mc.mmap_file
+    fname_to_use = cm.save_memmap(mc.mmap_file, 
+                                    base_name='memmap_', 
+                                    order='C',
+                                    border_to_0=0,  # exclude borders, if that was done
+                                    dview=cluster)
     print(f"  [STAGE:motion_correction] done -> {fname_to_use}", flush=True)
     return fname_to_use
 
@@ -716,7 +720,12 @@ def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
     """Stage: core CNMF fit. Raises on failure — this is the critical path."""
     opts.change_params({'fnames': [fname_to_use]})
     
-    images = cm.load(fname_to_use)
+    Yr, dims, num_frames = cm.load_memmap(fname_to_use)
+    images = np.reshape(Yr.T, [num_frames] + list(dims), order='F') #reshape frames in standard 3d format (T x X x Y)
+
+    # cm.stop_server(dview=cluster) # restart cluster to clean up memory in preparation for CNMF run.
+    # cluster, n_processes = _setup_cluster()
+
     cnmf_obj = cnmf_module.CNMF(n_processes=n_processes, params=opts, dview=cluster)
     
     print('[STAGE:fit] starting', flush=True)
@@ -797,8 +806,8 @@ def run_cnmf(params_override: dict, fname_mmap: str,
         else:
             print("  [STAGE:motion_correction] skipped — using precomputed mmap", flush=True)
         
-        cm.stop_server(dview=cluster)
-        cluster, n_processes = _setup_cluster()
+        # cm.stop_server(dview=cluster)
+        # cluster, n_processes = _setup_cluster()
         
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 

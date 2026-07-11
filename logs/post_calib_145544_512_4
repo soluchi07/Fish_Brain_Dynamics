@@ -1,0 +1,60 @@
+    Monitoring started at 19:08:06.875690
+====================================================================== at time 19:08:12.122941
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512 at time 19:08:12.122985
+====================================================================== at time 19:08:12.123003
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512 at time 19:08:12.123018
+Resolution : 512 at time 19:08:12.123039
+Best params: results/calib_20iv26_512/calibration_summary.json at time 19:08:12.123054
+CPU pin    : unpinned  workers=95 at time 19:08:12.123067
+Loaded best params from results/calib_20iv26_512/calibration_summary.json: at time 19:08:12.123099
+gSig: 3 at time 19:08:12.123112
+gSig_filt: 4 at time 19:08:12.123124
+min_corr: 0.5118676301124861 at time 19:08:12.123136
+min_pnr: 12 at time 19:08:12.123149
+rf: 80 at time 19:08:12.123161
+stride: 40 at time 19:08:12.123172
+p: 1 at time 19:08:12.123185
+merge_thr: 0.85 at time 19:08:12.123197
+ at time 19:08:12.123211
+--- TIME-SPLIT mode --- at time 19:08:12.123223
+Auto-detected n_planes=7 from metadata at time 19:08:12.128061
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 19:08:12.128093
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 19:08:12.128109
+Interleaved: z=3/7 planes -> 700 frames at time 19:08:12.128123
+ at time 19:14:02.306627
+[preprocess movie]  input shape=(700, 2048, 2048) at time 19:14:02.306726
+Downsampling -> (512, 512) at time 19:14:02.306743
+ at time 19:15:14.722986
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 19:15:14.723037
+ at time 19:15:17.001213
+Running CNMF with configured params on reference half (for stability)... at time 19:15:17.001253
+[STAGE:motion_correction] starting at time 19:15:21.296319
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_F_frames_350.mmap at time 19:15:42.693711
+[STAGE:fit] starting at time 19:15:42.700125
+CNMF failed: The file is in F order, it should be in C order (see save_memmap function) at time 19:15:42.700168
+ at time 19:15:42.967103
+============================================================ at time 19:15:42.967143
+TEST: test_half (frames 350-699) at time 19:15:42.967160
+============================================================ at time 19:15:42.967174
+[STAGE:motion_correction] starting at time 19:15:47.178757
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_F_frames_350.mmap at time 19:16:08.632118
+[STAGE:fit] starting at time 19:16:08.638098
+CNMF failed: The file is in F order, it should be in C order (see save_memmap function) at time 19:16:08.638158
+Neurons: 0  composite: -inf  stability: 0.000  t=21s at time 19:16:08.893408
+ at time 19:16:13.824604
+============================================================ at time 19:16:13.824654
+TEST: full_movie at time 19:16:13.824733
+============================================================ at time 19:16:13.824748
+[STAGE:motion_correction] starting at time 19:16:18.148386
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_F_frames_700.mmap at time 19:16:42.072954
+[STAGE:fit] starting at time 19:16:42.079271
+CNMF failed: The file is in F order, it should be in C order (see save_memmap function) at time 19:16:42.079312
+Neurons: 0  composite: -inf  stability: 0.000  t=24s at time 19:16:42.395449
+ at time 19:16:42.396523
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512/ at time 19:16:42.396550
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 19:16:42.404031
+ at time 19:16:42.445719
+====================================================================== at time 19:16:42.445735
+DONE  |  time-split  |  145544_timesplit_512  |  8.5 min at time 19:16:42.445742
+====================================================================== at time 19:16:42.445748
+Monitoring ended at 19:16:43.643079
