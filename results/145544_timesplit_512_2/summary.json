@@ -6,44 +6,69 @@
   "min_snr_trace": 1.5,
   "best_params_path": "results/calib_20iv26_512/calibration_summary.json",
   "params": {
-    "fr": 5,
-    "decay_time": 0.25,
-    "method_init": "corr_pnr",
-    "K": null,
-    "nb": 0,
-    "nb_patch": 0,
-    "center_psf": true,
-    "ring_size_factor": 1.4,
-    "merge_thr": 0.85,
-    "use_cnn": false,
-    "min_SNR": 1.5,
-    "rval_thr": 0.85,
-    "del_duplicates": true,
-    "ssub": 1,
-    "tsub": 1,
-    "only_init": false,
-    "pw_rigid": true,
-    "max_shifts": [
-      3,
-      3
-    ],
-    "strides": [
-      48,
-      48
-    ],
-    "overlaps": [
-      24,
-      24
-    ],
-    "max_deviation_rigid": 2,
-    "border_nan": "copy",
-    "gSig": 3,
-    "gSig_filt": 4,
-    "min_corr": 0.5118676301124861,
-    "min_pnr": 12,
-    "rf": 80,
-    "stride": 40,
-    "p": 1
+    "data": {
+      "fr": 5,
+      "decay_time": 0.25,
+      "gnb": 0
+    },
+    "init": {
+      "nb": 0,
+      "nb_patch": 0,
+      "K": null,
+      "method_init": "corr_pnr",
+      "center_psf": true,
+      "ssub": 1,
+      "tsub": 1,
+      "gSig": 3,
+      "gSig_filt": 4,
+      "min_corr": 0.5118676301124861,
+      "min_pnr": 12
+    },
+    "ring": {
+      "ring_size_factor": 1.4
+    },
+    "motion": {
+      "pw_rigid": true,
+      "max_shifts": [
+        3,
+        3
+      ],
+      "strides": [
+        48,
+        48
+      ],
+      "overlaps": [
+        24,
+        24
+      ],
+      "max_deviation_rigid": 2,
+      "border_nan": "copy"
+    },
+    "preprocess": {
+      "p": 1
+    },
+    "temporal": {
+      "p": 1
+    },
+    "patch": {
+      "rf": 80,
+      "stride": 40,
+      "only_init": false,
+      "del_duplicates": true
+    },
+    "merging": {
+      "merge_thr": 0.85
+    },
+    "quality": {
+      "min_SNR": 1.5,
+      "rval_thr": 0.85,
+      "use_cnn": false
+    },
+    "is_1p": false,
+    "gnb": 2,
+    "p": 1,
+    "min_SNR": 2.0,
+    "rval_thr": 0.85
   },
   "format_info": {
     "format": "interleaved",
@@ -71,24 +96,24 @@
   },
   "tests": {
     "test_half": {
-      "n_neurons": 3829,
-      "recon_error": 0.9866899207860222,
-      "spatial_compactness": 0.9159314893544042,
-      "trace_sparsity": 16.439583375402144,
-      "stability": 0.11239860950173812,
-      "composite_score": -0.26569770527602127,
+      "n_neurons": 1875,
+      "recon_error": 0.9905353015598066,
+      "spatial_compactness": 0.8799721033097703,
+      "trace_sparsity": 16.69026880638171,
+      "stability": 0.17813333333333334,
+      "composite_score": -0.22678343047475272,
       "label": "test_half (frames 350-699)",
-      "runtime_s": 3033.7
+      "runtime_s": 944.7
     },
     "full_movie": {
-      "n_neurons": 4661,
-      "recon_error": 0.9956979339854198,
-      "spatial_compactness": 0.9402877199443329,
-      "trace_sparsity": 21.08148148839659,
-      "stability": 0.025782155272305908,
-      "composite_score": -0.4197465135871933,
+      "n_neurons": 2362,
+      "recon_error": 0.9975469040986683,
+      "spatial_compactness": 0.9546209792349837,
+      "trace_sparsity": 19.31906169291704,
+      "stability": 0.0029635901778154107,
+      "composite_score": -0.41297297056050586,
       "label": "full_movie",
-      "runtime_s": 2001.2
+      "runtime_s": 990.7
     }
   },
   "z_index": 3,

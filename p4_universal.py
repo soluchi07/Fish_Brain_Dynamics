@@ -749,28 +749,33 @@ def get_base_params(best_params: dict = None) -> dict:
     
     p_value = best.get("p", 1)
 
-        # "merge_thr": 0.85,
-        # "del_duplicates": True,
     return {
         "data": {
             "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
             "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
             # "dxy": [2.0, 2.0]
+            "gnb": 0
         },
         "init": {
             "nb": 0,
             "nb_patch": 0,
             "K": None,
-            "method_init": "greedy_roi",
-            "rolling_sum": True,
+            "method_init": "corr_pnr",
+            "center_psf": True,
             "ssub": ssub,
             "tsub": 1,
-            "gSig": best.get("gSig", None),
-            "gSig_filt": best.get("gSig_filt", None),
-            "min_corr": best.get("min_corr", None),
-            "min_pnr": best.get("min_pnr", None),
+            "gSig": best.get("gSig", 3),
+            "gSig_filt": best.get("gSig_filt", 4),
+            "min_corr": best.get("min_corr", 0.8),
+            "min_pnr": best.get("min_pnr", 12),
         },
-        "motion": {"pw_rigid": True, **mc},
+        "ring": {
+            "ring_size_factor": 1.4,
+        },
+        "motion": {
+            "pw_rigid": True,
+            **mc
+        },
         "preprocess": {
             "p": p_value,
         },
@@ -778,19 +783,18 @@ def get_base_params(best_params: dict = None) -> dict:
             "p": p_value,
         },
         "patch": {
-            "rf": best.get("rf", None),
-            "stride": best.get("stride", None),
-            "only_init": True,
+            "rf": best.get("rf", 80),
+            "stride": best.get("stride", 40),
+            "only_init": False,
+            "del_duplicates": True,
         },
         "merging": {
-            "merge_thr": best.get("merge_thr", None),
+            "merge_thr": best.get("merge_thr", 0.85),
         },
         "quality": {
-            "min_SNR": 2,
+            "min_SNR": ARGS.min_snr_trace,
             "rval_thr": 0.85,
-            "use_cnn": True,
-            "min_cnn_thr": 0.99,
-            "cnn_lowest": 0.1,
+            "use_cnn": False,
         },
     }
 
@@ -826,23 +830,40 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
 
 
 def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
-    """Stage: build CNMFParams from overrides. Normalizes gSig/gSig_filt to int tuples."""
-    p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
+    """Stage: build CNMFParams from nested BASE_PARAMS and overrides."""
+    import copy
+    p = copy.deepcopy(BASE_PARAMS)
+    
+    p.setdefault("data", {})["fnames"] = [fname_mmap]
+    
+    # Merge any flat overrides into p["init"] or top-level groups if provided
+    if params_override:
+        for k, v in params_override.items():
+            # If the override is already nested, update the group
+            if isinstance(v, dict) and k in p:
+                p[k].update(v)
+            else:
+                # Fallback: assign flat overrides directly to 'init'
+                p["init"][k] = v
+
+    # Normalize gSig and gSig_filt inside the 'init' group
+    init_group = p["init"]
     for key in ("gSig", "gSig_filt"):
-        val = p.get(key)
+        val = init_group.get(key)
         if val is None:
             continue
         if isinstance(val, tuple):
-            p[key] = (int(val[0]), int(val[1]))
+            init_group[key] = (int(val[0]), int(val[1]))
         else:
-            p[key] = (int(val), int(val))
+            init_group[key] = (int(val), int(val))
 
-    if "gSiz" not in params_override:
-        g = p["gSig"]
-        p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
+    if "gSiz" not in init_group:
+        g = init_group["gSig"]
+        init_group["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
+    # Pass the correctly nested dict to CNMFParams
     return params_module.CNMFParams(params_dict=p)
-
+    
 
 def _setup_cluster():
     """Stage: start multiprocessing cluster. Falls back to single-threaded on failure."""
@@ -951,6 +972,42 @@ def _refit(cnmf_obj, images, cluster):
         print(f"  [STAGE:refit] failed, keeping pre-refit estimates: {exc}", flush=True)
         return cnmf_obj
 
+def run_cnmf(params_override: dict, fname_mmap: str,
+             do_mc: bool = True, do_filter_caiman: bool = True):
+    """Run CNMF + CaImAn's built-in evaluate_components / select_components."""
+    p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
+
+    for key in ("gSig", "gSig_filt"):
+        val = p.get(key)
+        if val is None:
+            continue
+        if isinstance(val, tuple):
+            p[key] = (int(val[0]), int(val[1]))
+        else:
+            p[key] = (int(val), int(val))
+
+    g = p["gSig"]
+    p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
+
+    opts = params_module.CNMFParams(params_dict=p)
+    cnmf_obj = cnmf_module.CNMF(n_processes=1, params=opts)
+
+    t0 = time.time()
+    try:
+        cnmf_obj.fit_file(motion_correct=do_mc)
+        if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
+            try:
+                Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_mmap)
+                images = np.reshape(Yr.T, [T_loc] + list(dims), order="F")
+                cnmf_obj.estimates.evaluate_components(
+                    imgs=images, params=cnmf_obj.params, dview=None)
+                cnmf_obj.estimates.select_components(use_object=True)
+            except Exception:
+                pass
+        return cnmf_obj, time.time() - t0
+    except Exception as exc:
+        print(f"    CNMF failed: {exc}")
+        return None, time.time() - t0
 
 def run_cnmf(
     params_override: dict,
