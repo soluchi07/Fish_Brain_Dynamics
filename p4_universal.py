@@ -16,11 +16,12 @@ Major upgrades over p3:
     on top of the resolution-aware defaults in BASE_PARAMS. There is no
     Bayesian tuning step in this script anymore — every mode just applies
     BASE_PARAMS to each split it processes.
-  * No brain-mask preprocessing — the full frame is used as-is.
-  * No post-hoc geometric quality filtering (circularity / max-area / in-mask).
-    Instead, every CNMF run gets a second validation pass via
-    cnmf_model.refit(), on top of CaImAn's own evaluate_components /
-    select_components, before the run is scored.
+  * Optional brain-mask preprocessing (default ON, --no-mask to disable) and
+    optional post-hoc geometric quality filtering (circularity / max-area /
+    in-mask; default ON, --no-filters to disable). In addition, every CNMF
+    run gets a second validation pass via cnmf_model.refit(), on top of
+    CaImAn's own evaluate_components / select_components, before the run is
+    scored.
   * Configurable resolution: --resolution {full, 1024, 512}
   * 4 validation modes (time-split, plane-split, file-plane-split, file-split)
     with graceful skipping when data doesn't support a mode (e.g. Z=1). These
@@ -49,6 +50,10 @@ Usage examples:
   # Use a best_params.json that isn't at the script's root directory
   python p4_universal.py --mode time-split --data-dir <DIR> \\
       --run-name custom_params --best-params-path /path/to/best_params.json
+
+  # Disable brain mask and quality filters (debug / raw-CNMF comparison)
+  python p4_universal.py --mode time-split --data-dir <DIR> \\
+      --run-name no_mask_no_filters --no-mask --no-filters
 """
 
 from __future__ import annotations
@@ -151,6 +156,14 @@ def parse_args() -> argparse.Namespace:
         help="Spatial resolution (default 512)",
     )
     p.add_argument(
+        "--no-mask",
+        action="store_true",
+        help="Disable brain-mask preprocessing (Otsu threshold on mean image; "
+        "default: mask ON). Masked-out pixels are zeroed before CNMF ever "
+        "sees them, so this is the first line of defense against background "
+        "false positives.",
+    )
+    p.add_argument(
         "--no-stripe", action="store_true", help="Disable column-median stripe removal"
     )
     p.add_argument(
@@ -197,6 +210,28 @@ def parse_args() -> argparse.Namespace:
         default=1.5,
         help="Reject components with trace SNR below this (used by CaImAn's "
         "own evaluate_components/select_components, and by refit)",
+    )
+    p.add_argument(
+        "--no-filters",
+        action="store_true",
+        help="Disable post-hoc geometric quality filtering (circularity / "
+        "max-area / in-mask) that runs after CaImAn's own "
+        "evaluate_components/select_components and refit (default: ON). "
+        "This is the second line of defense against background false "
+        "positives — it rejects accepted components whose footprint is "
+        "non-circular, too large, or centered outside the brain mask.",
+    )
+    p.add_argument(
+        "--min-circularity",
+        type=float,
+        default=0.5,
+        help="Quality filter: reject footprints with circularity below this (0-1)",
+    )
+    p.add_argument(
+        "--max-area-factor",
+        type=float,
+        default=4.0,
+        help="Quality filter: reject footprints with area > factor * pi * gSig^2",
     )
 
     # dF/F
@@ -285,7 +320,14 @@ import numpy as np
 import pandas as pd
 import tifffile
 import skimage.transform
-from skimage.morphology import convex_hull_image
+from skimage.morphology import (
+    convex_hull_image,
+    binary_closing,
+    binary_opening,
+    disk,
+    remove_small_objects,
+)
+from skimage.filters import threshold_otsu
 from scipy.optimize import linear_sum_assignment, curve_fit
 
 import caiman as cm
@@ -349,6 +391,8 @@ print("=" * 70)
 print(f"Output dir : {OUTPUT_DIR}")
 print(f"Resolution : {ARGS.resolution}")
 print(f"Best params: {BEST_PARAMS_PATH}")
+print(f"Brain mask : {'OFF' if ARGS.no_mask else 'ON'}")
+print(f"Filters    : {'OFF' if ARGS.no_filters else 'ON'}")
 _cpu_pin_str = (
     f"{ARGS.pin_cpus}  ({len(_pinned_cores)} cores)" if _pinned_cores else "unpinned"
 )
@@ -584,7 +628,7 @@ def load_plane_interleaved(filepath: str, z_index: int, n_planes: int) -> np.nda
 
 
 # =============================================================================
-# PREPROCESSING  (brain mask removed — full frame used as-is)
+# PREPROCESSING  (brain mask ON by default; disable with --no-mask)
 # =============================================================================
 
 
@@ -606,6 +650,45 @@ def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     col_median = np.median(data, axis=(0, 2), keepdims=True)
     cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
     return cleaned, col_median
+
+
+def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
+    """
+    Build a binary mask of brain pixels using Otsu on the mean image.
+    Cleans up with morphological opening/closing and drops small blobs.
+
+    Falls back to an all-True (no-op) mask if Otsu produces something too
+    small to be a real brain region — better to run unmasked than to zero
+    out the whole frame.
+    """
+    mean_img = data.mean(axis=0)
+    try:
+        thr = threshold_otsu(mean_img)
+    except Exception:
+        thr = mean_img.mean() + mean_img.std()
+
+    mask = mean_img > thr
+    if mask.sum() < 100:
+        print(f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask.")
+        return np.ones_like(mask, dtype=bool)
+
+    h, w = mask.shape
+    se_radius = max(3, min(h, w) // 100)
+    mask = binary_opening(mask, disk(se_radius))
+    mask = binary_closing(mask, disk(se_radius * 2))
+    mask = remove_small_objects(mask, min_size=max(200, (h * w) // 5000))
+
+    if mask.sum() < 100:
+        print(f"  WARNING: brain mask too small after cleanup. Disabling mask.")
+        return np.ones_like(mask, dtype=bool)
+
+    coverage = 100.0 * mask.sum() / mask.size
+    print(f"  Brain mask coverage: {coverage:.1f}% of frame")
+    return mask
+
+
+def apply_mask(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    return (data * mask[None, :, :]).astype(np.float32)
 
 
 def compute_dff(traces: np.ndarray) -> np.ndarray:
@@ -668,11 +751,13 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
     return dff
 
 
-def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dict]:
+def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, np.ndarray, dict]:
     """
-    Preprocessing pipeline: resolution + optional stripe removal.
-    No brain mask is applied — the full frame is used as-is.
-    Returns (preprocessed_movie, metadata_dict).
+    Preprocessing pipeline: resolution + optional stripe removal + optional
+    brain mask (default ON; --no-mask disables it).
+    Returns (preprocessed_movie, mask, metadata_dict). `mask` is an all-True
+    array when --no-mask is set, so downstream code can always index it
+    without a None check.
     """
     info = {"original_shape": tuple(data.shape)}
     print(f"\n[preprocess {label}]  input shape={data.shape}")
@@ -708,8 +793,27 @@ def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dic
     else:
         info["stripe_removed"] = False
 
+    # Brain mask
+    if not ARGS.no_mask:
+        mask = make_brain_mask(data, label=label)
+        data = apply_mask(data, mask)
+        info["brain_mask_used"] = True
+        info["mask_coverage_frac"] = float(mask.sum() / mask.size)
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.imshow(data.mean(axis=0), cmap="gray")
+        ax.contour(mask, levels=[0.5], colors="lime", linewidths=1.0)
+        ax.set_title(f"Brain mask overlay ({label or 'main'})")
+        ax.axis("off")
+        plt.tight_layout()
+        plt.savefig(str(OUTPUT_DIR / f"brain_mask_{label or 'main'}.png"), dpi=100)
+        plt.close(fig)
+    else:
+        mask = np.ones(data.shape[1:], dtype=bool)
+        info["brain_mask_used"] = False
+
     info["final_shape"] = tuple(data.shape)
-    return data, info
+    return data, mask, info
 
 
 # =============================================================================
@@ -972,43 +1076,6 @@ def _refit(cnmf_obj, images, cluster):
         print(f"  [STAGE:refit] failed, keeping pre-refit estimates: {exc}", flush=True)
         return cnmf_obj
 
-def run_cnmf(params_override: dict, fname_mmap: str,
-             do_mc: bool = True, do_filter_caiman: bool = True):
-    """Run CNMF + CaImAn's built-in evaluate_components / select_components."""
-    p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
-
-    for key in ("gSig", "gSig_filt"):
-        val = p.get(key)
-        if val is None:
-            continue
-        if isinstance(val, tuple):
-            p[key] = (int(val[0]), int(val[1]))
-        else:
-            p[key] = (int(val), int(val))
-
-    g = p["gSig"]
-    p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
-
-    opts = params_module.CNMFParams(params_dict=p)
-    cnmf_obj = cnmf_module.CNMF(n_processes=1, params=opts)
-
-    t0 = time.time()
-    try:
-        cnmf_obj.fit_file(motion_correct=do_mc)
-        if do_filter_caiman and cnmf_obj.estimates.A.shape[1] > 0:
-            try:
-                Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_mmap)
-                images = np.reshape(Yr.T, [T_loc] + list(dims), order="F")
-                cnmf_obj.estimates.evaluate_components(
-                    imgs=images, params=cnmf_obj.params, dview=None)
-                cnmf_obj.estimates.select_components(use_object=True)
-            except Exception:
-                pass
-        return cnmf_obj, time.time() - t0
-    except Exception as exc:
-        print(f"    CNMF failed: {exc}")
-        return None, time.time() - t0
-
 def run_cnmf(
     params_override: dict,
     fname_mmap: str,
@@ -1109,18 +1176,143 @@ def load_yr_for_scoring(fname_used: Optional[str], fallback_Yr):
         return fallback_Yr
 
 
-def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> dict:
+def _gsig_scalar(params_dict: dict) -> int:
+    """Pull a scalar gSig out of either a nested {'init': {'gSig': ...}} dict
+    (the shape BASE_PARAMS/params_override normally have) or a flat dict,
+    falling back to BASE_PARAMS if neither is present. Used by quality_filter
+    for the max-area check, which needs a single number, not the (g, g) tuple
+    CNMF itself expects."""
+    g = None
+    if isinstance(params_dict, dict):
+        if "init" in params_dict and isinstance(params_dict["init"], dict):
+            g = params_dict["init"].get("gSig")
+        if g is None:
+            g = params_dict.get("gSig")
+    if g is None:
+        g = BASE_PARAMS["init"]["gSig"]
+    if isinstance(g, (tuple, list)):
+        return int(g[0])
+    return int(g)
+
+
+def quality_filter(
+    cnmf_obj, dims: tuple[int, int], mask: np.ndarray, gSig: int
+) -> tuple[list[int], dict]:
     """
-    Composite score over all neurons CaImAn accepted (post evaluate_components/
-    select_components/refit — no additional geometric quality filtering here).
+    Post-hoc geometric quality filter (ported from the prior geometric-filter
+    pipeline). Returns (kept_indices, counts_log).
+
+    Filters applied, in order, when enabled:
+      1. circularity >= ARGS.min_circularity
+      2. area <= ARGS.max_area_factor * pi * gSig^2
+      3. centroid inside the brain mask
+
+    This runs *after* CaImAn's own evaluate_components/select_components and
+    after refit — it's a deterministic, location/shape-aware backstop that
+    statistical SNR/r-value checks can't provide (a noise blob with decent
+    temporal correlation can still pass those). When --no-filters is set,
+    this is a no-op that keeps every component CaImAn/refit already accepted.
+    """
+    if (
+        cnmf_obj is None
+        or cnmf_obj.estimates.A is None
+        or cnmf_obj.estimates.A.shape[1] == 0
+    ):
+        return [], {
+            "input": 0,
+            "circularity_rejected": 0,
+            "max_area_rejected": 0,
+            "in_mask_rejected": 0,
+            "final": 0,
+        }
+
+    A = cnmf_obj.estimates.A
+    n = A.shape[1]
+    H, W = dims
+    counts = {"input": n}
+
+    if ARGS.no_filters:
+        counts["final"] = n
+        return list(range(n)), counts
+
+    max_area = ARGS.max_area_factor * np.pi * gSig * gSig
+
+    keep = []
+    rej_circ = 0
+    rej_area = 0
+    rej_mask = 0
+
+    for i in range(n):
+        fp = np.asarray(A[:, i].todense()).flatten().reshape(H, W)
+        if fp.max() <= 0:
+            rej_circ += 1
+            continue
+        binary = fp > (fp.max() * 0.2)
+        area = int(binary.sum())
+        if area < 5:
+            rej_circ += 1
+            continue
+
+        # Circularity = 4*pi*area / perimeter^2 (perimeter via 4-neighbor edges)
+        eroded = np.zeros_like(binary)
+        eroded[1:-1, 1:-1] = (
+            binary[1:-1, 1:-1]
+            & binary[:-2, 1:-1]
+            & binary[2:, 1:-1]
+            & binary[1:-1, :-2]
+            & binary[1:-1, 2:]
+        )
+        perimeter = max(int((binary & ~eroded).sum()), 1)
+        circularity = 4 * np.pi * area / (perimeter * perimeter)
+
+        if circularity < ARGS.min_circularity:
+            rej_circ += 1
+            continue
+        if area > max_area:
+            rej_area += 1
+            continue
+
+        ys, xs = np.nonzero(binary)
+        cy, cx = int(ys.mean()), int(xs.mean())
+        if 0 <= cy < H and 0 <= cx < W and not mask[cy, cx]:
+            rej_mask += 1
+            continue
+
+        keep.append(i)
+
+    counts["circularity_rejected"] = rej_circ
+    counts["max_area_rejected"] = rej_area
+    counts["in_mask_rejected"] = rej_mask
+    counts["final"] = len(keep)
+    return keep, counts
+
+
+def score_run(
+    cnmf_obj,
+    Yr,
+    dims: tuple[int, int],
+    mask: np.ndarray,
+    gSig: int,
+    stability: float = 0.0,
+) -> tuple[dict, list[int], dict]:
+    """
+    Composite score over neurons that survive quality_filter() on top of
+    whatever CaImAn's own evaluate_components/select_components and refit
+    already accepted. (When --no-filters is set, quality_filter is a no-op
+    and this scores every refit-accepted component, same as before.)
 
     composite = 1.0*(1 - recon_error)
               + 0.5*spatial_compactness
               - 0.3*log(1 + trace_sparsity)
               + 1.0*stability
               + 0.001*log(1 + n_neurons)   # small bonus for finding more neurons
+
+    Returns (metrics_dict, kept_indices, filter_counts). metrics_dict includes
+    both "n_neurons_pre" (CaImAn/refit-accepted count) and "n_neurons" (count
+    after quality_filter) so the survival rate is always visible.
     """
     sentinel = {
+        "n_neurons_pre": 0,
         "n_neurons": 0,
         "recon_error": 1.0,
         "spatial_compactness": 0.0,
@@ -1128,12 +1320,22 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
         "stability": stability,
         "composite_score": -float("inf"),
     }
-    if cnmf_obj is None or cnmf_obj.estimates.A.shape[1] == 0:
-        return sentinel
+    if (
+        cnmf_obj is None
+        or cnmf_obj.estimates.A is None
+        or cnmf_obj.estimates.A.shape[1] == 0
+    ):
+        return sentinel, [], {"input": 0, "final": 0}
 
-    A = cnmf_obj.estimates.A
-    C = cnmf_obj.estimates.C
-    n = A.shape[1]
+    n_pre = cnmf_obj.estimates.A.shape[1]
+    keep, counts = quality_filter(cnmf_obj, dims, mask, gSig)
+    n = len(keep)
+    if n == 0:
+        sentinel["n_neurons_pre"] = n_pre
+        return sentinel, [], counts
+
+    A = cnmf_obj.estimates.A[:, keep]
+    C = cnmf_obj.estimates.C[keep, :]
 
     # Reconstruction error via Frobenius norm identity - avoids materialising
     # the (pixels x frames) dense reconstruction matrix (~11 GB at full res).
@@ -1187,7 +1389,8 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
         + 0.001 * np.log1p(n)
     )
 
-    return {
+    metrics = {
+        "n_neurons_pre": n_pre,
         "n_neurons": n,
         "recon_error": recon_error,
         "spatial_compactness": spatial_compactness,
@@ -1195,6 +1398,7 @@ def score_run(cnmf_obj, Yr, dims: tuple[int, int], stability: float = 0.0) -> di
         "stability": stability,
         "composite_score": float(composite),
     }
+    return metrics, keep, counts
 
 
 def compute_stability(A1, A2, threshold: float = 0.5) -> float:
@@ -1217,14 +1421,17 @@ def test_cnmf(
     mmap_path: str,
     data: np.ndarray,
     dims: tuple[int, int],
+    mask: np.ndarray,
     label: str,
     tune_A=None,
 ) -> dict:
-    """Run CNMF (+ refit validation) on a split, save plots/traces, and score the run.
+    """Run CNMF (+ refit validation, + quality_filter) on a split, save
+    plots/traces for surviving neurons only, and score the run.
 
-    If tune_A is given (footprints from a reference/held-out split), the
-    footprint-matching stability between this run and the reference is
-    folded into the composite score.
+    If tune_A is given (already quality-filtered footprints from a
+    reference/held-out split), the footprint-matching stability between this
+    run's *filtered* footprints and the reference is folded into the
+    composite score.
     """
     print(f"\n{'='*60}\nTEST: {label}\n{'='*60}")
 
@@ -1236,21 +1443,29 @@ def test_cnmf(
     # drives recon_error to ~1 independent of how good the fit actually is.
     Yr = load_yr_for_scoring(fname_used, Yr_unregistered)
 
+    gSig = _gsig_scalar(params)
+
     stability = 0.0
     if (
         tune_A is not None
         and cnmf_obj is not None
+        and cnmf_obj.estimates.A is not None
         and cnmf_obj.estimates.A.shape[1] > 0
     ):
-        stability = compute_stability(tune_A, cnmf_obj.estimates.A)
+        keep_pre, _ = quality_filter(cnmf_obj, dims, mask, gSig)
+        if keep_pre:
+            stability = compute_stability(tune_A, cnmf_obj.estimates.A[:, keep_pre])
 
-    metrics = score_run(cnmf_obj, Yr, dims, stability=stability)
+    metrics, keep, counts = score_run(cnmf_obj, Yr, dims, mask, gSig, stability=stability)
     metrics["label"] = label
     metrics["runtime_s"] = round(rt, 1)
+    metrics["filter_counts"] = counts
 
+    n_pre = metrics["n_neurons_pre"]
     n = metrics["n_neurons"]
     print(
-        f"  Neurons: {n}  composite: {metrics['composite_score']:+.4f}  stability: {stability:.3f}  t={rt:.0f}s"
+        f"  Raw neurons: {n_pre}  kept: {n}  composite: {metrics['composite_score']:+.4f}  "
+        f"stability: {stability:.3f}  t={rt:.0f}s"
     )
 
     if cnmf_obj is not None and n > 0:
@@ -1259,13 +1474,15 @@ def test_cnmf(
         )
         H_val, W_val = dims
 
-        # Contour plot
+        # Contour plot — only surviving (kept) neurons are drawn
         mean_frame = data.mean(axis=0)
         fig, ax = plt.subplots(figsize=(11, 11))
         ax.imshow(mean_frame, cmap="gray")
-        ax.set_title(f"{label}: {n} neurons", fontsize=10)
+        ax.set_title(f"{label}: {n} kept neurons (raw {n_pre})", fontsize=10)
         ax.axis("off")
-        for i in range(n):
+        if not ARGS.no_mask:
+            ax.contour(mask, levels=[0.5], colors="lime", linewidths=0.5, alpha=0.5)
+        for i in keep:
             fp = (
                 np.asarray(cnmf_obj.estimates.A[:, i].todense())
                 .flatten()
@@ -1280,8 +1497,8 @@ def test_cnmf(
         plt.savefig(str(OUTPUT_DIR / f"contours_{safe}.png"), dpi=150)
         plt.close(fig)
 
-        # Raw traces and dF/F
-        traces = cnmf_obj.estimates.C
+        # Raw traces and dF/F — filtered neurons only
+        traces = cnmf_obj.estimates.C[keep]
         dff = compute_dff(traces)
         bleach_applied = (not ARGS.no_bleach_correct) and (traces.shape[1] >= 100)
 
@@ -1327,7 +1544,9 @@ def save_summary(
         "mode": mode,
         "run_name": ARGS.run_name,
         "resolution": ARGS.resolution,
+        "brain_mask": not ARGS.no_mask,
         "stripe_removal": not ARGS.no_stripe,
+        "quality_filters": not ARGS.no_filters,
         "min_snr_trace": ARGS.min_snr_trace,
         "best_params_path": str(BEST_PARAMS_PATH),
         "params": params,
@@ -1374,6 +1593,7 @@ def save_summary(
             "resolution": ARGS.resolution,
             "test_key": headline_key,
             "n_neurons": headline_test.get("n_neurons", 0),
+            "n_neurons_raw": headline_test.get("n_neurons_pre", 0),
             "composite_score": headline_test.get("composite_score", float("nan")),
             "stability": headline_test.get("stability", 0.0),
             "gSig": params.get("gSig"),
@@ -1419,7 +1639,7 @@ def mode_time_split():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes if _nplanes is not None else ARGS.n_planes,
     )
-    data, prep_info = preprocess_movie(raw, label="movie")
+    data, mask, prep_info = preprocess_movie(raw, label="movie")
 
     T_full = data.shape[0]
     if T_full < 4:
@@ -1444,13 +1664,23 @@ def mode_time_split():
         "rval_thr": 0.85,  # Filter out spatial noise
     }
     cnmf_tune, _, _ = run_cnmf(params_override, tune_mmap)
-    tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
+    tune_keep, _ = (
+        quality_filter(cnmf_tune, dims, mask, _gsig_scalar(params_override))
+        if cnmf_tune is not None
+        else ([], {})
+    )
+    tune_A = (
+        cnmf_tune.estimates.A[:, tune_keep]
+        if (cnmf_tune is not None and tune_keep)
+        else None
+    )
 
     test_metrics = test_cnmf(
         params_override,
         test_mmap,
         data[mid:],
         dims,
+        mask,
         label=f"test_half (frames {mid}-{T_full-1})",
         tune_A=tune_A,
     )
@@ -1460,6 +1690,7 @@ def mode_time_split():
         full_mmap,
         data,
         dims,
+        mask,
         label="full_movie",
         tune_A=tune_A,
     )
@@ -1522,7 +1753,7 @@ def mode_plane_split():
     print(f"\nZ={Z}; reference z={tune_z}, test z=0..{Z-1}\\{{tune_z}}")
 
     tune_raw = _load_plane(tune_z)
-    tune_data, prep_info = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
+    tune_data, tune_mask, prep_info = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
 
@@ -1530,19 +1761,29 @@ def mode_plane_split():
         f"\nRunning CNMF with configured params on z={tune_z} (reference for stability)..."
     )
     cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
-    tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
+    tune_keep, _ = (
+        quality_filter(cnmf_tune, dims, tune_mask, _gsig_scalar(BASE_PARAMS))
+        if cnmf_tune is not None
+        else ([], {})
+    )
+    tune_A = (
+        cnmf_tune.estimates.A[:, tune_keep]
+        if (cnmf_tune is not None and tune_keep)
+        else None
+    )
 
     all_metrics = {}
     for z in range(Z):
         print(f"\n--- z={z} ---")
         test_raw = _load_plane(z)
-        test_data, _ = preprocess_movie(test_raw, label=f"test_z{z}")
+        test_data, test_mask, _ = preprocess_movie(test_raw, label=f"test_z{z}")
         test_mmap = array_to_memmap(test_data, WORK_DIR / f"test_z{z}")
         m = test_cnmf(
             BASE_PARAMS,
             test_mmap,
             test_data,
             test_data.shape[1:],
+            test_mask,
             label=f"z{z}" + (" (tune)" if z == tune_z else ""),
             tune_A=tune_A if z != tune_z else None,
         )
@@ -1610,13 +1851,22 @@ def mode_file_plane_split():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes,
     )
-    tune_data, prep_info_tune = preprocess_movie(tune_raw, label="tune")
+    tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label="tune")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
     print("\nRunning CNMF with configured params on reference file (for stability)...")
     cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
-    tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
+    tune_keep, _ = (
+        quality_filter(cnmf_tune, dims, tune_mask, _gsig_scalar(BASE_PARAMS))
+        if cnmf_tune is not None
+        else ([], {})
+    )
+    tune_A = (
+        cnmf_tune.estimates.A[:, tune_keep]
+        if (cnmf_tune is not None and tune_keep)
+        else None
+    )
 
     print("\n[Loading test]")
     test_raw = load_movie(
@@ -1628,7 +1878,7 @@ def mode_file_plane_split():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes,
     )
-    test_data, prep_info_test = preprocess_movie(test_raw, label="test")
+    test_data, test_mask, prep_info_test = preprocess_movie(test_raw, label="test")
     test_mmap = array_to_memmap(test_data, WORK_DIR / "test")
 
     test_metrics = test_cnmf(
@@ -1636,6 +1886,7 @@ def mode_file_plane_split():
         test_mmap,
         test_data,
         test_data.shape[1:],
+        test_mask,
         label="test_file",
         tune_A=tune_A,
     )
@@ -1698,13 +1949,22 @@ def mode_file_split():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes,
     )
-    tune_data, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
+    tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
     print("\nRunning CNMF with configured params on reference file (for stability)...")
     cnmf_tune, _, _ = run_cnmf(BASE_PARAMS, tune_mmap)
-    tune_A = cnmf_tune.estimates.A if cnmf_tune is not None else None
+    tune_keep, _ = (
+        quality_filter(cnmf_tune, dims, tune_mask, _gsig_scalar(BASE_PARAMS))
+        if cnmf_tune is not None
+        else ([], {})
+    )
+    tune_A = (
+        cnmf_tune.estimates.A[:, tune_keep]
+        if (cnmf_tune is not None and tune_keep)
+        else None
+    )
 
     if fmt_te == "multi-tp":
         Z_te = shape_te[0]
@@ -1743,13 +2003,14 @@ def mode_file_split():
                 max_frames=ARGS.max_frames,
                 n_planes=_nplanes_te if _nplanes_te is not None else ARGS.n_planes,
             )
-        test_data, _ = preprocess_movie(test_raw, label=label)
+        test_data, test_mask, _ = preprocess_movie(test_raw, label=label)
         test_mmap = array_to_memmap(test_data, WORK_DIR / label)
         m = test_cnmf(
             BASE_PARAMS,
             test_mmap,
             test_data,
             test_data.shape[1:],
+            test_mask,
             label=label,
             tune_A=tune_A,
         )
