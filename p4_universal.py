@@ -856,7 +856,7 @@ def get_base_params(best_params: dict = None) -> dict:
     return {
         "data": {
             "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
-            "decay_time": 0.25,  # GCaMP8m off-kinetics; revisit once measured from real transients
+            "decay_time": 1,  # GCaMP8m off-kinetics; revisit once measured from real transients
             # "dxy": [2.0, 2.0]
             "gnb": 0
         },

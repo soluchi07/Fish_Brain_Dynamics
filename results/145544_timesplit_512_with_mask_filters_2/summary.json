@@ -1,0 +1,137 @@
+{
+  "mode": "time-split",
+  "run_name": "145544_timesplit_512_with_mask_filters_2",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": false,
+  "min_snr_trace": 1.5,
+  "best_params_path": "results/calib_20iv26_512/calibration_summary.json",
+  "params": {
+    "data": {
+      "fr": 5,
+      "decay_time": 0.25,
+      "gnb": 0
+    },
+    "init": {
+      "nb": 0,
+      "nb_patch": 0,
+      "K": null,
+      "method_init": "corr_pnr",
+      "center_psf": true,
+      "ssub": 1,
+      "tsub": 1,
+      "gSig": 3,
+      "gSig_filt": 4,
+      "min_corr": 0.5118676301124861,
+      "min_pnr": 12
+    },
+    "ring": {
+      "ring_size_factor": 1.4
+    },
+    "motion": {
+      "pw_rigid": true,
+      "max_shifts": [
+        3,
+        3
+      ],
+      "strides": [
+        48,
+        48
+      ],
+      "overlaps": [
+        24,
+        24
+      ],
+      "max_deviation_rigid": 2,
+      "border_nan": "copy"
+    },
+    "preprocess": {
+      "p": 1
+    },
+    "temporal": {
+      "p": 1
+    },
+    "patch": {
+      "rf": 80,
+      "stride": 40,
+      "only_init": false,
+      "del_duplicates": true
+    },
+    "merging": {
+      "merge_thr": 0.85
+    },
+    "quality": {
+      "min_SNR": 1.5,
+      "rval_thr": 0.85,
+      "use_cnn": false
+    },
+    "is_1p": false,
+    "gnb": 2,
+    "p": 1,
+    "min_SNR": 2.0,
+    "rval_thr": 0.85
+  },
+  "format_info": {
+    "format": "interleaved",
+    "n_files": 1,
+    "sample_shape": [
+      4900,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      700,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.19440841674804688,
+    "final_shape": [
+      700,
+      512,
+      512
+    ]
+  },
+  "tests": {
+    "test_half": {
+      "n_neurons_pre": 236,
+      "n_neurons": 236,
+      "recon_error": 0.9983977369595571,
+      "spatial_compactness": 0.9771413972500929,
+      "trace_sparsity": 17.018845954240682,
+      "stability": 0.4110169491525424,
+      "composite_score": 0.03923250866884201,
+      "label": "test_half (frames 350-699)",
+      "runtime_s": 295.0,
+      "filter_counts": {
+        "input": 236,
+        "final": 236
+      }
+    },
+    "full_movie": {
+      "n_neurons_pre": 88,
+      "n_neurons": 88,
+      "recon_error": 0.9997381228044586,
+      "spatial_compactness": 0.9916666666666666,
+      "trace_sparsity": 20.080213849736428,
+      "stability": 0.0,
+      "composite_score": -0.4139166135902257,
+      "label": "full_movie",
+      "runtime_s": 374.3,
+      "filter_counts": {
+        "input": 88,
+        "final": 88
+      }
+    }
+  },
+  "z_index": 3,
+  "n_planes": 7,
+  "T_total": 700,
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom"
+}

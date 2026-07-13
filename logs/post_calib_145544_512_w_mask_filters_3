@@ -1,0 +1,1555 @@
+Monitoring started at 23:25:33.580181
+====================================================================== at time 23:25:38.760234
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512_with_mask_filters_3 at time 23:25:38.760288
+====================================================================== at time 23:25:38.760306
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_with_mask_filters_3 at time 23:25:38.760328
+Resolution : 512 at time 23:25:38.760343
+Best params: results/calib_20iv26_512/calibration_summary.json at time 23:25:38.760359
+Brain mask : OFF at time 23:25:38.760371
+Filters    : ON at time 23:25:38.760382
+CPU pin    : unpinned  workers=95 at time 23:25:38.760396
+Loaded best params from results/calib_20iv26_512/calibration_summary.json: at time 23:25:38.760427
+gSig: 3 at time 23:25:38.760440
+gSig_filt: 4 at time 23:25:38.760453
+min_corr: 0.5118676301124861 at time 23:25:38.760466
+min_pnr: 12 at time 23:25:38.760479
+rf: 80 at time 23:25:38.760491
+stride: 40 at time 23:25:38.760503
+p: 1 at time 23:25:38.760516
+merge_thr: 0.85 at time 23:25:38.760528
+ at time 23:25:38.760542
+--- TIME-SPLIT mode --- at time 23:25:38.760555
+Auto-detected n_planes=7 from metadata at time 23:25:38.765737
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 23:25:38.765770
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 23:25:38.765783
+Interleaved: z=3/7 planes -> 700 frames at time 23:25:38.765799
+ at time 23:31:36.843408
+[preprocess movie]  input shape=(700, 2048, 2048) at time 23:31:36.843449
+Downsampling -> (512, 512) at time 23:31:36.843468
+ at time 23:32:50.890899
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 23:32:50.890952
+ at time 23:32:53.262636
+Running CNMF with configured params on reference half (for stability)... at time 23:32:53.262736
+[STAGE:motion_correction] starting at time 23:32:59.150023
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 23:33:17.397075
+[STAGE:fit] starting at time 23:33:17.404635
+[STAGE:fit] done -> 7237 components at time 23:51:38.650051
+[STAGE:evaluate_components] starting at time 23:51:38.650400
+*** Variable cnn_preds has not the same number of components as A *** at time 23:51:39.892882
+[STAGE:evaluate_components] done -> 4737 components remain at time 23:51:39.893548
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 23:51:39.893571
+[STAGE:refit] done -> 3076 neurons remain at time 23:52:50.557816
+ at time 23:52:57.186738
+============================================================ at time 23:52:57.186780
+TEST: test_half (frames 350-699) at time 23:52:57.186796
+============================================================ at time 23:52:57.186808
+[STAGE:motion_correction] starting at time 23:53:02.172941
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 23:53:23.064934
+[STAGE:fit] starting at time 23:53:23.072292
+[STAGE:fit] done -> 5689 components at time 00:07:19.033408
+[STAGE:evaluate_components] starting at time 00:07:19.033864
+*** Variable cnn_preds has not the same number of components as A *** at time 00:07:20.184644
+[STAGE:evaluate_components] done -> 3714 components remain at time 00:07:20.185352
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 00:07:20.185365
+[STAGE:refit] done -> 1817 neurons remain at time 00:08:10.965379
+Raw neurons: 1817  kept: 816  composite: -0.2456  stability: 0.178  t=909s at time 00:08:26.244723
+WARNING: neuron 4 F0=-1189.9007 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:39.362839
+WARNING: neuron 5 F0=-461.2905 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:39.377879
+WARNING: bleach fit rejected for neuron 8 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:08:41.760544
+WARNING: neuron 12 F0=-168.8399 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:41.856027
+WARNING: bleach fit rejected for neuron 14 (bleach trend overshoots (residual min=-3941.40 < -2832.17)); using raw trace at time 00:08:41.885102
+WARNING: neuron 14 F0=-791.9316 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:41.885156
+WARNING: neuron 19 F0=-2195.4661 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:41.996614
+WARNING: bleach fit rejected for neuron 21 (bleach trend overshoots (residual min=-4747.46 < -2158.44)); using raw trace at time 00:08:42.027012
+WARNING: neuron 21 F0=-2687.3682 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:42.027065
+WARNING: neuron 24 F0=-431.9444 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:42.746646
+WARNING: neuron 26 F0=-144.1131 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.068318
+WARNING: neuron 27 F0=-123.7879 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.073778
+WARNING: neuron 29 F0=-2886.7553 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.103063
+WARNING: neuron 30 F0=-267.3235 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.109733
+WARNING: neuron 31 F0=-138.0151 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.217193
+WARNING: neuron 32 F0=-1919.5038 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.226524
+WARNING: neuron 36 F0=-2628.1946 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.276023
+WARNING: neuron 39 F0=-628.8290 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.348793
+WARNING: neuron 45 F0=-385.3140 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.767785
+WARNING: neuron 47 F0=-567.9251 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.789144
+WARNING: neuron 48 F0=-657.2315 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.797466
+WARNING: neuron 49 F0=-624.2198 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.802152
+WARNING: neuron 50 F0=-2058.6977 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:43.807597
+WARNING: neuron 54 F0=-1284.2849 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.469510
+WARNING: bleach fit rejected for neuron 56 (bleach trend overshoots (residual min=-4494.93 < -2440.18)); using raw trace at time 00:08:44.492802
+WARNING: neuron 56 F0=-2484.2612 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.492854
+WARNING: neuron 57 F0=-56.3812 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.499775
+WARNING: neuron 58 F0=-432.0020 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.506100
+WARNING: neuron 61 F0=-763.0229 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.609335
+WARNING: neuron 62 F0=-1401.7098 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.616029
+WARNING: neuron 64 F0=-755.9801 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.720974
+WARNING: neuron 65 F0=-1253.0861 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.727926
+WARNING: neuron 67 F0=-295.0242 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.741789
+WARNING: neuron 73 F0=-505.3168 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.791237
+WARNING: neuron 74 F0=-129.4155 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.808194
+WARNING: bleach fit rejected for neuron 76 (bleach trend overshoots (residual min=-2659.27 < -1981.05)); using raw trace at time 00:08:44.850655
+WARNING: neuron 76 F0=-725.2207 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.850751
+WARNING: neuron 78 F0=-73.1440 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.896119
+WARNING: neuron 81 F0=-316.9869 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.918646
+WARNING: neuron 82 F0=-769.9787 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:44.925011
+WARNING: neuron 84 F0=-1214.1145 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.245645
+WARNING: bleach fit rejected for neuron 85 (bleach trend overshoots (residual min=-3312.57 < -2417.22)); using raw trace at time 00:08:45.259886
+WARNING: neuron 85 F0=-1522.3058 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.259928
+WARNING: neuron 86 F0=-1157.1566 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.268991
+WARNING: neuron 88 F0=-2793.9188 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.853303
+WARNING: neuron 90 F0=-2493.0038 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.869476
+WARNING: neuron 91 F0=-1052.5845 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.876073
+WARNING: neuron 92 F0=-1457.7128 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:45.887479
+WARNING: neuron 95 F0=-42.7312 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.014127
+WARNING: neuron 97 F0=-459.7696 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.032804
+WARNING: neuron 100 F0=-933.5267 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.058302
+WARNING: bleach fit rejected for neuron 102 (bleach trend overshoots (residual min=-3006.55 < -2625.53)); using raw trace at time 00:08:46.097436
+WARNING: neuron 102 F0=-711.7249 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.097502
+WARNING: neuron 107 F0=-585.2342 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.314861
+WARNING: neuron 117 F0=-40.6916 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:46.772542
+WARNING: bleach fit rejected for neuron 122 (bleach trend overshoots (residual min=-2069.18 < -2010.19)); using raw trace at time 00:08:47.920946
+WARNING: neuron 122 F0=-155.6545 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.921009
+WARNING: neuron 123 F0=-785.8793 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.928191
+WARNING: neuron 124 F0=-213.3315 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.936048
+WARNING: neuron 125 F0=-177.7518 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.940825
+WARNING: neuron 126 F0=-1816.4371 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.947045
+WARNING: bleach fit rejected for neuron 128 (bleach trend overshoots (residual min=-5337.39 < -3979.93)); using raw trace at time 00:08:47.960237
+WARNING: neuron 128 F0=-1747.0119 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.960292
+WARNING: neuron 129 F0=-440.2662 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:47.970540
+WARNING: neuron 131 F0=-1890.0923 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:48.031458
+WARNING: neuron 134 F0=-500.5492 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:48.254622
+WARNING: bleach fit rejected for neuron 135 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:08:50.221504
+WARNING: neuron 135 F0=-702.3164 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.221567
+WARNING: neuron 136 F0=-113.6957 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.232925
+WARNING: neuron 137 F0=-287.0680 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.240743
+WARNING: bleach fit rejected for neuron 138 (bleach trend overshoots (residual min=-3636.27 < -2416.02)); using raw trace at time 00:08:50.247345
+WARNING: neuron 138 F0=-728.7454 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.247389
+WARNING: neuron 139 F0=-866.3664 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.255786
+WARNING: neuron 140 F0=-1839.1338 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.298793
+WARNING: neuron 141 F0=-575.4202 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.303501
+WARNING: neuron 142 F0=-2827.2962 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.312076
+WARNING: neuron 143 F0=-751.3344 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.523553
+WARNING: neuron 148 F0=-1183.2843 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.590464
+WARNING: neuron 151 F0=-1796.7316 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.856450
+WARNING: neuron 152 F0=-613.4622 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.871055
+WARNING: neuron 153 F0=-27.8517 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.877699
+WARNING: neuron 155 F0=-872.2030 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.891319
+WARNING: bleach fit rejected for neuron 156 (bleach trend overshoots (residual min=-3732.38 < -1569.97)); using raw trace at time 00:08:50.902735
+WARNING: neuron 156 F0=-2239.3140 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.902796
+WARNING: bleach fit rejected for neuron 157 (bleach trend overshoots (residual min=-3062.65 < -2917.77)); using raw trace at time 00:08:50.914744
+WARNING: neuron 157 F0=-672.8849 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.914801
+WARNING: bleach fit rejected for neuron 159 (bleach trend overshoots (residual min=-3574.85 < -1386.84)); using raw trace at time 00:08:50.932309
+WARNING: neuron 159 F0=-2320.5357 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:50.932364
+WARNING: neuron 166 F0=-1067.4955 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.195995
+WARNING: neuron 168 F0=-582.1070 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.212461
+WARNING: neuron 169 F0=-977.0225 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.218142
+WARNING: neuron 171 F0=-808.9428 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.238262
+WARNING: neuron 173 F0=-930.0203 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.250170
+WARNING: neuron 174 F0=-15.5716 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:51.260385
+WARNING: bleach fit rejected for neuron 175 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:08:53.165034
+WARNING: neuron 177 F0=-371.6556 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:53.186577
+WARNING: neuron 182 F0=-786.4588 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:53.277584
+WARNING: neuron 183 F0=-1162.6512 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:53.308946
+WARNING: neuron 187 F0=-861.0537 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:54.044476
+WARNING: neuron 191 F0=-295.5330 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:54.377639
+WARNING: neuron 193 F0=-524.5128 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:54.927379
+WARNING: neuron 197 F0=-1167.3890 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:55.755856
+WARNING: bleach fit rejected for neuron 201 (bleach trend overshoots (residual min=-3741.95 < -3332.58)); using raw trace at time 00:08:55.889248
+WARNING: neuron 201 F0=-629.3286 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:55.889324
+WARNING: neuron 205 F0=-858.1363 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:55.998151
+WARNING: neuron 206 F0=-220.9480 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:56.005489
+WARNING: neuron 209 F0=-355.0115 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:56.028538
+WARNING: bleach fit rejected for neuron 211 (bleach trend overshoots (residual min=-3266.02 < -1948.84)); using raw trace at time 00:08:56.479166
+WARNING: neuron 211 F0=-1424.9930 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:56.479222
+WARNING: neuron 214 F0=-640.7095 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:56.704505
+WARNING: neuron 217 F0=-842.4248 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:56.963944
+WARNING: neuron 222 F0=-1612.5603 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.110637
+WARNING: bleach fit rejected for neuron 223 (bleach trend overshoots (residual min=-4516.25 < -2668.27)); using raw trace at time 00:08:57.722855
+WARNING: neuron 223 F0=-2539.8864 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.722934
+WARNING: neuron 224 F0=-810.3272 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.730543
+WARNING: neuron 227 F0=-436.8131 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.766625
+WARNING: neuron 228 F0=-391.0861 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.785921
+WARNING: bleach fit rejected for neuron 229 (bleach trend overshoots (residual min=-3127.49 < -2136.99)); using raw trace at time 00:08:57.793963
+WARNING: neuron 229 F0=-934.4162 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.794019
+WARNING: neuron 232 F0=-18.4612 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.960476
+WARNING: neuron 234 F0=-593.9554 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.974122
+WARNING: neuron 236 F0=-852.4857 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.984964
+WARNING: neuron 237 F0=-1873.4596 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:57.992117
+WARNING: neuron 238 F0=-263.2458 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.010232
+WARNING: neuron 239 F0=-196.4630 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.023013
+WARNING: neuron 240 F0=-293.7341 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.059590
+WARNING: neuron 243 F0=-321.3222 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.100368
+WARNING: neuron 244 F0=-58.0567 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.105775
+WARNING: neuron 247 F0=-73.1091 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.151645
+WARNING: bleach fit rejected for neuron 248 (bleach trend overshoots (residual min=-3795.37 < -3569.74)); using raw trace at time 00:08:58.161048
+WARNING: neuron 253 F0=-762.8168 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.228242
+WARNING: neuron 257 F0=-519.3792 <= 0 after bleach correction; clamping to 1e-6 at time 00:08:58.277890
+WARNING: bleach fit rejected for neuron 265 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:09:00.327151
+WARNING: neuron 266 F0=-382.3220 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.335380
+WARNING: neuron 268 F0=-28.9153 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.360061
+WARNING: neuron 269 F0=-264.3899 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.369996
+WARNING: neuron 270 F0=-1078.8377 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.374617
+WARNING: neuron 271 F0=-847.3070 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.385401
+WARNING: bleach fit rejected for neuron 272 (bleach trend overshoots (residual min=-3434.42 < -2305.73)); using raw trace at time 00:09:00.406189
+WARNING: neuron 272 F0=-1163.2782 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.406270
+WARNING: neuron 273 F0=-524.4397 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.413419
+WARNING: neuron 276 F0=-1493.5683 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.465520
+WARNING: bleach fit rejected for neuron 277 (bleach trend overshoots (residual min=-1668.99 < -945.34)); using raw trace at time 00:09:00.471368
+WARNING: neuron 277 F0=-593.1491 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.471396
+WARNING: neuron 278 F0=-1734.5918 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:00.479654
+WARNING: bleach fit rejected for neuron 281 (bleach trend overshoots (residual min=-3252.74 < -3212.78)); using raw trace at time 00:09:01.662315
+WARNING: neuron 282 F0=-1096.1234 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.687391
+WARNING: bleach fit rejected for neuron 283 (bleach trend overshoots (residual min=-2458.82 < -1574.65)); using raw trace at time 00:09:01.694643
+WARNING: neuron 283 F0=-960.7192 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.694731
+WARNING: neuron 286 F0=-188.6153 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.739719
+WARNING: bleach fit rejected for neuron 287 (bleach trend overshoots (residual min=-2362.24 < -1152.55)); using raw trace at time 00:09:01.747291
+WARNING: neuron 287 F0=-1256.8095 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.747344
+WARNING: neuron 293 F0=-733.7368 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.814798
+WARNING: neuron 297 F0=-819.4146 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.845909
+WARNING: neuron 301 F0=-2110.3101 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:01.886864
+WARNING: neuron 307 F0=-482.2516 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:02.052402
+WARNING: neuron 312 F0=-627.4573 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:02.096825
+WARNING: bleach fit rejected for neuron 313 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:09:04.019329
+WARNING: neuron 313 F0=-518.7286 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.019395
+WARNING: neuron 317 F0=-2560.4559 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.191078
+WARNING: neuron 322 F0=-1184.1469 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.430570
+WARNING: neuron 324 F0=-738.7535 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.448538
+WARNING: neuron 328 F0=-926.1531 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.691343
+WARNING: bleach fit rejected for neuron 331 (bleach trend overshoots (residual min=-2678.04 < -2535.76)); using raw trace at time 00:09:04.731414
+WARNING: neuron 331 F0=-307.1442 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.731468
+WARNING: bleach fit rejected for neuron 332 (bleach trend overshoots (residual min=-4162.19 < -3216.69)); using raw trace at time 00:09:04.737086
+WARNING: neuron 332 F0=-969.8245 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.737131
+WARNING: neuron 333 F0=-1672.7585 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.749729
+WARNING: neuron 334 F0=-84.7635 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.756739
+WARNING: neuron 338 F0=-96.6962 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.790732
+WARNING: neuron 341 F0=-535.6543 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:04.819253
+WARNING: neuron 346 F0=-411.8970 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.411628
+WARNING: bleach fit rejected for neuron 350 (bleach trend overshoots (residual min=-3062.72 < -2317.01)); using raw trace at time 00:09:05.508799
+WARNING: neuron 350 F0=-1249.5153 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.508853
+WARNING: bleach fit rejected for neuron 351 (bleach trend overshoots (residual min=-2756.24 < -2321.81)); using raw trace at time 00:09:05.515185
+WARNING: neuron 351 F0=-269.3958 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.515228
+WARNING: neuron 352 F0=-798.1728 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.526385
+WARNING: neuron 354 F0=-830.0690 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.539815
+WARNING: neuron 356 F0=-2038.6718 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.577109
+WARNING: neuron 362 F0=-244.6485 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.780025
+WARNING: neuron 363 F0=-2508.4208 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.802341
+WARNING: neuron 370 F0=-1174.3970 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.948418
+WARNING: neuron 371 F0=-2066.1259 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.954228
+WARNING: bleach fit rejected for neuron 372 (bleach trend overshoots (residual min=-3092.54 < -1123.54)); using raw trace at time 00:09:05.968843
+WARNING: neuron 372 F0=-1975.9672 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:05.968891
+WARNING: neuron 377 F0=-444.8235 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.038235
+WARNING: neuron 379 F0=-1305.9169 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.059880
+WARNING: neuron 380 F0=-837.6893 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.105713
+WARNING: neuron 383 F0=-1458.6986 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.128734
+WARNING: neuron 384 F0=-645.7280 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.139003
+WARNING: bleach fit rejected for neuron 387 (bleach trend overshoots (residual min=-3640.29 < -2680.29)); using raw trace at time 00:09:06.168607
+WARNING: neuron 387 F0=-1402.6088 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.168658
+WARNING: bleach fit rejected for neuron 392 (bleach trend overshoots (residual min=-4917.96 < -2888.92)); using raw trace at time 00:09:06.311550
+WARNING: neuron 392 F0=-2309.2003 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.311618
+WARNING: neuron 396 F0=-482.1339 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.377166
+WARNING: neuron 398 F0=-711.2492 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.404266
+WARNING: neuron 399 F0=-469.7702 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.411181
+WARNING: neuron 401 F0=-26.2233 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.434821
+WARNING: neuron 405 F0=-584.7583 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.540600
+WARNING: neuron 408 F0=-1505.6013 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.574518
+WARNING: neuron 410 F0=-304.7165 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:06.587867
+WARNING: neuron 414 F0=-755.3999 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:07.534787
+WARNING: neuron 415 F0=-701.0379 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:07.540654
+WARNING: neuron 416 F0=-745.0170 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:07.578088
+WARNING: neuron 417 F0=-326.0701 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:07.591453
+WARNING: bleach fit rejected for neuron 418 (bleach trend overshoots (residual min=-2371.96 < -1249.56)); using raw trace at time 00:09:07.619997
+WARNING: neuron 418 F0=-1094.6081 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:07.620067
+WARNING: neuron 422 F0=-875.0191 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.151047
+WARNING: neuron 423 F0=-962.8470 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.161784
+WARNING: neuron 427 F0=-469.2319 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.193079
+WARNING: neuron 431 F0=-352.2638 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.233116
+WARNING: bleach fit rejected for neuron 432 (bleach trend overshoots (residual min=-3371.18 < -3121.14)); using raw trace at time 00:09:09.271629
+WARNING: neuron 435 F0=-777.2479 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.299223
+WARNING: neuron 436 F0=-1291.3757 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.560941
+WARNING: neuron 438 F0=-249.4417 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.576435
+WARNING: bleach fit rejected for neuron 440 (bleach trend overshoots (residual min=-3476.07 < -3359.26)); using raw trace at time 00:09:09.818360
+WARNING: neuron 440 F0=-598.4375 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:09.818424
+WARNING: neuron 446 F0=-289.1781 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:10.687802
+WARNING: neuron 452 F0=-680.3170 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:10.739907
+WARNING: neuron 454 F0=-1203.7063 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:10.835117
+WARNING: neuron 456 F0=-1131.7062 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:10.854843
+WARNING: neuron 459 F0=-1328.3385 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:10.881207
+WARNING: neuron 466 F0=-622.0300 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:12.001388
+WARNING: neuron 467 F0=-22.1247 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:12.462639
+WARNING: bleach fit rejected for neuron 468 (bleach trend overshoots (residual min=-3621.47 < -2415.59)); using raw trace at time 00:09:12.475056
+WARNING: neuron 468 F0=-1891.8175 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:12.475107
+WARNING: neuron 471 F0=-1185.8066 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.003447
+WARNING: neuron 472 F0=-1142.1831 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.011415
+WARNING: bleach fit rejected for neuron 473 (bleach trend overshoots (residual min=-4292.37 < -2046.88)); using raw trace at time 00:09:14.033555
+WARNING: neuron 473 F0=-1893.5634 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.033605
+WARNING: neuron 474 F0=-1413.8258 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.043310
+WARNING: neuron 475 F0=-548.3679 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.056639
+WARNING: bleach fit rejected for neuron 476 (bleach trend overshoots (residual min=-3469.45 < -3379.27)); using raw trace at time 00:09:14.064305
+WARNING: neuron 476 F0=-417.7608 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.064359
+WARNING: bleach fit rejected for neuron 479 (bleach trend overshoots (residual min=-2505.21 < -2502.75)); using raw trace at time 00:09:14.092369
+WARNING: neuron 479 F0=-551.9929 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.092426
+WARNING: neuron 481 F0=-426.2577 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.109551
+WARNING: neuron 485 F0=-1073.0774 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.629489
+WARNING: bleach fit rejected for neuron 487 (bleach trend overshoots (residual min=-3164.21 < -2990.61)); using raw trace at time 00:09:14.642056
+WARNING: neuron 491 F0=-109.5198 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:14.696956
+WARNING: neuron 499 F0=-331.5646 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:15.161313
+WARNING: neuron 501 F0=-273.6284 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:15.301753
+WARNING: neuron 505 F0=-1751.3527 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:16.094032
+WARNING: neuron 506 F0=-582.0215 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:16.113849
+WARNING: neuron 507 F0=-109.3268 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:16.134341
+WARNING: neuron 508 F0=-913.3538 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:16.144780
+WARNING: neuron 510 F0=-319.9168 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.314966
+WARNING: neuron 512 F0=-933.2529 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.332187
+WARNING: neuron 518 F0=-689.1984 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.407925
+WARNING: neuron 519 F0=-672.6364 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.415375
+WARNING: neuron 520 F0=-498.3391 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.424775
+WARNING: neuron 522 F0=-2150.6676 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.453867
+WARNING: neuron 523 F0=-856.7218 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.477012
+WARNING: neuron 524 F0=-1055.7570 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.483654
+WARNING: bleach fit rejected for neuron 527 (bleach trend overshoots (residual min=-3748.88 < -2628.69)); using raw trace at time 00:09:17.545521
+WARNING: neuron 527 F0=-674.8511 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.545590
+WARNING: neuron 531 F0=-531.8383 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.595066
+WARNING: neuron 535 F0=-794.8258 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.857951
+WARNING: bleach fit rejected for neuron 539 (bleach trend overshoots (residual min=-757.26 < -548.43)); using raw trace at time 00:09:17.904114
+WARNING: neuron 539 F0=-291.0003 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.904184
+WARNING: neuron 540 F0=-680.1427 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.910752
+WARNING: bleach fit rejected for neuron 543 (bleach trend overshoots (residual min=-2524.75 < -1998.88)); using raw trace at time 00:09:17.958024
+WARNING: neuron 543 F0=-905.6946 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.958091
+WARNING: bleach fit rejected for neuron 544 (bleach trend overshoots (residual min=-3435.01 < -2847.14)); using raw trace at time 00:09:17.965137
+WARNING: neuron 544 F0=-1362.2671 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.965189
+WARNING: neuron 545 F0=-326.6033 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.974225
+WARNING: neuron 548 F0=-526.4193 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:17.999531
+WARNING: bleach fit rejected for neuron 549 (bleach trend overshoots (residual min=-4693.28 < -2804.36)); using raw trace at time 00:09:18.006374
+WARNING: neuron 549 F0=-1965.6765 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.006426
+WARNING: neuron 550 F0=-1300.6825 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.123775
+WARNING: neuron 552 F0=-739.8170 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.151028
+WARNING: neuron 553 F0=-203.5549 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.174639
+WARNING: neuron 555 F0=-148.2810 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.212482
+WARNING: neuron 556 F0=-1079.0209 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.235118
+WARNING: neuron 561 F0=-385.2819 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.274862
+WARNING: neuron 562 F0=-574.6831 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.587114
+WARNING: neuron 567 F0=-718.5328 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.785408
+WARNING: neuron 568 F0=-489.5798 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.806897
+WARNING: neuron 572 F0=-535.2929 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.872328
+WARNING: neuron 573 F0=-323.9034 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.877754
+WARNING: neuron 575 F0=-1270.8343 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.923778
+WARNING: neuron 577 F0=-344.2884 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:18.972034
+WARNING: neuron 579 F0=-1139.0551 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.018828
+WARNING: neuron 581 F0=-875.6301 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.039642
+WARNING: neuron 583 F0=-138.8501 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.120283
+WARNING: neuron 584 F0=-41.0662 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.129500
+WARNING: neuron 588 F0=-357.5523 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.180442
+WARNING: neuron 590 F0=-268.2906 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.216590
+WARNING: neuron 592 F0=-196.9524 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.263001
+WARNING: neuron 594 F0=-1807.9746 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.282715
+WARNING: neuron 595 F0=-424.7473 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.289240
+WARNING: neuron 596 F0=-290.4531 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.297697
+WARNING: neuron 597 F0=-593.1783 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.327536
+WARNING: neuron 598 F0=-213.2388 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.351257
+WARNING: neuron 600 F0=-741.9433 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.379350
+WARNING: neuron 602 F0=-1036.9323 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.511535
+WARNING: neuron 603 F0=-46.7973 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.526771
+WARNING: neuron 609 F0=-313.6625 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.943421
+WARNING: neuron 610 F0=-891.7418 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.959604
+WARNING: neuron 611 F0=-42.9299 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:19.970407
+WARNING: bleach fit rejected for neuron 612 (bleach trend overshoots (residual min=-1404.51 < -1365.24)); using raw trace at time 00:09:19.977209
+WARNING: bleach fit rejected for neuron 613 (bleach trend overshoots (residual min=-4908.75 < -3379.94)); using raw trace at time 00:09:20.000794
+WARNING: neuron 613 F0=-2675.4191 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.000851
+WARNING: neuron 614 F0=-170.4057 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.019932
+WARNING: neuron 617 F0=-261.9731 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.076516
+WARNING: bleach fit rejected for neuron 618 (bleach trend overshoots (residual min=-4093.50 < -2189.86)); using raw trace at time 00:09:20.101725
+WARNING: neuron 618 F0=-2080.4365 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.101785
+WARNING: neuron 620 F0=-406.9433 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.202280
+WARNING: neuron 621 F0=-39.4181 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.225963
+WARNING: neuron 626 F0=-904.3783 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.289009
+WARNING: neuron 629 F0=-1905.1361 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.339470
+WARNING: neuron 630 F0=-341.8356 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.390171
+WARNING: neuron 631 F0=-999.5381 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.397882
+WARNING: neuron 638 F0=-160.5351 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.719195
+WARNING: neuron 640 F0=-796.8486 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.733298
+WARNING: neuron 641 F0=-1119.8121 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.743611
+WARNING: neuron 642 F0=-180.1493 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.764553
+WARNING: neuron 644 F0=-873.2272 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:20.859034
+WARNING: neuron 646 F0=-16.2699 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:21.622782
+WARNING: neuron 648 F0=-874.7817 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:21.644129
+WARNING: neuron 651 F0=-1177.6948 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:21.748454
+WARNING: neuron 658 F0=-29.9828 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.281336
+WARNING: neuron 663 F0=-804.1153 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.340752
+WARNING: neuron 665 F0=-1043.9793 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.359604
+WARNING: bleach fit rejected for neuron 670 (bleach trend overshoots (residual min=-2724.90 < -2621.22)); using raw trace at time 00:09:23.879385
+WARNING: neuron 670 F0=-441.4303 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.879449
+WARNING: neuron 673 F0=-878.0336 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.977259
+WARNING: neuron 674 F0=-284.7468 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:23.983695
+WARNING: neuron 675 F0=-507.9428 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.028654
+WARNING: bleach fit rejected for neuron 677 (bleach trend overshoots (residual min=-4150.58 < -2219.62)); using raw trace at time 00:09:24.063491
+WARNING: neuron 677 F0=-3056.4694 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.063546
+WARNING: neuron 678 F0=-416.0876 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.083575
+WARNING: neuron 679 F0=-3327.3167 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.091160
+WARNING: neuron 681 F0=-1947.0808 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.119315
+WARNING: neuron 682 F0=-2228.8342 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.142879
+WARNING: neuron 687 F0=-788.9206 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.285965
+WARNING: neuron 688 F0=-926.7677 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.292217
+WARNING: bleach fit rejected for neuron 694 (bleach trend overshoots (residual min=-1805.23 < -1689.71)); using raw trace at time 00:09:24.428782
+WARNING: neuron 694 F0=-503.0439 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.428840
+WARNING: bleach fit rejected for neuron 696 (bleach trend overshoots (residual min=-2552.20 < -2448.67)); using raw trace at time 00:09:24.551247
+WARNING: neuron 696 F0=-660.0033 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.551316
+WARNING: neuron 701 F0=-1189.5437 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.594614
+WARNING: neuron 703 F0=-2495.8922 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.628451
+WARNING: bleach fit rejected for neuron 704 (bleach trend overshoots (residual min=-1853.62 < -1507.25)); using raw trace at time 00:09:24.639392
+WARNING: neuron 704 F0=-200.0470 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.639447
+WARNING: neuron 706 F0=-1557.7248 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.962647
+WARNING: neuron 708 F0=-735.2007 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:24.996261
+WARNING: neuron 713 F0=-2107.3694 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.422134
+WARNING: bleach fit rejected for neuron 721 (bleach trend overshoots (residual min=-1802.37 < -1412.41)); using raw trace at time 00:09:25.567480
+WARNING: neuron 721 F0=-219.5597 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.567546
+WARNING: neuron 724 F0=-254.1254 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.590941
+WARNING: neuron 730 F0=-1492.0735 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.666204
+WARNING: neuron 732 F0=-6.6529 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.682872
+WARNING: neuron 734 F0=-1189.0372 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.698804
+WARNING: bleach fit rejected for neuron 735 (bleach trend overshoots (residual min=-1952.11 < -1895.41)); using raw trace at time 00:09:25.707452
+WARNING: neuron 735 F0=-922.4404 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:25.707515
+WARNING: bleach fit rejected for neuron 737 (bleach trend overshoots (residual min=-2603.07 < -1951.46)); using raw trace at time 00:09:26.162555
+WARNING: neuron 737 F0=-1390.3471 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:26.162621
+WARNING: neuron 738 F0=-245.2943 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:26.170012
+WARNING: bleach fit rejected for neuron 742 (bleach trend overshoots (residual min=-5623.68 < -3280.49)); using raw trace at time 00:09:26.511835
+WARNING: neuron 742 F0=-2103.7081 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:26.511889
+WARNING: neuron 750 F0=-65.3176 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:26.825543
+WARNING: neuron 751 F0=-2359.0642 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:26.868168
+WARNING: neuron 755 F0=-724.6276 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:27.924522
+WARNING: neuron 759 F0=-370.6776 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:28.057575
+WARNING: bleach fit rejected for neuron 760 (bleach trend overshoots (residual min=-4980.21 < -1699.38)); using raw trace at time 00:09:28.061907
+WARNING: neuron 760 F0=-3146.0171 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:28.061955
+WARNING: neuron 763 F0=-1560.3668 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:28.107960
+WARNING: neuron 765 F0=-714.8448 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:29.499558
+WARNING: neuron 767 F0=-395.5753 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:29.516084
+WARNING: neuron 768 F0=-212.7046 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:30.913493
+WARNING: neuron 772 F0=-221.9925 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.071270
+WARNING: neuron 773 F0=-750.5073 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.076280
+WARNING: neuron 774 F0=-149.5102 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.098355
+WARNING: bleach fit rejected for neuron 775 (bleach trend overshoots (residual min=-1372.95 < -1119.03)); using raw trace at time 00:09:31.140199
+WARNING: neuron 775 F0=-303.2667 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.140255
+WARNING: neuron 776 F0=-659.8296 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.154908
+WARNING: neuron 778 F0=-688.2763 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.216562
+WARNING: neuron 779 F0=-984.3691 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:31.297266
+WARNING: neuron 784 F0=-337.1317 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.739202
+WARNING: neuron 786 F0=-852.6928 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.770845
+WARNING: bleach fit rejected for neuron 789 (bleach trend overshoots (residual min=-3346.17 < -2564.94)); using raw trace at time 00:09:32.818950
+WARNING: neuron 789 F0=-1022.3529 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.819008
+WARNING: neuron 790 F0=-384.3435 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.832717
+WARNING: neuron 793 F0=-786.4025 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.956837
+WARNING: neuron 794 F0=-3.3871 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:32.991892
+WARNING: neuron 795 F0=-595.9220 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:33.004193
+WARNING: neuron 797 F0=-201.4191 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:33.021064
+WARNING: bleach fit rejected for neuron 801 (bleach trend overshoots (residual min=-2833.32 < -2240.17)); using raw trace at time 00:09:34.346512
+WARNING: neuron 801 F0=-493.8109 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:34.346575
+WARNING: neuron 802 F0=-1109.4313 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:34.356724
+WARNING: neuron 811 F0=-589.8157 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:34.608986
+WARNING: bleach fit rejected for neuron 814 (bleach trend overshoots (residual min=-3527.52 < -2505.12)); using raw trace at time 00:09:34.710505
+WARNING: neuron 814 F0=-922.1973 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:34.710572
+WARNING: neuron 815 F0=-681.7233 <= 0 after bleach correction; clamping to 1e-6 at time 00:09:34.719460
+dF/F: percentile=8.0  bleach_correct=True at time 00:09:35.222783
+ at time 00:09:40.211574
+============================================================ at time 00:09:40.211631
+TEST: full_movie at time 00:09:40.211647
+============================================================ at time 00:09:40.211705
+[STAGE:motion_correction] starting at time 00:09:56.811950
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_700.mmap at time 00:10:16.493954
+[STAGE:fit] starting at time 00:10:16.501907
+[STAGE:fit] done -> 5402 components at time 00:24:57.014130
+[STAGE:evaluate_components] starting at time 00:24:57.014540
+*** Variable cnn_preds has not the same number of components as A *** at time 00:24:58.124079
+[STAGE:evaluate_components] done -> 4101 components remain at time 00:24:58.124458
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 00:24:58.124481
+[STAGE:refit] done -> 2288 neurons remain at time 00:25:53.469500
+Raw neurons: 2288  kept: 1050  composite: -0.4576  stability: 0.001  t=957s at time 00:26:13.786445
+WARNING: bleach fit rejected for neuron 0 (bleach trend overshoots (residual min=-2294.71 < -1664.66)); using raw trace at time 00:26:30.897779
+WARNING: neuron 0 F0=-1342.9594 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:30.897842
+WARNING: neuron 2 F0=-2785.5449 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:30.985366
+WARNING: neuron 3 F0=-711.8239 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:30.992046
+WARNING: neuron 6 F0=-200.4036 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:32.779740
+WARNING: neuron 7 F0=-377.5324 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:32.786380
+WARNING: neuron 10 F0=-788.3664 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:32.821698
+WARNING: bleach fit rejected for neuron 11 (bleach trend overshoots (residual min=-1873.64 < -1105.18)); using raw trace at time 00:26:32.836710
+WARNING: neuron 11 F0=-925.1659 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:32.836752
+WARNING: bleach fit rejected for neuron 13 (bleach trend overshoots (residual min=-1309.47 < -951.52)); using raw trace at time 00:26:32.858892
+WARNING: neuron 13 F0=-487.6600 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:32.858937
+WARNING: neuron 16 F0=-219.3530 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.278469
+WARNING: neuron 17 F0=-593.1577 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.301801
+WARNING: bleach fit rejected for neuron 19 (bleach trend overshoots (residual min=-2612.21 < -1789.94)); using raw trace at time 00:26:33.338019
+WARNING: neuron 19 F0=-1578.1643 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.338062
+WARNING: bleach fit rejected for neuron 20 (bleach trend overshoots (residual min=-1379.49 < -938.83)); using raw trace at time 00:26:33.347113
+WARNING: neuron 20 F0=-688.0472 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.347153
+WARNING: neuron 21 F0=-827.7083 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.374594
+WARNING: bleach fit rejected for neuron 22 (bleach trend overshoots (residual min=-2838.16 < -1986.26)); using raw trace at time 00:26:33.383370
+WARNING: neuron 22 F0=-1341.2486 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.383410
+WARNING: neuron 23 F0=-381.4341 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.407196
+WARNING: neuron 24 F0=-101.6597 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.430393
+WARNING: bleach fit rejected for neuron 25 (bleach trend overshoots (residual min=-2148.61 < -1824.94)); using raw trace at time 00:26:33.438724
+WARNING: neuron 25 F0=-480.0265 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.438764
+WARNING: neuron 26 F0=-742.6192 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.445251
+WARNING: neuron 27 F0=-732.4554 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.454530
+WARNING: neuron 28 F0=-903.7321 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.641896
+WARNING: neuron 30 F0=-886.6167 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.834483
+WARNING: neuron 31 F0=-1222.5056 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.859856
+WARNING: neuron 32 F0=-267.3211 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:33.888462
+WARNING: neuron 34 F0=-887.2370 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.225027
+WARNING: neuron 35 F0=-431.7863 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.234185
+WARNING: neuron 36 F0=-910.1678 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.787979
+WARNING: neuron 37 F0=-682.6568 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.796869
+WARNING: bleach fit rejected for neuron 38 (bleach trend overshoots (residual min=-6909.29 < -2325.03)); using raw trace at time 00:26:34.805125
+WARNING: neuron 38 F0=-4758.9124 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.805167
+WARNING: neuron 39 F0=-325.1928 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.812629
+WARNING: neuron 40 F0=-387.5691 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.818656
+WARNING: neuron 43 F0=-942.8042 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.851312
+WARNING: neuron 44 F0=-405.5814 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.858087
+WARNING: neuron 45 F0=-273.8254 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.881517
+WARNING: neuron 46 F0=-68.7447 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.896705
+WARNING: neuron 47 F0=-907.0128 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.905709
+WARNING: neuron 48 F0=-81.2784 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.933496
+WARNING: bleach fit rejected for neuron 49 (bleach trend overshoots (residual min=-4485.44 < -3069.71)); using raw trace at time 00:26:34.940500
+WARNING: neuron 49 F0=-2248.8672 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.940543
+WARNING: neuron 50 F0=-79.6793 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.962084
+WARNING: bleach fit rejected for neuron 51 (bleach trend overshoots (residual min=-1392.91 < -1137.82)); using raw trace at time 00:26:34.972849
+WARNING: neuron 51 F0=-623.2664 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:34.972890
+WARNING: bleach fit rejected for neuron 52 (bleach trend overshoots (residual min=-1293.71 < -781.40)); using raw trace at time 00:26:35.009268
+WARNING: neuron 52 F0=-646.7696 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.009329
+WARNING: bleach fit rejected for neuron 53 (bleach trend overshoots (residual min=-3705.58 < -2214.61)); using raw trace at time 00:26:35.033556
+WARNING: neuron 53 F0=-1792.1209 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.033596
+WARNING: neuron 54 F0=-221.0856 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.039734
+WARNING: neuron 55 F0=-545.3317 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.048656
+WARNING: neuron 56 F0=-418.7181 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.058161
+WARNING: neuron 57 F0=-2853.8507 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.098158
+WARNING: neuron 58 F0=-700.6038 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.106247
+WARNING: neuron 59 F0=-1338.5969 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.114775
+WARNING: neuron 60 F0=-1060.2245 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.121322
+WARNING: neuron 61 F0=-489.1265 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.131807
+WARNING: neuron 62 F0=-386.9860 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.139617
+WARNING: neuron 63 F0=-674.4110 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.148261
+WARNING: neuron 64 F0=-136.0646 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.349444
+WARNING: neuron 65 F0=-572.9638 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.359763
+WARNING: neuron 67 F0=-681.6649 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.377319
+WARNING: bleach fit rejected for neuron 68 (bleach trend overshoots (residual min=-1320.20 < -950.22)); using raw trace at time 00:26:35.390939
+WARNING: neuron 68 F0=-633.5098 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.391004
+WARNING: neuron 69 F0=-395.0458 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.398935
+WARNING: neuron 70 F0=-306.0356 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.403814
+WARNING: neuron 71 F0=-384.3859 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.410323
+WARNING: neuron 72 F0=-1015.1498 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.418888
+WARNING: bleach fit rejected for neuron 73 (bleach trend overshoots (residual min=-3344.18 < -2597.67)); using raw trace at time 00:26:35.424737
+WARNING: neuron 73 F0=-1330.3570 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.424779
+WARNING: neuron 74 F0=-450.7500 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.480069
+WARNING: neuron 76 F0=-291.8487 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.603471
+WARNING: neuron 77 F0=-732.9673 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.612458
+WARNING: neuron 78 F0=-41.5861 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.620591
+WARNING: neuron 79 F0=-657.4847 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.628637
+WARNING: neuron 80 F0=-681.1093 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.639025
+WARNING: neuron 81 F0=-171.7705 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.649566
+WARNING: neuron 82 F0=-995.7555 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.659362
+WARNING: neuron 83 F0=-518.3464 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.671737
+WARNING: neuron 84 F0=-720.4164 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.679773
+WARNING: neuron 86 F0=-883.2077 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.696291
+WARNING: bleach fit rejected for neuron 88 (bleach trend overshoots (residual min=-7390.64 < -2770.66)); using raw trace at time 00:26:35.714901
+WARNING: neuron 88 F0=-5213.4873 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.714943
+WARNING: neuron 89 F0=-791.2453 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.722244
+WARNING: neuron 90 F0=-218.6982 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.746260
+WARNING: neuron 91 F0=-636.6891 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.755146
+WARNING: bleach fit rejected for neuron 92 (bleach trend overshoots (residual min=-2684.87 < -2672.06)); using raw trace at time 00:26:35.768817
+WARNING: neuron 92 F0=-784.8959 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.768860
+WARNING: bleach fit rejected for neuron 93 (bleach trend overshoots (residual min=-3703.16 < -3578.73)); using raw trace at time 00:26:35.787010
+WARNING: neuron 93 F0=-337.9710 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.787052
+WARNING: neuron 94 F0=-536.9387 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.803190
+WARNING: bleach fit rejected for neuron 95 (bleach trend overshoots (residual min=-6368.19 < -4243.22)); using raw trace at time 00:26:35.811783
+WARNING: neuron 95 F0=-2552.3465 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.811825
+WARNING: neuron 96 F0=-398.4432 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.860546
+WARNING: neuron 97 F0=-20.5949 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.867960
+WARNING: neuron 98 F0=-625.7948 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.888365
+WARNING: neuron 99 F0=-344.6295 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.905154
+WARNING: neuron 101 F0=-379.4442 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.920058
+WARNING: neuron 102 F0=-26.4771 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.940484
+WARNING: neuron 103 F0=-1035.5974 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:35.948787
+WARNING: neuron 104 F0=-1097.8903 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.012029
+WARNING: neuron 105 F0=-372.2390 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.020516
+WARNING: neuron 106 F0=-445.0047 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.031988
+WARNING: bleach fit rejected for neuron 108 (bleach trend overshoots (residual min=-2489.03 < -1372.93)); using raw trace at time 00:26:36.059962
+WARNING: neuron 108 F0=-1757.4852 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.060006
+WARNING: neuron 109 F0=-828.8591 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.069833
+WARNING: neuron 110 F0=-378.0549 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.079159
+WARNING: bleach fit rejected for neuron 111 (bleach trend overshoots (residual min=-3139.74 < -1805.06)); using raw trace at time 00:26:36.088908
+WARNING: neuron 111 F0=-1538.8781 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.088949
+WARNING: neuron 113 F0=-449.1816 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.114411
+WARNING: bleach fit rejected for neuron 114 (bleach trend overshoots (residual min=-4371.63 < -4251.98)); using raw trace at time 00:26:36.137390
+WARNING: bleach fit rejected for neuron 115 (bleach trend overshoots (residual min=-6527.72 < -2874.72)); using raw trace at time 00:26:36.145427
+WARNING: neuron 115 F0=-3716.4713 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.145469
+WARNING: neuron 116 F0=-1999.4577 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.153745
+WARNING: neuron 117 F0=-696.8911 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.164236
+WARNING: neuron 118 F0=-423.1453 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.176296
+WARNING: neuron 119 F0=-417.2979 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:36.183654
+WARNING: neuron 121 F0=-333.6320 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.064362
+WARNING: neuron 122 F0=-20.6043 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.072150
+WARNING: neuron 123 F0=-283.4970 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.084266
+WARNING: neuron 124 F0=-717.3688 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.092809
+WARNING: neuron 125 F0=-2942.7827 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.127142
+WARNING: neuron 126 F0=-584.7313 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.134362
+WARNING: bleach fit rejected for neuron 127 (bleach trend overshoots (residual min=-3517.01 < -1326.02)); using raw trace at time 00:26:37.174655
+WARNING: neuron 127 F0=-2405.8612 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:37.174751
+WARNING: neuron 128 F0=-962.2547 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:38.979537
+WARNING: bleach fit rejected for neuron 129 (bleach trend overshoots (residual min=-819.95 < -778.69)); using raw trace at time 00:26:38.994937
+WARNING: neuron 129 F0=-73.0242 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:38.994998
+WARNING: neuron 130 F0=-452.3440 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.021966
+WARNING: neuron 131 F0=-451.7341 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.031274
+WARNING: neuron 132 F0=-559.8964 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.055746
+WARNING: neuron 133 F0=-544.7096 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.073271
+WARNING: neuron 134 F0=-41.1442 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.082934
+WARNING: bleach fit rejected for neuron 135 (bleach trend overshoots (residual min=-2875.38 < -2012.51)); using raw trace at time 00:26:39.092526
+WARNING: neuron 135 F0=-1432.4790 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.092565
+WARNING: neuron 136 F0=-364.5147 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.105763
+WARNING: neuron 137 F0=-1157.2867 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.118904
+WARNING: neuron 138 F0=-439.1007 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.126088
+WARNING: neuron 139 F0=-1260.3018 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.138144
+WARNING: neuron 140 F0=-1897.1562 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.145858
+WARNING: neuron 141 F0=-571.3014 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.158403
+WARNING: bleach fit rejected for neuron 142 (bleach trend overshoots (residual min=-2799.17 < -2525.15)); using raw trace at time 00:26:39.167763
+WARNING: neuron 142 F0=-982.6935 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.167805
+WARNING: neuron 143 F0=-600.0648 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.176090
+WARNING: neuron 144 F0=-784.8608 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.183203
+WARNING: bleach fit rejected for neuron 146 (bleach trend overshoots (residual min=-2297.73 < -1571.80)); using raw trace at time 00:26:39.197531
+WARNING: neuron 146 F0=-802.3337 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.197574
+WARNING: neuron 147 F0=-494.8979 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.257511
+WARNING: neuron 148 F0=-778.6983 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.264615
+WARNING: neuron 149 F0=-319.0470 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.304859
+WARNING: neuron 150 F0=-303.8256 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.311952
+WARNING: neuron 152 F0=-453.4756 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.327012
+WARNING: neuron 154 F0=-350.9291 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.352017
+WARNING: neuron 155 F0=-560.5927 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.359647
+WARNING: neuron 156 F0=-517.6282 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.370857
+WARNING: neuron 157 F0=-338.3311 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.469411
+WARNING: neuron 158 F0=-818.9721 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.477901
+WARNING: bleach fit rejected for neuron 159 (bleach trend overshoots (residual min=-1528.54 < -1073.18)); using raw trace at time 00:26:39.489902
+WARNING: neuron 159 F0=-753.9649 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.489945
+WARNING: bleach fit rejected for neuron 161 (bleach trend overshoots (residual min=-3582.37 < -1197.45)); using raw trace at time 00:26:39.521761
+WARNING: neuron 161 F0=-2577.9805 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.521804
+WARNING: neuron 162 F0=-59.5334 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.530412
+WARNING: neuron 163 F0=-644.2014 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.548389
+WARNING: bleach fit rejected for neuron 164 (bleach trend overshoots (residual min=-3318.74 < -3282.07)); using raw trace at time 00:26:39.560099
+WARNING: neuron 164 F0=-830.3084 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.560137
+WARNING: neuron 165 F0=-366.0045 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.568097
+WARNING: neuron 166 F0=-410.9069 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.576079
+WARNING: neuron 167 F0=-752.6170 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.590357
+WARNING: neuron 168 F0=-566.9242 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.770654
+WARNING: bleach fit rejected for neuron 169 (bleach trend overshoots (residual min=-4618.43 < -3421.68)); using raw trace at time 00:26:39.784291
+WARNING: neuron 169 F0=-1665.8303 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.784334
+WARNING: neuron 170 F0=-425.5519 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.795770
+WARNING: neuron 171 F0=-685.2123 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.803999
+WARNING: neuron 172 F0=-413.4902 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.811773
+WARNING: neuron 173 F0=-575.6996 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.818768
+WARNING: neuron 174 F0=-139.4303 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.849864
+WARNING: neuron 175 F0=-564.6154 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.874745
+WARNING: neuron 176 F0=-327.4156 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.884315
+WARNING: bleach fit rejected for neuron 177 (bleach trend overshoots (residual min=-3280.00 < -2645.36)); using raw trace at time 00:26:39.898393
+WARNING: neuron 177 F0=-1111.2253 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.898433
+WARNING: neuron 178 F0=-802.2167 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.906565
+WARNING: neuron 179 F0=-819.5663 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.913531
+WARNING: neuron 180 F0=-485.6748 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.921727
+WARNING: neuron 181 F0=-746.4712 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.929352
+WARNING: neuron 182 F0=-320.9996 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.940187
+WARNING: neuron 183 F0=-265.7527 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.947966
+WARNING: neuron 184 F0=-478.0213 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.955173
+WARNING: neuron 185 F0=-484.6998 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.969973
+WARNING: neuron 186 F0=-86.0362 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.981059
+WARNING: neuron 187 F0=-662.5912 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:39.990092
+WARNING: neuron 188 F0=-555.7236 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.045527
+WARNING: neuron 189 F0=-861.7874 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.053017
+WARNING: neuron 190 F0=-1291.8924 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.062246
+WARNING: bleach fit rejected for neuron 191 (bleach trend overshoots (residual min=-2241.50 < -1411.58)); using raw trace at time 00:26:40.150432
+WARNING: neuron 191 F0=-969.7639 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.150494
+WARNING: neuron 192 F0=-446.7394 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.159547
+WARNING: neuron 193 F0=-711.8849 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.166581
+WARNING: neuron 194 F0=-2008.3704 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.176712
+WARNING: neuron 195 F0=-436.1349 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.189409
+WARNING: bleach fit rejected for neuron 196 (bleach trend overshoots (residual min=-3225.79 < -1319.04)); using raw trace at time 00:26:40.199525
+WARNING: neuron 196 F0=-1825.9678 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.199565
+WARNING: neuron 197 F0=-1045.0953 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.208506
+WARNING: neuron 198 F0=-673.3740 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.277889
+WARNING: neuron 199 F0=-132.6478 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.282857
+WARNING: neuron 200 F0=-838.5076 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.305527
+WARNING: neuron 201 F0=-2500.8329 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.321417
+WARNING: neuron 202 F0=-721.8489 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.330370
+WARNING: neuron 203 F0=-490.7524 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.341051
+WARNING: neuron 204 F0=-335.7848 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.349203
+WARNING: neuron 205 F0=-518.4737 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.457735
+WARNING: neuron 206 F0=-1008.3273 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.466183
+WARNING: bleach fit rejected for neuron 207 (bleach trend overshoots (residual min=-4607.96 < -2533.27)); using raw trace at time 00:26:40.499921
+WARNING: neuron 207 F0=-2283.6994 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.499965
+WARNING: neuron 208 F0=-349.7146 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.508247
+WARNING: neuron 209 F0=-305.0740 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.515694
+WARNING: neuron 211 F0=-229.4282 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.618484
+WARNING: neuron 212 F0=-448.5790 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.639553
+WARNING: bleach fit rejected for neuron 213 (bleach trend overshoots (residual min=-5563.93 < -1671.19)); using raw trace at time 00:26:40.661135
+WARNING: neuron 213 F0=-3897.5795 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.661175
+WARNING: neuron 214 F0=-237.0078 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.667370
+WARNING: neuron 215 F0=-725.0556 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.676277
+WARNING: bleach fit rejected for neuron 216 (bleach trend overshoots (residual min=-812.19 < -626.84)); using raw trace at time 00:26:40.698220
+WARNING: neuron 216 F0=-41.8969 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.698262
+WARNING: bleach fit rejected for neuron 217 (bleach trend overshoots (residual min=-3071.69 < -1039.79)); using raw trace at time 00:26:40.715773
+WARNING: neuron 217 F0=-2066.3348 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.715814
+WARNING: bleach fit rejected for neuron 218 (bleach trend overshoots (residual min=-1082.78 < -988.96)); using raw trace at time 00:26:40.725030
+WARNING: neuron 218 F0=-368.4864 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.725115
+WARNING: neuron 219 F0=-415.3648 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.750642
+WARNING: neuron 220 F0=-534.5411 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.758877
+WARNING: bleach fit rejected for neuron 222 (bleach trend overshoots (residual min=-2464.32 < -1431.82)); using raw trace at time 00:26:40.818204
+WARNING: neuron 222 F0=-1020.0631 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.818250
+WARNING: neuron 223 F0=-635.0700 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.861606
+WARNING: neuron 224 F0=-1504.0855 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:40.868434
+WARNING: neuron 225 F0=-475.8084 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.403976
+WARNING: neuron 226 F0=-1030.2585 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.415148
+WARNING: neuron 227 F0=-296.6089 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.439973
+WARNING: neuron 228 F0=-248.6291 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.588161
+WARNING: neuron 229 F0=-693.4925 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.596174
+WARNING: neuron 230 F0=-728.2364 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.607749
+WARNING: neuron 231 F0=-367.2717 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.617381
+WARNING: neuron 232 F0=-208.1902 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:41.702828
+WARNING: bleach fit rejected for neuron 233 (bleach trend overshoots (residual min=-2845.23 < -2531.63)); using raw trace at time 00:26:41.981891
+WARNING: neuron 234 F0=-1260.4487 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.002216
+WARNING: neuron 235 F0=-502.6801 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.011238
+WARNING: neuron 236 F0=-374.3500 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.019126
+WARNING: neuron 237 F0=-572.7833 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.027313
+WARNING: neuron 238 F0=-1148.9195 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.052858
+WARNING: neuron 239 F0=-1271.4451 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.062211
+WARNING: neuron 240 F0=-369.7808 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.069838
+WARNING: neuron 241 F0=-340.3564 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.078112
+WARNING: neuron 242 F0=-268.6081 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.088440
+WARNING: neuron 243 F0=-484.7013 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.109099
+WARNING: neuron 244 F0=-616.8223 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.118122
+WARNING: neuron 245 F0=-433.0554 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.127929
+WARNING: neuron 247 F0=-172.4705 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.151016
+WARNING: neuron 248 F0=-89.4838 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.163275
+WARNING: neuron 249 F0=-121.0159 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.168847
+WARNING: neuron 250 F0=-1204.6008 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.187382
+WARNING: neuron 251 F0=-371.0745 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.195746
+WARNING: neuron 252 F0=-341.9856 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.203278
+WARNING: neuron 253 F0=-496.9406 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.391778
+WARNING: neuron 254 F0=-1096.3567 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.400616
+WARNING: neuron 255 F0=-1789.5721 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.414538
+WARNING: neuron 256 F0=-103.1812 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.424061
+WARNING: neuron 257 F0=-921.8554 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.453745
+WARNING: bleach fit rejected for neuron 258 (bleach trend overshoots (residual min=-5340.51 < -2210.01)); using raw trace at time 00:26:42.461569
+WARNING: neuron 258 F0=-3067.4176 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.461613
+WARNING: neuron 259 F0=-845.8970 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.706928
+WARNING: bleach fit rejected for neuron 260 (bleach trend overshoots (residual min=-3282.71 < -1231.44)); using raw trace at time 00:26:42.714175
+WARNING: neuron 260 F0=-2201.5277 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.714219
+WARNING: neuron 261 F0=-576.3483 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.737596
+WARNING: neuron 262 F0=-409.7317 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.747370
+WARNING: neuron 263 F0=-765.9239 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.758896
+WARNING: neuron 264 F0=-727.1893 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.767094
+WARNING: neuron 265 F0=-1468.3161 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.788012
+WARNING: neuron 266 F0=-253.3203 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.798869
+WARNING: neuron 267 F0=-125.2841 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.805983
+WARNING: neuron 269 F0=-318.7632 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.821719
+WARNING: neuron 270 F0=-927.0452 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.836713
+WARNING: neuron 271 F0=-909.3985 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.879893
+WARNING: neuron 272 F0=-465.3364 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.959946
+WARNING: neuron 274 F0=-128.0272 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.975025
+WARNING: neuron 275 F0=-617.7992 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.986744
+WARNING: neuron 276 F0=-207.1700 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:42.998165
+WARNING: neuron 277 F0=-1368.1190 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.006055
+WARNING: neuron 278 F0=-1246.5832 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.016229
+WARNING: neuron 279 F0=-92.7381 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.023806
+WARNING: neuron 281 F0=-562.4404 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.041034
+WARNING: bleach fit rejected for neuron 282 (bleach trend overshoots (residual min=-708.55 < -413.81)); using raw trace at time 00:26:43.057930
+WARNING: neuron 282 F0=-435.3617 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.057974
+WARNING: neuron 283 F0=-105.9371 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:43.066744
+WARNING: neuron 284 F0=-1712.7190 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.357546
+WARNING: neuron 285 F0=-148.2842 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.365057
+WARNING: neuron 286 F0=-90.6344 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.373540
+WARNING: neuron 287 F0=-244.4104 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.381283
+WARNING: neuron 288 F0=-271.3168 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.397231
+WARNING: neuron 289 F0=-239.0204 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.443032
+WARNING: neuron 290 F0=-274.6823 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.451056
+WARNING: bleach fit rejected for neuron 291 (bleach trend overshoots (residual min=-3395.07 < -2573.52)); using raw trace at time 00:26:44.471114
+WARNING: neuron 291 F0=-1239.8189 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.471165
+WARNING: bleach fit rejected for neuron 292 (bleach trend overshoots (residual min=-2675.25 < -1943.95)); using raw trace at time 00:26:44.486311
+WARNING: neuron 292 F0=-1129.4031 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.486447
+WARNING: neuron 293 F0=-806.4980 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.491746
+WARNING: neuron 294 F0=-724.2310 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.496762
+WARNING: neuron 295 F0=-1019.7127 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.509817
+WARNING: neuron 296 F0=-506.0965 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.519834
+WARNING: neuron 298 F0=-450.8576 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:44.788018
+WARNING: bleach fit rejected for neuron 299 (bleach trend overshoots (residual min=-1251.18 < -1215.83)); using raw trace at time 00:26:45.113391
+WARNING: neuron 299 F0=-417.0905 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.113457
+WARNING: neuron 300 F0=-256.6186 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.123063
+WARNING: neuron 301 F0=-572.9828 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.133984
+WARNING: neuron 302 F0=-754.7200 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.144388
+WARNING: bleach fit rejected for neuron 303 (bleach trend overshoots (residual min=-2315.80 < -1134.59)); using raw trace at time 00:26:45.406527
+WARNING: neuron 303 F0=-1546.1726 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.406592
+WARNING: neuron 304 F0=-703.3073 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.697586
+WARNING: neuron 305 F0=-495.9030 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.739762
+WARNING: bleach fit rejected for neuron 306 (bleach trend overshoots (residual min=-4396.80 < -2218.67)); using raw trace at time 00:26:45.746777
+WARNING: neuron 306 F0=-2357.9689 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.746820
+WARNING: neuron 307 F0=-269.4947 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.752632
+WARNING: neuron 308 F0=-399.7487 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.776204
+WARNING: bleach fit rejected for neuron 309 (bleach trend overshoots (residual min=-2881.84 < -2015.49)); using raw trace at time 00:26:45.867492
+WARNING: neuron 309 F0=-1282.0952 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.867558
+WARNING: bleach fit rejected for neuron 310 (bleach trend overshoots (residual min=-2717.32 < -2600.19)); using raw trace at time 00:26:45.875071
+WARNING: neuron 310 F0=-807.8233 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.875111
+WARNING: bleach fit rejected for neuron 311 (bleach trend overshoots (residual min=-3376.50 < -1635.06)); using raw trace at time 00:26:45.885172
+WARNING: neuron 311 F0=-1964.8242 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.885211
+WARNING: bleach fit rejected for neuron 312 (bleach trend overshoots (residual min=-2252.13 < -1806.00)); using raw trace at time 00:26:45.893793
+WARNING: neuron 312 F0=-1061.3209 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.893832
+WARNING: neuron 313 F0=-664.4194 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.902319
+WARNING: bleach fit rejected for neuron 314 (bleach trend overshoots (residual min=-1868.64 < -1582.00)); using raw trace at time 00:26:45.912119
+WARNING: neuron 314 F0=-426.0722 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.912158
+WARNING: neuron 315 F0=-242.4174 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.943952
+WARNING: neuron 316 F0=-831.3916 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.953451
+WARNING: neuron 317 F0=-756.0058 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.961967
+WARNING: neuron 318 F0=-274.0327 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.968314
+WARNING: neuron 319 F0=-1207.6899 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.977613
+WARNING: neuron 320 F0=-1279.4338 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.991175
+WARNING: neuron 321 F0=-393.1880 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:45.999727
+WARNING: bleach fit rejected for neuron 322 (bleach trend overshoots (residual min=-2437.64 < -2309.74)); using raw trace at time 00:26:46.007017
+WARNING: neuron 322 F0=-537.0028 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.007055
+WARNING: neuron 323 F0=-1890.3028 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.015488
+WARNING: neuron 324 F0=-201.9814 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.021013
+WARNING: neuron 325 F0=-704.3777 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.031315
+WARNING: neuron 326 F0=-166.6402 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.039163
+WARNING: neuron 327 F0=-1976.9008 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.061329
+WARNING: bleach fit rejected for neuron 328 (bleach trend overshoots (residual min=-947.84 < -697.11)); using raw trace at time 00:26:46.072706
+WARNING: neuron 328 F0=-523.0322 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.072744
+WARNING: neuron 329 F0=-607.2667 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.082170
+WARNING: neuron 330 F0=-418.6110 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.098179
+WARNING: neuron 331 F0=-436.1101 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.104726
+WARNING: neuron 333 F0=-549.6620 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.207054
+WARNING: neuron 334 F0=-287.6365 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.218063
+WARNING: neuron 336 F0=-815.1275 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.240077
+WARNING: bleach fit rejected for neuron 337 (bleach trend overshoots (residual min=-4321.34 < -2413.09)); using raw trace at time 00:26:46.248069
+WARNING: neuron 337 F0=-2014.8391 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.248108
+WARNING: neuron 338 F0=-165.6552 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.256283
+WARNING: neuron 339 F0=-562.3013 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:46.271719
+WARNING: bleach fit rejected for neuron 340 (bleach trend overshoots (residual min=-5692.09 < -2308.83)); using raw trace at time 00:26:47.171360
+WARNING: neuron 340 F0=-3628.6847 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.171425
+WARNING: neuron 341 F0=-33.3379 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.237640
+WARNING: bleach fit rejected for neuron 343 (bleach trend overshoots (residual min=-3886.80 < -3017.65)); using raw trace at time 00:26:47.273470
+WARNING: neuron 343 F0=-1219.2283 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.273516
+WARNING: neuron 344 F0=-1651.5614 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.289546
+WARNING: neuron 345 F0=-88.4700 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.298042
+WARNING: neuron 346 F0=-453.7594 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.312235
+WARNING: neuron 348 F0=-399.9878 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.329063
+WARNING: neuron 349 F0=-664.2839 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.338393
+WARNING: neuron 350 F0=-538.8353 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.351532
+WARNING: neuron 351 F0=-732.2924 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.427719
+WARNING: neuron 352 F0=-445.0123 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.605094
+WARNING: neuron 353 F0=-659.8646 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.613021
+WARNING: bleach fit rejected for neuron 354 (bleach trend overshoots (residual min=-3381.36 < -1692.41)); using raw trace at time 00:26:47.969286
+WARNING: neuron 354 F0=-1890.8209 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.969348
+WARNING: neuron 355 F0=-352.7661 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:47.975615
+WARNING: neuron 357 F0=-617.6255 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.017101
+WARNING: bleach fit rejected for neuron 358 (bleach trend overshoots (residual min=-4368.23 < -1639.00)); using raw trace at time 00:26:48.028229
+WARNING: neuron 358 F0=-2562.7989 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.028271
+WARNING: neuron 359 F0=-849.7895 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.038120
+WARNING: neuron 360 F0=-987.1123 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.046591
+WARNING: neuron 361 F0=-366.2309 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.053852
+WARNING: bleach fit rejected for neuron 362 (bleach trend overshoots (residual min=-1708.19 < -1506.29)); using raw trace at time 00:26:48.063610
+WARNING: neuron 362 F0=-618.2212 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.063648
+WARNING: neuron 363 F0=-113.0413 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.074953
+WARNING: neuron 364 F0=-252.7288 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.083235
+WARNING: neuron 366 F0=-502.8010 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.100439
+WARNING: neuron 368 F0=-2359.7523 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.119208
+WARNING: bleach fit rejected for neuron 370 (bleach trend overshoots (residual min=-5376.28 < -2699.43)); using raw trace at time 00:26:48.326538
+WARNING: neuron 370 F0=-2998.2329 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.326603
+WARNING: neuron 371 F0=-408.0194 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.331713
+WARNING: neuron 372 F0=-534.4059 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.349126
+WARNING: bleach fit rejected for neuron 373 (bleach trend overshoots (residual min=-2431.94 < -1405.34)); using raw trace at time 00:26:48.575069
+WARNING: neuron 373 F0=-1330.3308 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.575122
+WARNING: neuron 374 F0=-752.1127 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.583066
+WARNING: neuron 375 F0=-387.4383 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.589463
+WARNING: neuron 376 F0=-826.1615 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.599267
+WARNING: neuron 377 F0=-769.8162 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.605434
+WARNING: neuron 378 F0=-221.7276 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.613419
+WARNING: neuron 379 F0=-475.6608 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.621423
+WARNING: neuron 380 F0=-715.6198 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.648061
+WARNING: neuron 381 F0=-243.4602 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.855943
+WARNING: neuron 382 F0=-495.6342 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.870032
+WARNING: neuron 383 F0=-772.5206 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.878348
+WARNING: neuron 385 F0=-127.4278 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.909293
+WARNING: neuron 386 F0=-608.3761 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:48.916498
+WARNING: neuron 387 F0=-682.1238 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.554240
+WARNING: neuron 388 F0=-398.3659 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.563967
+WARNING: neuron 390 F0=-606.9674 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.603726
+WARNING: neuron 391 F0=-691.8117 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.612533
+WARNING: bleach fit rejected for neuron 392 (bleach trend overshoots (residual min=-5465.32 < -2349.43)); using raw trace at time 00:26:49.620683
+WARNING: neuron 392 F0=-3030.3249 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.620726
+WARNING: neuron 393 F0=-496.7252 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.629144
+WARNING: neuron 395 F0=-387.6521 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.643580
+WARNING: neuron 396 F0=-420.1329 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.686066
+WARNING: neuron 397 F0=-583.7854 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.690881
+WARNING: neuron 398 F0=-407.7345 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.699564
+WARNING: bleach fit rejected for neuron 399 (bleach trend overshoots (residual min=-1987.88 < -1401.47)); using raw trace at time 00:26:49.705715
+WARNING: neuron 399 F0=-799.7209 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.705757
+WARNING: bleach fit rejected for neuron 400 (bleach trend overshoots (residual min=-3251.54 < -2587.15)); using raw trace at time 00:26:49.755621
+WARNING: neuron 400 F0=-984.6346 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.755697
+WARNING: neuron 402 F0=-2442.8649 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.843751
+WARNING: neuron 403 F0=-25.7224 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.850153
+WARNING: neuron 404 F0=-689.9884 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.856189
+WARNING: neuron 405 F0=-422.1612 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.873549
+WARNING: neuron 406 F0=-722.1631 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.880599
+WARNING: neuron 407 F0=-955.0493 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.891006
+WARNING: neuron 408 F0=-315.2645 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.898985
+WARNING: neuron 409 F0=-222.0818 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.907369
+WARNING: bleach fit rejected for neuron 410 (bleach trend overshoots (residual min=-2463.27 < -1232.37)); using raw trace at time 00:26:49.918810
+WARNING: neuron 410 F0=-1481.3043 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.918853
+WARNING: neuron 411 F0=-388.2715 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.922877
+WARNING: bleach fit rejected for neuron 412 (bleach trend overshoots (residual min=-3931.33 < -1407.15)); using raw trace at time 00:26:49.979762
+WARNING: neuron 412 F0=-2694.4268 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.979806
+WARNING: neuron 413 F0=-239.6474 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:49.993518
+WARNING: neuron 414 F0=-297.3046 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.003742
+WARNING: neuron 415 F0=-400.4904 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.013989
+WARNING: neuron 416 F0=-120.7652 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.024185
+WARNING: neuron 417 F0=-241.9655 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.032843
+WARNING: neuron 418 F0=-368.0013 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.063872
+WARNING: neuron 419 F0=-390.5492 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.071264
+WARNING: neuron 421 F0=-569.9966 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.117120
+WARNING: neuron 422 F0=-204.7801 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.220843
+WARNING: neuron 423 F0=-870.7373 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.243952
+WARNING: neuron 425 F0=-704.1002 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.265351
+WARNING: bleach fit rejected for neuron 426 (bleach trend overshoots (residual min=-2036.99 < -1216.91)); using raw trace at time 00:26:50.273962
+WARNING: neuron 426 F0=-1003.6348 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.274001
+WARNING: neuron 427 F0=-179.1222 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.288352
+WARNING: neuron 428 F0=-441.8338 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.297850
+WARNING: bleach fit rejected for neuron 429 (bleach trend overshoots (residual min=-1470.83 < -1095.96)); using raw trace at time 00:26:50.307187
+WARNING: neuron 429 F0=-638.5519 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.307227
+WARNING: neuron 430 F0=-718.5324 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.315241
+WARNING: neuron 431 F0=-453.0216 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.322281
+WARNING: bleach fit rejected for neuron 432 (bleach trend overshoots (residual min=-2540.55 < -1357.91)); using raw trace at time 00:26:50.349762
+WARNING: neuron 432 F0=-1526.2691 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.349804
+WARNING: neuron 433 F0=-3141.0930 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.357877
+WARNING: neuron 434 F0=-516.9559 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.377937
+WARNING: neuron 436 F0=-893.0371 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.398992
+WARNING: neuron 437 F0=-205.6953 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.406164
+WARNING: neuron 439 F0=-701.9278 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.812806
+WARNING: neuron 440 F0=-195.3964 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.821409
+WARNING: neuron 442 F0=-375.8990 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.838598
+WARNING: neuron 443 F0=-860.3327 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.846282
+WARNING: neuron 445 F0=-638.3025 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.863739
+WARNING: neuron 446 F0=-488.0767 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.873312
+WARNING: neuron 447 F0=-1289.0332 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.882538
+WARNING: neuron 448 F0=-488.7869 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.890594
+WARNING: neuron 449 F0=-97.5850 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.898119
+WARNING: neuron 451 F0=-546.6408 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.979161
+WARNING: neuron 452 F0=-697.2918 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.987295
+WARNING: neuron 453 F0=-375.8265 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:50.996126
+WARNING: neuron 454 F0=-1983.3737 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.059938
+WARNING: neuron 455 F0=-216.9544 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.068157
+WARNING: neuron 456 F0=-610.2098 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.077063
+WARNING: bleach fit rejected for neuron 457 (bleach trend overshoots (residual min=-7279.06 < -2904.91)); using raw trace at time 00:26:52.194313
+WARNING: neuron 457 F0=-4217.9271 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.194362
+WARNING: neuron 458 F0=-220.7584 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.260527
+WARNING: neuron 459 F0=-440.2045 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.270232
+WARNING: neuron 460 F0=-538.7820 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:52.278807
+WARNING: bleach fit rejected for neuron 462 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:26:54.891136
+WARNING: neuron 462 F0=-2771.3027 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.891201
+WARNING: neuron 463 F0=-432.2520 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.899183
+WARNING: neuron 464 F0=-541.5966 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.904172
+WARNING: neuron 465 F0=-621.7912 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.912768
+WARNING: neuron 466 F0=-458.7169 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.920284
+WARNING: neuron 467 F0=-227.3252 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.931577
+WARNING: neuron 468 F0=-403.0041 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.937565
+WARNING: neuron 469 F0=-609.1585 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.950548
+WARNING: neuron 470 F0=-209.4093 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.963950
+WARNING: neuron 471 F0=-1302.7853 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.973020
+WARNING: neuron 472 F0=-583.3264 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.980874
+WARNING: neuron 473 F0=-808.2760 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.989942
+WARNING: bleach fit rejected for neuron 474 (bleach trend overshoots (residual min=-1819.90 < -1127.22)); using raw trace at time 00:26:54.999493
+WARNING: neuron 474 F0=-1000.8915 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:54.999534
+WARNING: neuron 475 F0=-818.8291 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.009144
+WARNING: neuron 476 F0=-319.5761 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.017598
+WARNING: neuron 478 F0=-316.3205 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.051429
+WARNING: neuron 479 F0=-841.5154 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.549400
+WARNING: neuron 480 F0=-705.7218 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.558464
+WARNING: neuron 481 F0=-273.7929 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.604243
+WARNING: neuron 482 F0=-225.2587 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.622424
+WARNING: neuron 483 F0=-470.0113 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.631008
+WARNING: neuron 484 F0=-670.9908 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.704202
+WARNING: neuron 485 F0=-439.4686 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.730516
+WARNING: neuron 486 F0=-600.4021 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.740385
+WARNING: neuron 487 F0=-503.7341 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.808759
+WARNING: neuron 488 F0=-423.8481 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.840855
+WARNING: neuron 489 F0=-20.3227 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.849858
+WARNING: neuron 490 F0=-306.3855 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.907758
+WARNING: bleach fit rejected for neuron 491 (bleach trend overshoots (residual min=-3081.10 < -1352.04)); using raw trace at time 00:26:55.914162
+WARNING: neuron 491 F0=-1701.5064 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.914204
+WARNING: neuron 492 F0=-524.4515 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.921742
+WARNING: neuron 493 F0=-563.8409 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.933052
+WARNING: neuron 494 F0=-575.9227 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.940224
+WARNING: neuron 495 F0=-28.7719 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.949510
+WARNING: neuron 496 F0=-891.5375 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.955616
+WARNING: neuron 497 F0=-554.4837 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:55.973032
+WARNING: neuron 498 F0=-651.0889 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.009938
+WARNING: neuron 499 F0=-242.4583 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.018465
+WARNING: neuron 500 F0=-824.9659 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.026161
+WARNING: neuron 501 F0=-152.4824 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.034086
+WARNING: bleach fit rejected for neuron 502 (bleach trend overshoots (residual min=-3067.77 < -1492.12)); using raw trace at time 00:26:56.053550
+WARNING: neuron 502 F0=-1702.3627 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.053592
+WARNING: neuron 504 F0=-268.7146 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.078986
+WARNING: neuron 505 F0=-476.4515 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.086895
+WARNING: neuron 506 F0=-977.8925 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.096983
+WARNING: neuron 507 F0=-109.4085 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.106222
+WARNING: neuron 508 F0=-415.7311 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.126123
+WARNING: bleach fit rejected for neuron 509 (bleach trend overshoots (residual min=-2239.56 < -1854.59)); using raw trace at time 00:26:56.134032
+WARNING: neuron 509 F0=-762.5887 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.134073
+WARNING: neuron 510 F0=-443.0921 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.176112
+WARNING: neuron 511 F0=-482.8722 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.207857
+WARNING: neuron 512 F0=-332.8715 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.218083
+WARNING: neuron 514 F0=-345.4088 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.236731
+WARNING: neuron 515 F0=-74.4815 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.245579
+WARNING: neuron 516 F0=-184.2042 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.252187
+WARNING: neuron 517 F0=-218.8343 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.261244
+WARNING: neuron 518 F0=-177.9655 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.271051
+WARNING: neuron 519 F0=-130.6124 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.310085
+WARNING: neuron 521 F0=-298.8676 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.345502
+WARNING: neuron 522 F0=-421.5743 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.379719
+WARNING: neuron 523 F0=-549.5352 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.389285
+WARNING: neuron 524 F0=-220.3862 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.410778
+WARNING: neuron 525 F0=-201.0243 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.417961
+WARNING: neuron 526 F0=-799.1334 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.425450
+WARNING: neuron 527 F0=-65.8345 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.433831
+WARNING: neuron 528 F0=-613.7934 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.442017
+WARNING: neuron 529 F0=-469.7486 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.493976
+WARNING: neuron 530 F0=-904.5883 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.509747
+WARNING: neuron 531 F0=-7.2598 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:56.530789
+WARNING: bleach fit rejected for neuron 533 (bleach trend overshoots (residual min=-2252.49 < -2065.68)); using raw trace at time 00:26:57.011860
+WARNING: neuron 533 F0=-752.9787 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.011914
+WARNING: neuron 536 F0=-1195.5499 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.077199
+WARNING: neuron 538 F0=-396.1104 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.092199
+WARNING: neuron 539 F0=-1130.6011 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.106448
+WARNING: neuron 540 F0=-1478.4069 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.112391
+WARNING: neuron 542 F0=-83.9879 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.265876
+WARNING: neuron 544 F0=-893.3570 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.293021
+WARNING: bleach fit rejected for neuron 545 (bleach trend overshoots (residual min=-6038.11 < -2061.73)); using raw trace at time 00:26:57.324977
+WARNING: neuron 545 F0=-4099.1503 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.325025
+WARNING: neuron 546 F0=-12.8949 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.331589
+WARNING: neuron 548 F0=-383.6352 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.399336
+WARNING: neuron 549 F0=-359.8914 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:57.408143
+WARNING: neuron 550 F0=-581.5979 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.423711
+WARNING: neuron 551 F0=-1943.1775 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.432102
+WARNING: neuron 552 F0=-577.8555 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.445540
+WARNING: bleach fit rejected for neuron 553 (bleach trend overshoots (residual min=-1857.68 < -1354.83)); using raw trace at time 00:26:58.494609
+WARNING: neuron 553 F0=-336.4940 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.494656
+WARNING: neuron 556 F0=-83.0558 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.564538
+WARNING: neuron 559 F0=-546.2497 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.613267
+WARNING: neuron 560 F0=-812.5069 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.703100
+WARNING: neuron 561 F0=-778.6630 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.723830
+WARNING: bleach fit rejected for neuron 563 (bleach trend overshoots (residual min=-2625.39 < -1493.45)); using raw trace at time 00:26:58.774972
+WARNING: neuron 563 F0=-1522.1611 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.775041
+WARNING: neuron 564 F0=-473.5000 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.785352
+WARNING: neuron 565 F0=-519.2929 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.792227
+WARNING: neuron 566 F0=-253.3302 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.799047
+WARNING: bleach fit rejected for neuron 567 (bleach trend overshoots (residual min=-3705.76 < -3083.69)); using raw trace at time 00:26:58.808192
+WARNING: neuron 567 F0=-1397.5971 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:58.808234
+WARNING: bleach fit rejected for neuron 568 (bleach trend overshoots (residual min=-2722.81 < -2552.18)); using raw trace at time 00:26:59.353954
+WARNING: neuron 568 F0=-489.0213 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.354007
+WARNING: neuron 569 F0=-1639.9623 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.553101
+WARNING: neuron 570 F0=-707.2348 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.564633
+WARNING: neuron 571 F0=-420.2477 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.573402
+WARNING: neuron 572 F0=-339.5985 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.582821
+WARNING: neuron 573 F0=-322.7781 <= 0 after bleach correction; clamping to 1e-6 at time 00:26:59.591975
+WARNING: neuron 575 F0=-631.6079 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.924089
+WARNING: neuron 576 F0=-1691.4211 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.936297
+WARNING: neuron 578 F0=-844.6018 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.960455
+WARNING: neuron 579 F0=-1622.1324 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.977353
+WARNING: neuron 580 F0=-407.9514 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.986442
+WARNING: neuron 581 F0=-572.6127 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:00.996212
+WARNING: neuron 582 F0=-350.6740 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.042268
+WARNING: bleach fit rejected for neuron 583 (bleach trend overshoots (residual min=-1488.69 < -1332.64)); using raw trace at time 00:27:01.053898
+WARNING: neuron 583 F0=-566.1095 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.053940
+WARNING: neuron 584 F0=-955.3312 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.064380
+WARNING: neuron 585 F0=-820.8641 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.079822
+WARNING: neuron 586 F0=-730.9070 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.103462
+WARNING: neuron 587 F0=-514.0792 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.130334
+WARNING: neuron 588 F0=-693.5411 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.140827
+WARNING: neuron 589 F0=-406.2456 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.173102
+WARNING: neuron 590 F0=-259.6107 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.178748
+WARNING: bleach fit rejected for neuron 591 (bleach trend overshoots (residual min=-6083.51 < -1296.78)); using raw trace at time 00:27:01.216913
+WARNING: neuron 591 F0=-4822.1044 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.216972
+WARNING: neuron 592 F0=-497.2458 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.225650
+WARNING: neuron 593 F0=-396.2228 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.235260
+WARNING: neuron 594 F0=-344.1185 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.328752
+WARNING: neuron 595 F0=-267.0413 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.337560
+WARNING: bleach fit rejected for neuron 596 (bleach trend overshoots (residual min=-10176.97 < -2694.62)); using raw trace at time 00:27:01.345868
+WARNING: neuron 596 F0=-7648.3663 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.345910
+WARNING: neuron 597 F0=-802.2501 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.870481
+WARNING: neuron 598 F0=-833.2659 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.878107
+WARNING: bleach fit rejected for neuron 600 (bleach trend overshoots (residual min=-1471.91 < -1201.27)); using raw trace at time 00:27:01.893901
+WARNING: neuron 600 F0=-690.7349 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.893947
+WARNING: bleach fit rejected for neuron 601 (bleach trend overshoots (residual min=-8649.05 < -2744.88)); using raw trace at time 00:27:01.900619
+WARNING: neuron 601 F0=-6057.6622 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:01.900698
+WARNING: neuron 602 F0=-842.2892 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.086477
+WARNING: bleach fit rejected for neuron 604 (bleach trend overshoots (residual min=-2320.80 < -1336.48)); using raw trace at time 00:27:02.130650
+WARNING: neuron 604 F0=-1172.0221 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.130754
+WARNING: bleach fit rejected for neuron 605 (bleach trend overshoots (residual min=-3974.28 < -2907.90)); using raw trace at time 00:27:02.251848
+WARNING: neuron 605 F0=-1594.7084 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.251914
+WARNING: neuron 606 F0=-504.2530 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.322496
+WARNING: neuron 607 F0=-478.8941 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.332719
+WARNING: neuron 608 F0=-278.7186 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.446191
+WARNING: neuron 609 F0=-355.9247 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.470849
+WARNING: neuron 610 F0=-1009.6599 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.480038
+WARNING: neuron 611 F0=-1978.0653 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.489441
+WARNING: neuron 612 F0=-1742.1399 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.496068
+WARNING: neuron 613 F0=-640.9512 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.509976
+WARNING: bleach fit rejected for neuron 614 (bleach trend overshoots (residual min=-8871.62 < -3487.01)); using raw trace at time 00:27:02.520300
+WARNING: neuron 614 F0=-6353.1350 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.520340
+WARNING: neuron 616 F0=-1617.9427 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.542459
+WARNING: neuron 617 F0=-419.7384 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.549555
+WARNING: bleach fit rejected for neuron 620 (bleach trend overshoots (residual min=-10450.75 < -2793.87)); using raw trace at time 00:27:02.573405
+WARNING: neuron 620 F0=-7641.1720 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:02.573455
+WARNING: neuron 621 F0=-563.2375 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.013452
+WARNING: neuron 622 F0=-1084.1308 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.019599
+WARNING: bleach fit rejected for neuron 623 (bleach trend overshoots (residual min=-570.67 < -498.41)); using raw trace at time 00:27:03.027648
+WARNING: neuron 623 F0=-139.8802 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.027772
+WARNING: neuron 624 F0=-427.0256 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.035640
+WARNING: neuron 625 F0=-650.0139 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.049072
+WARNING: neuron 626 F0=-663.3518 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.057887
+WARNING: bleach fit rejected for neuron 627 (bleach trend overshoots (residual min=-1336.83 < -687.91)); using raw trace at time 00:27:03.067582
+WARNING: neuron 627 F0=-804.9117 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.067623
+WARNING: neuron 628 F0=-460.3359 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.081245
+WARNING: bleach fit rejected for neuron 629 (bleach trend overshoots (residual min=-5824.24 < -3181.08)); using raw trace at time 00:27:03.096424
+WARNING: neuron 629 F0=-3629.9271 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.096467
+WARNING: neuron 630 F0=-324.3583 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.188958
+WARNING: neuron 631 F0=-242.1301 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.200600
+WARNING: neuron 632 F0=-562.2825 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.223831
+WARNING: neuron 633 F0=-459.5350 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.231275
+WARNING: neuron 634 F0=-449.8536 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.239193
+WARNING: neuron 635 F0=-1507.2559 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.247023
+WARNING: bleach fit rejected for neuron 636 (bleach trend overshoots (residual min=-2946.79 < -1938.06)); using raw trace at time 00:27:03.255710
+WARNING: neuron 636 F0=-1545.2389 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.255755
+WARNING: bleach fit rejected for neuron 637 (bleach trend overshoots (residual min=-2418.56 < -1481.32)); using raw trace at time 00:27:03.269177
+WARNING: neuron 637 F0=-1348.0255 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.269221
+WARNING: neuron 638 F0=-816.8600 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.278545
+WARNING: neuron 639 F0=-552.3796 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.302958
+WARNING: neuron 640 F0=-432.7546 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.309965
+WARNING: neuron 641 F0=-405.4340 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.319260
+WARNING: neuron 642 F0=-764.6303 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.806867
+WARNING: neuron 643 F0=-524.5978 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.812436
+WARNING: neuron 644 F0=-372.9524 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.819745
+WARNING: neuron 645 F0=-492.4369 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.827446
+WARNING: neuron 646 F0=-439.4174 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.879425
+WARNING: neuron 647 F0=-408.5812 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.887776
+WARNING: neuron 649 F0=-61.6697 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.951050
+WARNING: neuron 650 F0=-1223.0545 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.959187
+WARNING: neuron 651 F0=-164.3984 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.968811
+WARNING: neuron 652 F0=-520.3641 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:03.990733
+WARNING: neuron 653 F0=-540.3831 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.017223
+WARNING: neuron 654 F0=-959.9996 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.297043
+WARNING: neuron 655 F0=-1001.7238 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.322875
+WARNING: bleach fit rejected for neuron 656 (bleach trend overshoots (residual min=-5604.84 < -2405.59)); using raw trace at time 00:27:04.330163
+WARNING: neuron 656 F0=-3534.6226 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.330205
+WARNING: neuron 657 F0=-501.5451 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.338174
+WARNING: neuron 658 F0=-396.2091 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.346530
+WARNING: neuron 659 F0=-838.8245 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.353644
+WARNING: neuron 660 F0=-829.7752 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.369545
+WARNING: neuron 661 F0=-325.7225 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.376578
+WARNING: neuron 662 F0=-641.8911 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.426343
+WARNING: neuron 663 F0=-333.1607 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.435131
+WARNING: neuron 666 F0=-750.7741 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.496279
+WARNING: neuron 667 F0=-537.1210 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.517476
+WARNING: bleach fit rejected for neuron 668 (bleach trend overshoots (residual min=-4529.19 < -3548.30)); using raw trace at time 00:27:04.540721
+WARNING: neuron 668 F0=-1950.9564 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.540766
+WARNING: neuron 669 F0=-941.3244 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.550262
+WARNING: neuron 670 F0=-564.4057 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.616745
+WARNING: neuron 671 F0=-412.0546 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.626168
+WARNING: neuron 672 F0=-777.6367 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.636135
+WARNING: neuron 673 F0=-588.7671 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.648027
+WARNING: neuron 674 F0=-658.2897 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.654699
+WARNING: neuron 675 F0=-1083.1352 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.664247
+WARNING: neuron 676 F0=-1950.1730 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:04.670295
+WARNING: neuron 677 F0=-603.5916 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.047182
+WARNING: neuron 678 F0=-871.5532 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.054845
+WARNING: neuron 679 F0=-140.6488 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.083113
+WARNING: neuron 680 F0=-424.5497 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.092233
+WARNING: neuron 681 F0=-461.8138 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.098278
+WARNING: neuron 682 F0=-2028.6543 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.118267
+WARNING: bleach fit rejected for neuron 683 (bleach trend overshoots (residual min=-831.86 < -757.16)); using raw trace at time 00:27:05.236736
+WARNING: neuron 683 F0=-23.1219 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.236788
+WARNING: bleach fit rejected for neuron 684 (bleach trend overshoots (residual min=-2312.31 < -1989.60)); using raw trace at time 00:27:05.245438
+WARNING: bleach fit rejected for neuron 685 (bleach trend overshoots (residual min=-2670.63 < -868.76)); using raw trace at time 00:27:05.256462
+WARNING: neuron 685 F0=-1675.6808 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.256505
+WARNING: neuron 686 F0=-576.4754 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.283035
+WARNING: neuron 687 F0=-400.5914 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.469847
+WARNING: neuron 688 F0=-507.6726 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.668930
+WARNING: neuron 689 F0=-699.1593 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.677841
+WARNING: neuron 690 F0=-443.9441 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.686152
+WARNING: neuron 691 F0=-194.8408 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.781510
+WARNING: neuron 692 F0=-1759.3209 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.789097
+WARNING: neuron 693 F0=-216.2407 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.797249
+WARNING: neuron 694 F0=-376.4386 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.837395
+WARNING: neuron 695 F0=-239.2266 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.844696
+WARNING: neuron 696 F0=-1739.6814 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.850638
+WARNING: neuron 697 F0=-815.6272 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.855972
+WARNING: neuron 700 F0=-176.1027 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.892255
+WARNING: neuron 701 F0=-312.6083 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.904898
+WARNING: neuron 702 F0=-745.7759 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.931851
+WARNING: neuron 703 F0=-1007.5212 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.940743
+WARNING: neuron 704 F0=-500.5964 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.952063
+WARNING: neuron 705 F0=-318.1437 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.959337
+WARNING: neuron 706 F0=-463.3304 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.965858
+WARNING: neuron 707 F0=-2416.2817 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.982090
+WARNING: neuron 708 F0=-632.2963 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:05.991232
+WARNING: neuron 709 F0=-453.2036 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.016424
+WARNING: neuron 710 F0=-1624.4550 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.039575
+WARNING: neuron 711 F0=-633.0297 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.048357
+WARNING: neuron 712 F0=-2355.8927 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.067220
+WARNING: neuron 713 F0=-925.8465 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.107009
+WARNING: neuron 714 F0=-2481.5599 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.116629
+WARNING: neuron 715 F0=-172.3351 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.132790
+WARNING: neuron 716 F0=-397.4197 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.162822
+WARNING: neuron 717 F0=-325.3189 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.170901
+WARNING: neuron 718 F0=-711.6248 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.195450
+WARNING: neuron 719 F0=-788.1402 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.240929
+WARNING: neuron 720 F0=-1288.8808 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.249322
+WARNING: neuron 721 F0=-326.5860 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.286113
+WARNING: bleach fit rejected for neuron 722 (bleach trend overshoots (residual min=-2542.30 < -1147.30)); using raw trace at time 00:27:06.293944
+WARNING: neuron 722 F0=-1690.4327 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.293983
+WARNING: bleach fit rejected for neuron 723 (bleach trend overshoots (residual min=-7746.20 < -2485.62)); using raw trace at time 00:27:06.302392
+WARNING: neuron 723 F0=-5302.5605 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.302432
+WARNING: bleach fit rejected for neuron 724 (bleach trend overshoots (residual min=-602.25 < -592.73)); using raw trace at time 00:27:06.308123
+WARNING: neuron 724 F0=-303.9432 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.308162
+WARNING: neuron 725 F0=-291.8680 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.316224
+WARNING: neuron 726 F0=-155.5493 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.410739
+WARNING: neuron 727 F0=-394.7084 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.443541
+WARNING: neuron 728 F0=-826.9921 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.452163
+WARNING: neuron 729 F0=-136.6969 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.457929
+WARNING: neuron 730 F0=-601.9150 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.465215
+WARNING: neuron 731 F0=-844.5288 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.515637
+WARNING: neuron 732 F0=-455.8762 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.523216
+WARNING: neuron 733 F0=-922.8550 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.529598
+WARNING: neuron 734 F0=-478.3460 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.538853
+WARNING: bleach fit rejected for neuron 735 (bleach trend overshoots (residual min=-1227.59 < -445.38)); using raw trace at time 00:27:06.547845
+WARNING: neuron 735 F0=-701.5228 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.547885
+WARNING: neuron 736 F0=-488.4694 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:06.557439
+WARNING: bleach fit rejected for neuron 737 (bleach trend overshoots (residual min=-3241.81 < -1742.68)); using raw trace at time 00:27:08.158730
+WARNING: neuron 737 F0=-1190.0238 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.158787
+WARNING: neuron 738 F0=-295.1262 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.166595
+WARNING: neuron 739 F0=-233.6671 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.171026
+WARNING: neuron 740 F0=-567.1311 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.178610
+WARNING: neuron 741 F0=-292.2114 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.184209
+WARNING: neuron 742 F0=-309.5249 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.203192
+WARNING: neuron 743 F0=-701.3236 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.213468
+WARNING: neuron 744 F0=-321.5869 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.236978
+WARNING: neuron 745 F0=-159.1178 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.264559
+WARNING: neuron 746 F0=-641.3346 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.269956
+WARNING: neuron 747 F0=-1736.1499 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.276923
+WARNING: neuron 748 F0=-135.7334 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.283067
+WARNING: neuron 749 F0=-174.8326 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.469970
+WARNING: neuron 750 F0=-2138.3556 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.478119
+WARNING: neuron 751 F0=-102.3978 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:08.891262
+WARNING: neuron 752 F0=-885.2665 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.483968
+WARNING: neuron 753 F0=-993.0766 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.491792
+WARNING: neuron 754 F0=-317.8237 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.500706
+WARNING: neuron 755 F0=-1041.4433 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.537465
+WARNING: neuron 756 F0=-147.9865 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.583387
+WARNING: neuron 758 F0=-310.1921 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.601343
+WARNING: neuron 759 F0=-140.5392 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.609478
+WARNING: bleach fit rejected for neuron 761 (bleach trend overshoots (residual min=-3401.49 < -1730.02)); using raw trace at time 00:27:09.627492
+WARNING: neuron 761 F0=-2165.0660 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.627570
+WARNING: neuron 762 F0=-505.9097 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.636580
+WARNING: bleach fit rejected for neuron 763 (bleach trend overshoots (residual min=-6621.45 < -2328.92)); using raw trace at time 00:27:09.649236
+WARNING: neuron 763 F0=-4932.5861 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.649276
+WARNING: neuron 764 F0=-404.3208 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.657982
+WARNING: neuron 766 F0=-1127.3581 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.677980
+WARNING: neuron 767 F0=-694.8159 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.705853
+WARNING: neuron 768 F0=-462.7868 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:09.737442
+WARNING: neuron 769 F0=-625.3262 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:10.231780
+WARNING: neuron 770 F0=-1641.5916 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:10.259710
+WARNING: neuron 771 F0=-915.5563 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:10.267809
+WARNING: bleach fit rejected for neuron 772 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:27:12.411640
+WARNING: neuron 773 F0=-175.3762 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.473287
+WARNING: neuron 774 F0=-615.9641 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.482834
+WARNING: neuron 775 F0=-380.4865 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.490542
+WARNING: neuron 776 F0=-797.1647 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.503084
+WARNING: neuron 778 F0=-2443.5814 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.531815
+WARNING: neuron 779 F0=-2459.0674 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.539221
+WARNING: neuron 782 F0=-510.9783 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.578778
+WARNING: neuron 783 F0=-500.0394 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:12.588527
+WARNING: neuron 784 F0=-1082.0010 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.562613
+WARNING: neuron 786 F0=-405.8836 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.592217
+WARNING: neuron 787 F0=-2870.4803 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.599438
+WARNING: neuron 788 F0=-692.2534 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.640185
+WARNING: neuron 789 F0=-239.5779 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.646810
+WARNING: bleach fit rejected for neuron 790 (bleach trend overshoots (residual min=-4694.09 < -2413.54)); using raw trace at time 00:27:13.655248
+WARNING: neuron 790 F0=-2995.8916 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.655327
+WARNING: neuron 791 F0=-514.8805 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.666423
+WARNING: neuron 792 F0=-563.8918 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.675736
+WARNING: neuron 794 F0=-451.9576 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.828199
+WARNING: neuron 795 F0=-1000.2370 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.865287
+WARNING: neuron 796 F0=-227.6191 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.873375
+WARNING: bleach fit rejected for neuron 798 (bleach trend overshoots (residual min=-4500.43 < -3088.09)); using raw trace at time 00:27:13.884530
+WARNING: neuron 798 F0=-2023.7251 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.884573
+WARNING: neuron 800 F0=-708.8593 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.923467
+WARNING: neuron 801 F0=-357.1914 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.931500
+WARNING: neuron 802 F0=-175.3008 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.938799
+WARNING: neuron 803 F0=-595.7141 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.948440
+WARNING: neuron 804 F0=-442.5953 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:13.985767
+WARNING: neuron 805 F0=-354.1665 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:14.012389
+WARNING: neuron 806 F0=-452.1800 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:14.020333
+WARNING: neuron 807 F0=-169.4491 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:14.033308
+WARNING: neuron 809 F0=-934.2578 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:14.359595
+WARNING: neuron 810 F0=-800.0841 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:14.962750
+WARNING: bleach fit rejected for neuron 811 (bleach trend overshoots (residual min=-1533.28 < -1099.60)); using raw trace at time 00:27:15.147704
+WARNING: neuron 811 F0=-759.3946 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.147760
+WARNING: neuron 812 F0=-528.0049 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.156542
+WARNING: neuron 813 F0=-249.5207 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.169886
+WARNING: neuron 814 F0=-933.0040 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.175781
+WARNING: neuron 815 F0=-244.9821 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.181877
+WARNING: neuron 816 F0=-2255.7360 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.189121
+WARNING: bleach fit rejected for neuron 817 (bleach trend overshoots (residual min=-1096.36 < -1090.17)); using raw trace at time 00:27:15.217975
+WARNING: neuron 818 F0=-451.0030 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.231317
+WARNING: neuron 819 F0=-504.4787 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.240207
+WARNING: neuron 820 F0=-529.4152 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.253950
+WARNING: neuron 821 F0=-367.8976 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.264191
+WARNING: neuron 823 F0=-499.0758 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.368575
+WARNING: neuron 824 F0=-1357.4739 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.393816
+WARNING: neuron 825 F0=-586.1088 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.401241
+WARNING: bleach fit rejected for neuron 826 (bleach trend overshoots (residual min=-3175.58 < -1436.52)); using raw trace at time 00:27:15.408742
+WARNING: neuron 826 F0=-2244.7281 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.408781
+WARNING: neuron 827 F0=-1356.2598 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.413348
+WARNING: neuron 828 F0=-438.4952 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.420329
+WARNING: neuron 829 F0=-753.0720 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.429190
+WARNING: neuron 830 F0=-878.7897 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.437310
+WARNING: bleach fit rejected for neuron 831 (bleach trend overshoots (residual min=-1472.17 < -1398.32)); using raw trace at time 00:27:15.786847
+WARNING: neuron 831 F0=-472.5232 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.786912
+WARNING: neuron 833 F0=-544.0697 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.810755
+WARNING: neuron 834 F0=-348.3689 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.818875
+WARNING: bleach fit rejected for neuron 835 (bleach trend overshoots (residual min=-3898.68 < -3507.32)); using raw trace at time 00:27:15.825527
+WARNING: neuron 835 F0=-462.0385 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:15.825566
+WARNING: neuron 837 F0=-1012.1514 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.000025
+WARNING: neuron 838 F0=-530.5474 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.061017
+WARNING: neuron 839 F0=-679.7836 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.070325
+WARNING: neuron 840 F0=-1583.9439 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.078254
+WARNING: neuron 841 F0=-365.5737 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.085156
+WARNING: bleach fit rejected for neuron 842 (bleach trend overshoots (residual min=-4927.34 < -2858.73)); using raw trace at time 00:27:16.093344
+WARNING: neuron 842 F0=-1875.5474 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.093384
+WARNING: neuron 844 F0=-2767.6609 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.146982
+WARNING: neuron 845 F0=-957.2116 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.154496
+WARNING: neuron 846 F0=-281.2214 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.199775
+WARNING: neuron 847 F0=-142.8550 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.220851
+WARNING: neuron 848 F0=-853.1322 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.228927
+WARNING: neuron 849 F0=-646.8030 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.236911
+WARNING: neuron 850 F0=-866.2974 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.245908
+WARNING: neuron 851 F0=-419.5717 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.254473
+WARNING: neuron 852 F0=-2627.6797 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:16.264010
+WARNING: bleach fit rejected for neuron 854 (Optimal parameters not found: The maximum number of function evaluations is exceeded.); using raw trace at time 00:27:18.402964
+WARNING: bleach fit rejected for neuron 855 (bleach trend overshoots (residual min=-4424.80 < -4328.67)); using raw trace at time 00:27:18.411165
+WARNING: neuron 855 F0=-84.8022 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.411209
+WARNING: neuron 856 F0=-883.1036 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.426446
+WARNING: neuron 857 F0=-688.6399 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.435225
+WARNING: neuron 858 F0=-801.4084 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.442086
+WARNING: neuron 859 F0=-659.8646 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.450855
+WARNING: neuron 860 F0=-1623.1704 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.460168
+WARNING: neuron 862 F0=-534.0941 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.481140
+WARNING: neuron 863 F0=-597.3021 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.490019
+WARNING: bleach fit rejected for neuron 866 (bleach trend overshoots (residual min=-3136.30 < -3124.86)); using raw trace at time 00:27:18.512203
+WARNING: neuron 866 F0=-280.4496 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.512243
+WARNING: neuron 867 F0=-811.8538 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.553005
+WARNING: neuron 868 F0=-968.8371 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.560384
+WARNING: neuron 869 F0=-995.7182 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.573097
+WARNING: neuron 870 F0=-866.9335 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.664959
+WARNING: neuron 871 F0=-39.4229 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.678789
+WARNING: neuron 872 F0=-1550.8193 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.687928
+WARNING: bleach fit rejected for neuron 873 (bleach trend overshoots (residual min=-1360.78 < -1274.38)); using raw trace at time 00:27:18.694377
+WARNING: neuron 873 F0=-349.8588 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.694439
+WARNING: neuron 874 F0=-355.3223 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.704338
+WARNING: neuron 875 F0=-620.6312 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.712091
+WARNING: neuron 876 F0=-233.3070 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.731741
+WARNING: bleach fit rejected for neuron 877 (bleach trend overshoots (residual min=-1321.07 < -1169.05)); using raw trace at time 00:27:18.756989
+WARNING: neuron 877 F0=-51.7722 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.757032
+WARNING: bleach fit rejected for neuron 879 (bleach trend overshoots (residual min=-1621.34 < -1505.32)); using raw trace at time 00:27:18.773794
+WARNING: neuron 879 F0=-855.8654 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.773836
+WARNING: bleach fit rejected for neuron 880 (bleach trend overshoots (residual min=-2943.72 < -1574.69)); using raw trace at time 00:27:18.785258
+WARNING: neuron 880 F0=-1618.7934 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.785298
+WARNING: neuron 881 F0=-478.9936 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.795614
+WARNING: bleach fit rejected for neuron 882 (bleach trend overshoots (residual min=-4134.39 < -1511.18)); using raw trace at time 00:27:18.810635
+WARNING: neuron 882 F0=-2575.3251 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.810711
+WARNING: neuron 883 F0=-1021.1338 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.819557
+WARNING: neuron 884 F0=-597.6559 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.828732
+WARNING: neuron 885 F0=-392.3770 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.837963
+WARNING: neuron 886 F0=-1026.8760 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.849251
+WARNING: neuron 887 F0=-492.4732 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.860430
+WARNING: neuron 888 F0=-807.1340 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.879419
+WARNING: bleach fit rejected for neuron 889 (bleach trend overshoots (residual min=-983.70 < -911.61)); using raw trace at time 00:27:18.893699
+WARNING: neuron 889 F0=-280.7793 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.893740
+WARNING: bleach fit rejected for neuron 890 (bleach trend overshoots (residual min=-11123.48 < -4730.56)); using raw trace at time 00:27:18.900357
+WARNING: neuron 890 F0=-6463.6918 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.900398
+WARNING: neuron 891 F0=-124.9547 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.912637
+WARNING: bleach fit rejected for neuron 892 (bleach trend overshoots (residual min=-2032.22 < -1516.98)); using raw trace at time 00:27:18.939878
+WARNING: neuron 892 F0=-1076.9883 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.939919
+WARNING: neuron 893 F0=-466.4708 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.948362
+WARNING: neuron 894 F0=-630.6138 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.976306
+WARNING: bleach fit rejected for neuron 895 (bleach trend overshoots (residual min=-5392.11 < -2292.74)); using raw trace at time 00:27:18.981517
+WARNING: neuron 895 F0=-3335.9808 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:18.981546
+WARNING: neuron 897 F0=-838.8167 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.014469
+WARNING: bleach fit rejected for neuron 898 (bleach trend overshoots (residual min=-2137.79 < -971.75)); using raw trace at time 00:27:19.056530
+WARNING: neuron 898 F0=-1353.7730 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.056575
+WARNING: neuron 899 F0=-582.1589 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.083392
+WARNING: neuron 900 F0=-987.6810 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.095731
+WARNING: neuron 901 F0=-944.4323 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.235910
+WARNING: neuron 902 F0=-209.8803 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.240977
+WARNING: bleach fit rejected for neuron 903 (bleach trend overshoots (residual min=-1803.75 < -927.86)); using raw trace at time 00:27:19.422146
+WARNING: neuron 903 F0=-1028.0213 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.422208
+WARNING: neuron 904 F0=-435.2798 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.470129
+WARNING: neuron 905 F0=-544.5162 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.478757
+WARNING: neuron 906 F0=-2141.2868 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.514121
+WARNING: neuron 907 F0=-1450.1170 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.522241
+WARNING: neuron 908 F0=-188.4385 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.529939
+WARNING: neuron 909 F0=-417.3448 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.537758
+WARNING: neuron 910 F0=-779.1039 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.628184
+WARNING: bleach fit rejected for neuron 911 (bleach trend overshoots (residual min=-985.88 < -792.63)); using raw trace at time 00:27:19.654416
+WARNING: neuron 911 F0=-124.8537 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.654463
+WARNING: neuron 914 F0=-1692.5797 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.679840
+WARNING: bleach fit rejected for neuron 915 (bleach trend overshoots (residual min=-3355.16 < -1446.21)); using raw trace at time 00:27:19.690457
+WARNING: neuron 915 F0=-1853.0078 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.690499
+WARNING: neuron 916 F0=-164.2501 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.698301
+WARNING: neuron 917 F0=-743.8596 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.707393
+WARNING: neuron 918 F0=-1519.2049 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.712279
+WARNING: neuron 919 F0=-248.9303 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.721934
+WARNING: bleach fit rejected for neuron 920 (bleach trend overshoots (residual min=-1248.89 < -1067.27)); using raw trace at time 00:27:19.751581
+WARNING: neuron 920 F0=-668.0515 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.751626
+WARNING: bleach fit rejected for neuron 921 (bleach trend overshoots (residual min=-3545.91 < -2383.37)); using raw trace at time 00:27:19.775724
+WARNING: neuron 921 F0=-1660.6036 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.775780
+WARNING: neuron 922 F0=-542.7678 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.782976
+WARNING: neuron 923 F0=-943.5992 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.802775
+WARNING: neuron 924 F0=-367.6134 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.811110
+WARNING: neuron 925 F0=-582.1718 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.824820
+WARNING: neuron 926 F0=-1740.5517 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.833291
+WARNING: neuron 927 F0=-768.5021 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.843742
+WARNING: neuron 928 F0=-568.3379 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.851436
+WARNING: bleach fit rejected for neuron 929 (bleach trend overshoots (residual min=-2586.86 < -2444.23)); using raw trace at time 00:27:19.970719
+WARNING: neuron 929 F0=-408.5589 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:19.970778
+WARNING: neuron 930 F0=-221.4155 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.056825
+WARNING: neuron 931 F0=-2014.2589 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.069391
+WARNING: neuron 932 F0=-16.5021 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.078365
+WARNING: neuron 933 F0=-1188.2474 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.099535
+WARNING: neuron 934 F0=-310.0335 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.114632
+WARNING: neuron 935 F0=-801.5023 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.121224
+WARNING: neuron 936 F0=-209.9901 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.233783
+WARNING: bleach fit rejected for neuron 937 (bleach trend overshoots (residual min=-1652.26 < -812.47)); using raw trace at time 00:27:20.243933
+WARNING: neuron 937 F0=-1202.9902 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.243974
+WARNING: neuron 938 F0=-1928.5617 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.250812
+WARNING: neuron 939 F0=-811.7579 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.282717
+WARNING: neuron 940 F0=-2029.8060 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.292163
+WARNING: neuron 942 F0=-525.2188 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.341579
+WARNING: bleach fit rejected for neuron 943 (bleach trend overshoots (residual min=-1675.02 < -1177.57)); using raw trace at time 00:27:20.473399
+WARNING: neuron 943 F0=-453.5744 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.473463
+WARNING: neuron 944 F0=-544.0122 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.480317
+WARNING: neuron 945 F0=-751.9581 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.489202
+WARNING: neuron 946 F0=-402.8631 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.500129
+WARNING: neuron 947 F0=-412.2309 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.507876
+WARNING: neuron 948 F0=-310.5067 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.516977
+WARNING: neuron 949 F0=-842.6216 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.526207
+WARNING: neuron 950 F0=-989.0872 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.565408
+WARNING: neuron 951 F0=-269.9748 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.572933
+WARNING: neuron 953 F0=-787.9770 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.592100
+WARNING: neuron 954 F0=-801.1032 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.612857
+WARNING: neuron 957 F0=-2663.2272 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.684092
+WARNING: neuron 958 F0=-823.5692 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.980250
+WARNING: neuron 959 F0=-294.8003 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.988346
+WARNING: neuron 960 F0=-2881.4767 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:20.997834
+WARNING: neuron 961 F0=-587.6217 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.012201
+WARNING: neuron 962 F0=-264.0550 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.076442
+WARNING: neuron 963 F0=-462.3610 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.083433
+WARNING: neuron 964 F0=-262.8556 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.096319
+WARNING: bleach fit rejected for neuron 965 (bleach trend overshoots (residual min=-5213.39 < -1978.70)); using raw trace at time 00:27:21.104074
+WARNING: neuron 965 F0=-3188.9061 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.104116
+WARNING: neuron 966 F0=-427.0986 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.126044
+WARNING: neuron 967 F0=-827.9787 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.187818
+WARNING: neuron 968 F0=-893.1825 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.196246
+WARNING: neuron 969 F0=-490.4891 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.209328
+WARNING: neuron 970 F0=-871.9552 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.232588
+WARNING: bleach fit rejected for neuron 971 (bleach trend overshoots (residual min=-3188.17 < -3001.86)); using raw trace at time 00:27:21.242774
+WARNING: neuron 971 F0=-897.0923 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.242814
+WARNING: neuron 972 F0=-1074.1460 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.250348
+WARNING: bleach fit rejected for neuron 973 (bleach trend overshoots (residual min=-2762.45 < -1028.43)); using raw trace at time 00:27:21.339330
+WARNING: neuron 973 F0=-1772.9018 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.339391
+WARNING: neuron 974 F0=-252.4785 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.360147
+WARNING: neuron 975 F0=-419.8262 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.372711
+WARNING: bleach fit rejected for neuron 976 (bleach trend overshoots (residual min=-3955.93 < -2380.90)); using raw trace at time 00:27:21.388096
+WARNING: neuron 976 F0=-2104.9568 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:21.388137
+WARNING: neuron 977 F0=-313.0820 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.639963
+WARNING: bleach fit rejected for neuron 978 (bleach trend overshoots (residual min=-5415.98 < -2459.98)); using raw trace at time 00:27:23.648795
+WARNING: neuron 978 F0=-3153.7406 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.648852
+WARNING: neuron 979 F0=-298.4408 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.876058
+WARNING: neuron 980 F0=-1017.5459 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.884418
+WARNING: neuron 981 F0=-326.3618 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.892358
+WARNING: neuron 982 F0=-1820.0496 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.903533
+WARNING: neuron 983 F0=-531.7022 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.910468
+WARNING: neuron 984 F0=-416.3576 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.917370
+WARNING: bleach fit rejected for neuron 985 (bleach trend overshoots (residual min=-974.17 < -604.93)); using raw trace at time 00:27:23.925052
+WARNING: neuron 985 F0=-542.2091 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:23.925093
+WARNING: neuron 987 F0=-484.9190 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.024596
+WARNING: neuron 988 F0=-732.0534 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.039768
+WARNING: neuron 989 F0=-254.9092 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.052756
+WARNING: neuron 991 F0=-68.4899 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.066154
+WARNING: neuron 992 F0=-544.5064 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.075537
+WARNING: bleach fit rejected for neuron 995 (bleach trend overshoots (residual min=-1894.49 < -1781.40)); using raw trace at time 00:27:24.228339
+WARNING: neuron 995 F0=-1126.0025 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.228391
+WARNING: neuron 996 F0=-391.5628 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.236700
+WARNING: neuron 997 F0=-1424.3828 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.860913
+WARNING: neuron 998 F0=-786.9498 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.885944
+WARNING: neuron 999 F0=-538.9235 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.898784
+WARNING: neuron 1000 F0=-1526.3084 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:24.907917
+WARNING: bleach fit rejected for neuron 1001 (bleach trend overshoots (residual min=-1430.85 < -1387.43)); using raw trace at time 00:27:25.072137
+WARNING: neuron 1001 F0=-271.4366 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.072202
+WARNING: bleach fit rejected for neuron 1002 (bleach trend overshoots (residual min=-2501.93 < -1873.53)); using raw trace at time 00:27:25.078861
+WARNING: neuron 1002 F0=-825.2741 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.078905
+WARNING: neuron 1003 F0=-691.4194 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.093535
+WARNING: neuron 1004 F0=-1782.7518 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.103574
+WARNING: neuron 1005 F0=-1667.8170 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.110740
+WARNING: neuron 1006 F0=-211.4847 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.125168
+WARNING: neuron 1007 F0=-134.2015 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.132511
+WARNING: neuron 1008 F0=-624.6929 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.143394
+WARNING: neuron 1009 F0=-449.6030 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.149853
+WARNING: neuron 1010 F0=-298.2023 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.160508
+WARNING: neuron 1012 F0=-450.7384 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.177054
+WARNING: neuron 1013 F0=-797.0969 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.190735
+WARNING: neuron 1014 F0=-70.4594 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.201219
+WARNING: neuron 1015 F0=-1718.7951 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.215890
+WARNING: neuron 1016 F0=-644.4566 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.223980
+WARNING: neuron 1017 F0=-266.3384 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.288220
+WARNING: neuron 1019 F0=-339.6254 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.307595
+WARNING: neuron 1020 F0=-401.4679 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.315724
+WARNING: neuron 1021 F0=-313.1793 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.341980
+WARNING: neuron 1022 F0=-538.4335 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.360559
+WARNING: neuron 1023 F0=-341.8757 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.442724
+WARNING: neuron 1024 F0=-111.3519 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.451500
+WARNING: neuron 1025 F0=-921.1414 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.461646
+WARNING: neuron 1026 F0=-127.4264 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.712279
+WARNING: neuron 1027 F0=-218.9232 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.762972
+WARNING: neuron 1028 F0=-534.7604 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.771504
+WARNING: neuron 1029 F0=-200.9934 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.812251
+WARNING: bleach fit rejected for neuron 1030 (bleach trend overshoots (residual min=-2842.99 < -2770.57)); using raw trace at time 00:27:25.819656
+WARNING: neuron 1030 F0=-20.3753 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.819736
+WARNING: neuron 1031 F0=-1677.1784 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.827349
+WARNING: bleach fit rejected for neuron 1032 (bleach trend overshoots (residual min=-5907.06 < -2276.00)); using raw trace at time 00:27:25.837986
+WARNING: neuron 1032 F0=-3459.2805 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.838027
+WARNING: neuron 1033 F0=-1790.5027 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:25.846009
+WARNING: neuron 1034 F0=-874.2405 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.068963
+WARNING: neuron 1035 F0=-355.0428 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.080528
+WARNING: neuron 1036 F0=-307.7789 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.132701
+WARNING: neuron 1037 F0=-437.5353 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.141153
+WARNING: neuron 1038 F0=-166.1458 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.150081
+WARNING: neuron 1039 F0=-345.6030 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.161222
+WARNING: neuron 1040 F0=-1102.3650 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.168497
+WARNING: neuron 1042 F0=-276.6960 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.183917
+WARNING: bleach fit rejected for neuron 1043 (bleach trend overshoots (residual min=-2686.45 < -1845.05)); using raw trace at time 00:27:26.207468
+WARNING: neuron 1043 F0=-649.4062 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.207513
+WARNING: neuron 1044 F0=-1419.1597 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.218078
+WARNING: neuron 1045 F0=-56.3974 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.242481
+WARNING: neuron 1046 F0=-344.2131 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.267651
+WARNING: neuron 1047 F0=-1437.3773 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.299710
+WARNING: neuron 1049 F0=-221.4433 <= 0 after bleach correction; clamping to 1e-6 at time 00:27:26.318747
+dF/F: percentile=8.0  bleach_correct=True at time 00:27:26.819740
+ at time 00:27:26.823030
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_with_mask_filters_3/ at time 00:27:26.823045
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 00:27:26.825860
+ at time 00:27:26.869276
+====================================================================== at time 00:27:26.869322
+DONE  |  time-split  |  145544_timesplit_512_with_mask_filters_3  |  61.8 min at time 00:27:26.869338
+====================================================================== at time 00:27:26.869352
+Monitoring ended at 00:27:28.784605
