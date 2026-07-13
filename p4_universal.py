@@ -669,7 +669,9 @@ def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
 
     mask = mean_img > thr
     if mask.sum() < 100:
-        print(f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask.")
+        print(
+            f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask."
+        )
         return np.ones_like(mask, dtype=bool)
 
     h, w = mask.shape
@@ -751,7 +753,9 @@ def compute_dff(traces: np.ndarray) -> np.ndarray:
     return dff
 
 
-def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, np.ndarray, dict]:
+def preprocess_movie(
+    data: np.ndarray, label: str = ""
+) -> tuple[np.ndarray, np.ndarray, dict]:
     """
     Preprocessing pipeline: resolution + optional stripe removal + optional
     brain mask (default ON; --no-mask disables it).
@@ -850,15 +854,14 @@ def get_base_params(best_params: dict = None) -> dict:
             border_nan="copy",
         )
         ssub = 2  # subsample 2x to cut init time ~16x on large FOV
-    
+
     p_value = best.get("p", 1)
 
     return {
         "data": {
             "fr": 5,  # TODO: verify actual frame rate from acquisition metadata/timestamps
-            "decay_time": 1,  # GCaMP8m off-kinetics; revisit once measured from real transients
-            # "dxy": [2.0, 2.0]
-            "gnb": 0
+            "decay_time": 1.0,
+            "gnb": 0,
         },
         "init": {
             "nb": 0,
@@ -876,10 +879,7 @@ def get_base_params(best_params: dict = None) -> dict:
         "ring": {
             "ring_size_factor": 1.4,
         },
-        "motion": {
-            "pw_rigid": True,
-            **mc
-        },
+        "motion": {"pw_rigid": True, **mc},
         "preprocess": {
             "p": p_value,
         },
@@ -910,7 +910,6 @@ LOADED_BEST_PARAMS = load_best_params(BEST_PARAMS_PATH)
 BASE_PARAMS = get_base_params(LOADED_BEST_PARAMS)
 
 
-
 # =============================================================================
 # CNMF + REFIT VALIDATION
 # =============================================================================
@@ -936,10 +935,11 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
 def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
     """Stage: build CNMFParams from nested BASE_PARAMS and overrides."""
     import copy
+
     p = copy.deepcopy(BASE_PARAMS)
-    
+
     p.setdefault("data", {})["fnames"] = [fname_mmap]
-    
+
     # Merge any flat overrides into p["init"] or top-level groups if provided
     if params_override:
         for k, v in params_override.items():
@@ -967,7 +967,7 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
 
     # Pass the correctly nested dict to CNMFParams
     return params_module.CNMFParams(params_dict=p)
-    
+
 
 def _setup_cluster():
     """Stage: start multiprocessing cluster. Falls back to single-threaded on failure."""
@@ -1075,6 +1075,7 @@ def _refit(cnmf_obj, images, cluster):
     except Exception as exc:
         print(f"  [STAGE:refit] failed, keeping pre-refit estimates: {exc}", flush=True)
         return cnmf_obj
+
 
 def run_cnmf(
     params_override: dict,
@@ -1456,7 +1457,9 @@ def test_cnmf(
         if keep_pre:
             stability = compute_stability(tune_A, cnmf_obj.estimates.A[:, keep_pre])
 
-    metrics, keep, counts = score_run(cnmf_obj, Yr, dims, mask, gSig, stability=stability)
+    metrics, keep, counts = score_run(
+        cnmf_obj, Yr, dims, mask, gSig, stability=stability
+    )
     metrics["label"] = label
     metrics["runtime_s"] = round(rt, 1)
     metrics["filter_counts"] = counts
@@ -1753,7 +1756,9 @@ def mode_plane_split():
     print(f"\nZ={Z}; reference z={tune_z}, test z=0..{Z-1}\\{{tune_z}}")
 
     tune_raw = _load_plane(tune_z)
-    tune_data, tune_mask, prep_info = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
+    tune_data, tune_mask, prep_info = preprocess_movie(
+        tune_raw, label=f"tune_z{tune_z}"
+    )
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / f"tune_z{tune_z}")
 
@@ -1949,7 +1954,9 @@ def mode_file_split():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes_t if _nplanes_t is not None else ARGS.n_planes,
     )
-    tune_data, tune_mask, prep_info_tune = preprocess_movie(tune_raw, label=f"tune_z{tune_z}")
+    tune_data, tune_mask, prep_info_tune = preprocess_movie(
+        tune_raw, label=f"tune_z{tune_z}"
+    )
     dims = tune_data.shape[1:]
     tune_mmap = array_to_memmap(tune_data, WORK_DIR / "tune")
 
