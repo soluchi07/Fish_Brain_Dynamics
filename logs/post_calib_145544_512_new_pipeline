@@ -1,0 +1,62 @@
+Monitoring started at 23:46:19.516399
+Loaded best params from results/calib_20iv26_512/calibration_summary.json: ['gSig', 'gSig_filt', 'min_corr', 'min_pnr', 'rf', 'stride', 'p', 'merge_thr'] at time 23:53:31.441849
+====================================================================== at time 23:53:31.441915
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512_new_pipeline at time 23:53:31.441935
+====================================================================== at time 23:53:31.441949
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_new_pipeline at time 23:53:31.441969
+Resolution : 512 at time 23:53:31.441982
+Brain mask : ON at time 23:53:31.441994
+Quality    : ON at time 23:53:31.442006
+Base CNMF params: {'fr': 5, 'decay_time': 1.0, 'method_init': 'corr_pnr', 'K': None, 'nb': 0, 'nb_patch': 0, 'center_psf': True, 'ring_size_factor': 1.4, 'merge_thr': 0.85, 'use_cnn': False, 'min_SNR': 1.5, 'rval_thr': 0.85, 'del_duplicates': True, 'ssub': 1, 'tsub': 1, 'only_init': False, 'pw_rigid': True, 'max_shifts': (3, 3), 'strides': (48, 48), 'overlaps': (24, 24), 'max_deviation_rigid': 2, 'gSig': 3, 'gSig_filt': 4, 'min_corr': 0.5118676301124861, 'min_pnr': 12, 'rf': 80, 'stride': 40, 'p': 1} at time 23:53:31.442033
+ at time 23:53:31.442048
+--- TIME-SPLIT mode --- at time 23:53:31.442061
+Auto-detected n_planes=7 at time 23:53:31.442074
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 23:53:31.442089
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 23:53:31.442106
+[STAGE] Loading movie data (Format: interleaved)... at time 23:53:31.442126
+Interleaved: z=3/7 planes -> 700 frames at time 23:53:31.442150
+[STAGE] Running preprocessing (masking, stripe removal, downsampling)... at time 23:53:31.442171
+Downsampling -> (512, 512) at time 23:53:31.442191
+[INFO] Time split established: tune on frames 0-349, total test set: 700 frames. at time 23:53:31.442211
+[STAGE] Creating memory maps for processing... at time 23:53:31.442228
+ at time 23:53:31.462364
+Re-running best params on tune half... at time 23:53:31.462398
+[STAGE] Running initial CNMF on tuning half for stability metrics... at time 23:53:31.462414
+[LOG] run_cnmf: Initializing parameters for /home/abl-dell/caiman_data/temp/tune_half_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 23:53:31.462430
+[LOG] run_cnmf: Setting up multiprocessing cluster... at time 23:53:31.462445
+[LOG] run_cnmf: Running motion correction... at time 23:53:58.755556
+[LOG] run_cnmf: Motion correction complete. Saving new memmap... at time 23:53:58.755594
+[LOG] run_cnmf: Initializing CNMF object... at time 02:31:10.081299
+[LOG] run_cnmf: Loading memmap and starting .fit()... at time 02:31:10.081328
+[LOG] run_cnmf: .fit() completed in 9413.88s at time 02:31:10.081337
+[LOG] run_cnmf: Evaluating components... at time 02:31:10.081345
+*** Variable cnn_preds has not the same number of components as A *** at time 02:31:10.081356
+[LOG] run_cnmf: Component selection finished. at time 02:31:10.081371
+[LOG] run_cnmf: Cleaning up cluster... at time 02:31:10.081378
+[STAGE] Running final CNMF pipeline on full dataset... at time 02:31:10.081386
+ at time 02:31:10.091149
+============================================================ at time 02:31:10.091180
+TEST: full_movie at time 02:31:10.091194
+============================================================ at time 02:31:10.091207
+[LOG] run_cnmf: Initializing parameters for /home/abl-dell/caiman_data/temp/full_movie_d1_512_d2_512_d3_1_order_C_frames_700.mmap at time 02:31:10.091220
+[LOG] run_cnmf: Setting up multiprocessing cluster... at time 02:31:10.091233
+[LOG] run_cnmf: Running motion correction... at time 02:31:39.961804
+[LOG] run_cnmf: Motion correction complete. Saving new memmap... at time 02:31:39.961842
+[LOG] run_cnmf: Initializing CNMF object... at time 04:33:26.045468
+[LOG] run_cnmf: Loading memmap and starting .fit()... at time 04:33:26.045514
+[LOG] run_cnmf: .fit() completed in 7210.27s at time 04:33:26.045531
+[LOG] run_cnmf: Evaluating components... at time 04:33:26.045545
+*** Variable cnn_preds has not the same number of components as A *** at time 04:33:26.045560
+[LOG] run_cnmf: Component selection finished. at time 04:33:26.045572
+[LOG] run_cnmf: Cleaning up cluster... at time 04:33:26.045585
+Raw neurons: 15069  kept: 1975  composite: -0.4482 stability: 0.048  t=7215s at time 04:33:26.045602
+[STAGE] Finalizing run and saving summary... at time 04:33:26.045616
+ at time 04:33:26.045632
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_new_pipeline/ at time 04:33:26.045647
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 04:33:26.045695
+[STAGE] Time-split mode completed successfully. at time 04:33:26.045709
+ at time 04:33:26.045722
+====================================================================== at time 04:33:26.045737
+DONE  |  time-split  |  145544_timesplit_512_new_pipeline  |  287.0 min at time 04:33:26.045750
+====================================================================== at time 04:33:26.045763
+Monitoring ended at 04:33:28.315939

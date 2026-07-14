@@ -1,0 +1,28 @@
+Monitoring started at 09:42:12.371596
+Loaded best params from results/calib_20iv26_512/calibration_summary.json: ['gSig', 'gSig_filt', 'min_corr', 'min_pnr', 'rf', 'stride', 'p', 'merge_thr'] at time 09:49:25.905305
+====================================================================== at time 09:49:25.905356
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512_new_pipeline_no_mask at time 09:49:25.905372
+====================================================================== at time 09:49:25.905382
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_new_pipeline_no_mask at time 09:49:25.905396
+Resolution : 512 at time 09:49:25.905406
+Brain mask : OFF at time 09:49:25.905415
+Quality    : ON at time 09:49:25.905424
+Base CNMF params: {'fr': 5, 'decay_time': 1.0, 'method_init': 'corr_pnr', 'K': None, 'nb': 0, 'nb_patch': 0, 'center_psf': True, 'ring_size_factor': 1.4, 'merge_thr': 0.85, 'use_cnn': False, 'min_SNR': 1.5, 'rval_thr': 0.85, 'del_duplicates': True, 'ssub': 1, 'tsub': 1, 'only_init': False, 'pw_rigid': True, 'max_shifts': (3, 3), 'strides': (48, 48), 'overlaps': (24, 24), 'max_deviation_rigid': 2, 'gSig': 3, 'gSig_filt': 4, 'min_corr': 0.5118676301124861, 'min_pnr': 12, 'rf': 80, 'stride': 40, 'p': 1} at time 09:49:25.905441
+ at time 09:49:25.905463
+--- TIME-SPLIT mode --- at time 09:49:25.905470
+Auto-detected n_planes=7 at time 09:49:25.905478
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 09:49:25.905486
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 09:49:25.905493
+[STAGE] Loading movie data (Format: interleaved)... at time 09:49:25.905501
+Interleaved: z=3/7 planes -> 700 frames at time 09:49:25.905508
+[STAGE] Running preprocessing (masking, stripe removal, downsampling)... at time 09:49:25.905516
+Downsampling -> (512, 512) at time 09:49:25.905522
+[INFO] Time split established: tune on frames 0-349, total test set: 700 frames. at time 09:49:25.905530
+[STAGE] Creating memory maps for processing... at time 09:49:25.905537
+ at time 09:49:25.925937
+Re-running best params on tune half... at time 09:49:25.925970
+[STAGE] Running initial CNMF on tuning half for stability metrics... at time 09:49:25.925985
+[LOG] run_cnmf: Initializing parameters for /home/abl-dell/caiman_data/temp/tune_half_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 09:49:25.926000
+[LOG] run_cnmf: Setting up multiprocessing cluster... at time 09:49:25.926013
+[LOG] run_cnmf: Running motion correction... at time 09:49:52.857633
+[LOG] run_cnmf: Motion correction complete. Saving new memmap... at time 09:49:52.857722

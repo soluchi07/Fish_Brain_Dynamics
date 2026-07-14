@@ -10,7 +10,7 @@
   "params": {
     "data": {
       "fr": 5,
-      "decay_time": 1,
+      "decay_time": 1.0,
       "gnb": 0
     },
     "init": {
@@ -107,7 +107,7 @@
       "stability": 0.17769607843137256,
       "composite_score": -0.24556191924165072,
       "label": "test_half (frames 350-699)",
-      "runtime_s": 908.8,
+      "runtime_s": 906.5,
       "filter_counts": {
         "input": 1817,
         "circularity_rejected": 1001,
@@ -125,7 +125,7 @@
       "stability": 0.0009523809523809524,
       "composite_score": -0.4576425281813124,
       "label": "full_movie",
-      "runtime_s": 957.0,
+      "runtime_s": 963.4,
       "filter_counts": {
         "input": 2288,
         "circularity_rejected": 1238,

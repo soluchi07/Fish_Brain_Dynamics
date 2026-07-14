@@ -1,0 +1,96 @@
+{
+  "mode": "time-split",
+  "run_name": "145544_timesplit_512_new_pipeline",
+  "resolution": "512",
+  "brain_mask": true,
+  "stripe_removal": true,
+  "quality_filters": true,
+  "best_params": {
+    "fr": 5,
+    "decay_time": 1.0,
+    "method_init": "corr_pnr",
+    "K": null,
+    "nb": 0,
+    "nb_patch": 0,
+    "center_psf": true,
+    "ring_size_factor": 1.4,
+    "merge_thr": 0.85,
+    "use_cnn": false,
+    "min_SNR": 1.5,
+    "rval_thr": 0.85,
+    "del_duplicates": true,
+    "ssub": 1,
+    "tsub": 1,
+    "only_init": false,
+    "pw_rigid": true,
+    "max_shifts": [
+      3,
+      3
+    ],
+    "strides": [
+      48,
+      48
+    ],
+    "overlaps": [
+      24,
+      24
+    ],
+    "max_deviation_rigid": 2,
+    "gSig": 3,
+    "gSig_filt": 4,
+    "min_corr": 0.5118676301124861,
+    "min_pnr": 12,
+    "rf": 80,
+    "stride": 40,
+    "p": 1
+  },
+  "format_info": {
+    "format": "interleaved",
+    "n_files": 1,
+    "sample_shape": [
+      4900,
+      2048,
+      2048
+    ],
+    "original_shape": [
+      700,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": true,
+    "mask_coverage_frac": 0.19158935546875,
+    "final_shape": [
+      700,
+      512,
+      512
+    ]
+  },
+  "tests": {
+    "full_movie": {
+      "n_neurons_pre": 15069,
+      "n_neurons": 1975,
+      "recon_error": 0.9992735936737442,
+      "spatial_compactness": 0.864543090555889,
+      "trace_sparsity": 21.74533606303219,
+      "stability": 0.04847859721505931,
+      "composite_score": -0.4482426561508937,
+      "label": "full_movie",
+      "runtime_s": 7215.0,
+      "filter_counts": {
+        "input": 15069,
+        "circularity_rejected": 4010,
+        "max_area_rejected": 0,
+        "in_mask_rejected": 9084,
+        "final": 1975
+      }
+    }
+  },
+  "z_index": null,
+  "T_total": 700,
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom"
+}

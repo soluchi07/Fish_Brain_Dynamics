@@ -21,6 +21,15 @@ import warnings
 from pathlib import Path
 from typing import Optional
 
+import signal
+import cv2
+import shutil
+
+try:
+    cv2.setNumThreads(0)
+except:
+    pass
+
 import matplotlib
 
 matplotlib.use("Agg")
@@ -119,10 +128,6 @@ def parse_args() -> argparse.Namespace:
         help="Override auto-detect format",
     )
 
-    # Bayesian search # TODO remove bayesian search  
-    # p.add_argument("--n-calls", type=int, default=10)
-    # p.add_argument("--n-initial", type=int, default=5)
-
     # Quality filter thresholds
     p.add_argument(
         "--min-circularity",
@@ -184,8 +189,13 @@ elif ARGS.mode in ("file-plane-split", "file-split"):
 
 OUTPUT_DIR = RESULTS_ROOT / ARGS.run_name
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-WORK_DIR = OUTPUT_DIR / "_work"
+
+WORK_DIR = Path("/dev/shm/caiman_work") / ARGS.run_name
 WORK_DIR.mkdir(parents=True, exist_ok=True)
+
+os.environ["CAIMAN_DATA"] = "/dev/shm/caiman_data"
+# WORK_DIR = OUTPUT_DIR / "_work"
+# WORK_DIR.mkdir(parents=True, exist_ok=True)
 
 # [UPGRADE 4: Cluster & Multiprocessing] Worker resolution
 if ARGS.n_workers is not None:
@@ -238,6 +248,12 @@ if not hasattr(cm, "paths"):
 # EXTERNAL PARAMETERS [UPGRADE 1]
 # =============================================================================
 
+def cleanup_shm():
+    shm_work = Path("/dev/shm/caiman_work") / ARGS.run_name
+    if shm_work.exists():
+        shutil.rmtree(shm_work)
+        print(f"[CLEANUP] Removed {shm_work}")
+
 
 def load_best_params(path: Path) -> dict:
     """Load external parameters to avoid hardcoding defaults."""
@@ -266,7 +282,6 @@ print(f"Output dir : {OUTPUT_DIR}")
 print(f"Resolution : {ARGS.resolution}")
 print(f"Brain mask : {'OFF' if ARGS.no_mask else 'ON'}")
 print(f"Quality    : {'OFF' if ARGS.no_quality_filters else 'ON'}")
-print(f"Trials     : n_calls={ARGS.n_calls}  n_initial={ARGS.n_initial}") # TODO bayesian opt fix
 
 
 # =============================================================================
@@ -384,12 +399,17 @@ def load_movie(
         z_index = nz // 2 if z_index is None else z_index
         if z_index >= nz:
             raise ValueError(f"z_index {z_index} >= n_planes {nz}")
-        indices = list(range(z_index, T_full, nz))
-        if max_frames:
-            indices = indices[:max_frames]
-        print(f"  Interleaved: z={z_index}/{nz} planes -> {len(indices)} frames")
+        
         with h5py.File(files[0], "r") as fh:
-            data = fh["Data"][indices].astype(np.float32)
+            data = fh["Data"][z_index:T_full:nz]
+
+        if max_frames:
+            data = data[:max_frames]
+        
+        data = data.astype(np.float32)
+        
+        print(f"  Interleaved: z={z_index}/{nz} planes -> {data.shape[0]} frames")
+        
         return data
 
     if fmt == "multi-tp":
@@ -424,20 +444,26 @@ def load_movie(
 
     if fmt in ("single-movie", "legacy"):
         T_full, H, W = shape
+        
         with h5py.File(files[0], "r") as fh:
             if n_planes and n_planes > 1:
                 z_index = n_planes // 2 if z_index is None else z_index
-                indices = list(range(z_index, T_full, n_planes))
+
+                data = fh["Data"][z_index:T_full:nz]
+
                 if max_frames:
-                    indices = indices[:max_frames]
+                    data = data[:max_frames]
+        
+        
                 print(
                     f"  Striding {T_full} frames by n_planes={n_planes} (z={z_index})..."
                 )
-                data = fh["Data"][indices].astype(np.float32)
             else:
                 T = T_full if max_frames is None else min(T_full, max_frames)
                 print(f"  Loading {T}/{T_full} frames from single file...")
-                data = fh["Data"][:T].astype(np.float32)
+                data = fh["Data"][:T]
+            data = data.astype(np.float32)
+            
         return data
 
     raise ValueError(f"Unknown format: {fmt}")
@@ -623,7 +649,10 @@ def get_base_params(external_params: dict = None) -> dict:
         "only_init": external.get("only_init", False),
         "pw_rigid": external.get("pw_rigid", True),
         **mc,
+        **external
     }
+
+    print("  Base CNMF params:", {k: v for k, v in base.items() if k not in ("fnames",)})
     return base
 
 
@@ -647,7 +676,6 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
 
 
 def _setup_cluster():
-    """[UPGRADE 4: Cluster Setup for Multiprocessing]"""
     try:
         _, cluster, n_processes = cm.cluster.setup_cluster(
             backend="multiprocessing", n_processes=N_WORKERS, single_thread=False
@@ -657,6 +685,27 @@ def _setup_cluster():
         print(f"  [STAGE:cluster_setup] failed: {exc}", flush=True)
         return None, 1
 
+def stop_cluster_hard(cluster):
+    if cluster is None:
+        return
+    try:
+        cluster.terminate()  # sends SIGTERM to all workers
+        cluster.join()       # BLOCKS until all workers have actually exited
+        cluster.close()      # releases pool resources
+    except Exception as e:
+        print(f"[LOG] stop_cluster_hard: {e}, falling back to SIGKILL")
+        try:
+            # terminate() + join() failed, force kill
+            for p in cluster._pool:
+                try:
+                    os.kill(p.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            cluster.join()
+        except Exception:
+            pass
+    
+    print("[LOG] stop_cluster_hard: all workers confirmed dead")
 
 def run_cnmf(
     params_override: dict,
@@ -664,10 +713,7 @@ def run_cnmf(
     do_mc: bool = True,
     do_filter_caiman: bool = True,
 ):
-    """
-    [UPGRADE 3: Execution Update]
-    Now uses _setup_cluster(), MotionCorrect explicitly, and .fit() instead of .fit_file().
-    """
+    print(f"[LOG] run_cnmf: Initializing parameters for {fname_mmap}")
     p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
 
     for key in ("gSig", "gSig_filt"):
@@ -683,6 +729,7 @@ def run_cnmf(
     p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
     opts = params_module.CNMFParams(params_dict=p)
+    print(f"[LOG] run_cnmf: Setting up multiprocessing cluster...")
     cluster, n_processes = _setup_cluster()
 
     t0 = time.time()
@@ -691,45 +738,62 @@ def run_cnmf(
 
         # [UPGRADE 3] Explicit Motion Correction Execution
         if do_mc:
+            print(f"[LOG] run_cnmf: Running motion correction...")
             mc = MotionCorrect([fname_mmap], dview=cluster, **opts.get_group("motion"))
             mc.motion_correct(save_movie=True)
+            
+            print("[LOG] run_cnmf: Shutting down cluster after motion correction...")
+            
+
+            stop_cluster_hard(cluster)
+            cluster = None
+
+            print(f"[LOG] run_cnmf: Motion correction complete. Saving new memmap...")
             fname_to_use = cm.save_memmap(
                 mc.mmap_file,
                 base_name="memmap_",
                 order="C",
                 border_to_0=0,
-                dview=cluster,
             )
 
+            # Restart cluster for the actual CNMF fit (where parallelism matters)
+            print("[LOG] run_cnmf: Restarting cluster for CNMF fit...")
+            cluster, n_processes = _setup_cluster()
+
+        print(f"[LOG] run_cnmf: Initializing CNMF object...")
         opts.change_params({"fnames": [fname_to_use]})
         cnmf_obj = cnmf_module.CNMF(n_processes=n_processes, params=opts, dview=cluster)
 
-        # [UPGRADE 3] Core fit usage instead of fit_file
+        print(f"[LOG] run_cnmf: Loading memmap and starting .fit()...")
         Yr, dims, num_frames = cm.load_memmap(fname_to_use)
         images = np.reshape(Yr.T, [num_frames] + list(dims), order="F")
         cnmf_obj.fit(images)
+        print(f"[LOG] run_cnmf: .fit() completed in {time.time() - t0:.2f}s")
 
         if (
             do_filter_caiman
             and cnmf_obj.estimates.A is not None
             and cnmf_obj.estimates.A.shape[1] > 0
         ):
+            print(f"[LOG] run_cnmf: Evaluating components...")
             try:
                 cnmf_obj.estimates.evaluate_components(
                     imgs=images, params=cnmf_obj.params, dview=cluster
                 )
                 cnmf_obj.estimates.select_components(use_object=True)
-            except Exception:
-                pass
+                print(f"[LOG] run_cnmf: Component selection finished.")
+            except Exception as e:
+                print(f"[LOG] run_cnmf: Component evaluation skipped/failed: {e}")
         return cnmf_obj, time.time() - t0
     except Exception as exc:
-        print(f"    CNMF failed: {exc}")
+        print(f"    [ERROR] CNMF failed: {exc}")
         return None, time.time() - t0
     finally:
         # Clean up cluster
+        print(f"[LOG] run_cnmf: Cleaning up cluster...")
         if cluster is not None:
             try:
-                caiman.stop_server(dview=cluster)
+                stop_cluster_hard(cluster)
             except Exception:
                 pass
 
@@ -1010,7 +1074,6 @@ def save_summary(
         "brain_mask": not ARGS.no_mask,
         "stripe_removal": not ARGS.no_stripe,
         "quality_filters": not ARGS.no_quality_filters,
-        "n_calls": ARGS.n_calls,
         "best_params": best_params,
         "format_info": fmt_info,
         "tests": {},
@@ -1070,6 +1133,8 @@ def mode_time_split():
         Z = sample_shape[0]
         z_index = Z // 2 if z_index is None else z_index
 
+    # Data Loading Stage
+    print(f"[STAGE] Loading movie data (Format: {fmt})...")
     raw = load_movie(
         ARGS.data_dir,
         fmt,
@@ -1079,6 +1144,9 @@ def mode_time_split():
         max_frames=ARGS.max_frames,
         n_planes=det_n_planes,
     )
+
+    # Preprocessing Stage
+    print(f"[STAGE] Running preprocessing (masking, stripe removal, downsampling)...")
     data, mask, prep_info = preprocess_movie(raw, label="movie")
 
     T_full = data.shape[0]
@@ -1087,24 +1155,34 @@ def mode_time_split():
         sys.exit(1)
         
     mid = T_full // 2
-    print(
-        f"\nTime split: tune frames 0-{mid-1} ({mid}))"
-    )
+    
+    print(f"[INFO] Time split established: tune on frames 0-{mid-1}, total test set: {T_full} frames.")
     
     dims = data.shape[1:]
 
+    # Memory Mapping Stage
+    print(f"[STAGE] Creating memory maps for processing...")
     tune_mmap = array_to_memmap(data[:mid], WORK_DIR / "tune_half")
-    # test_mmap = array_to_memmap(data[mid:], WORK_DIR / "test_half")
+    
 
     print("\nRe-running best params on tune half...")
+
+    # Tuning Stage
+    print(f"[STAGE] Running initial CNMF on tuning half for stability metrics...")
     cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
+
+    gSig_val = BASE_PARAMS["gSig"]
+    gSig_int = int(gSig_val[0]) if isinstance(gSig_val, (tuple, list)) else int(gSig_val)
+    
     tune_keep, _ = (
-        quality_filter(cnmf_tune, dims, mask, int(BASE_PARAMS["gSig"]))
+        quality_filter(cnmf_tune, dims, mask, gSig_int)
         if cnmf_tune
         else ([], {})
     )
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
+    # Full Pipeline Execution Stage
+    print(f"[STAGE] Running final CNMF pipeline on full dataset...")
     full_mmap = array_to_memmap(data, WORK_DIR / "full_movie")
     full_metrics = test_cnmf(
         BASE_PARAMS,
@@ -1117,6 +1195,8 @@ def mode_time_split():
     )
 
 
+    # Reporting Stage
+    print(f"[STAGE] Finalizing run and saving summary...")
     fmt_info = {
         "format": fmt,
         "n_files": len(files),
@@ -1131,6 +1211,9 @@ def mode_time_split():
         fmt_info,
         extra={"z_index": z_index, "T_total": T_full, "data_dir": str(ARGS.data_dir)},
     )
+
+    print(f"[STAGE] Time-split mode completed successfully.")
+    cleanup_shm()
 
 def mode_plane_split():
     pass
@@ -1151,10 +1234,11 @@ MODES = {
     "file-split": mode_file_split,
 }
 
-t_start = time.time()
-MODES[ARGS.mode]()
-elapsed_min = (time.time() - t_start) / 60.0
+if __name__ == "__main__":
+    t_start = time.time()
+    MODES[ARGS.mode]()
+    elapsed_min = (time.time() - t_start) / 60.0
 
-print(f"\n{'='*70}")
-print(f"DONE  |  {ARGS.mode}  |  {ARGS.run_name}  |  {elapsed_min:.1f} min")
-print(f"{'='*70}")
+    print(f"\n{'='*70}")
+    print(f"DONE  |  {ARGS.mode}  |  {ARGS.run_name}  |  {elapsed_min:.1f} min")
+    print(f"{'='*70}")
