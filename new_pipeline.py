@@ -7,10 +7,12 @@ Refactored to include:
   3. Execution Update (motion correction & .fit() instead of .fit_file())
   4. Cluster & Multiprocessing (CaImAn cluster setup with n_workers)
 """
+
 # Must be the first lines of the file, before ALL imports
 from __future__ import annotations
 
 import os
+
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
@@ -73,7 +75,6 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--data-dir", type=Path, default=None, help="Folder for time-split, plane-split"
     )
-    
 
     # Z-plane selection
     p.add_argument(
@@ -364,8 +365,9 @@ def discover(
 
 
 # =============================================================================
-# UNIVERSAL LOADER 
+# UNIVERSAL LOADER
 # =============================================================================
+
 
 def load_movie(
     folder: Path,
@@ -471,6 +473,10 @@ def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
 
 
 def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
+    """
+    Build a binary mask of brain pixels using Otsu on the mean image.
+    Cleans up with morphological opening/closing and keeps the largest blob.
+    """
     mean_img = data.mean(axis=0)
     try:
         thr = threshold_otsu(mean_img)
@@ -479,6 +485,9 @@ def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
 
     mask = mean_img > thr
     if mask.sum() < 100:
+        print(
+            f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask."
+        )
         return np.ones_like(mask, dtype=bool)
 
     h, w = mask.shape
@@ -488,7 +497,11 @@ def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
     mask = remove_small_objects(mask, min_size=max(200, (h * w) // 5000))
 
     if mask.sum() < 100:
+        print(f"  WARNING: brain mask too small after cleanup. Disabling mask.")
         return np.ones_like(mask, dtype=bool)
+    
+    coverage = 100.0 * mask.sum() / mask.size
+    print(f"  Brain mask coverage: {coverage:.1f}% of frame")
     return mask
 
 
@@ -499,6 +512,7 @@ def apply_mask(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
 def preprocess_movie(
     data: np.ndarray, label: str = ""
 ) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Full preprocessing pipeline. Returns (preprocessed_movie, mask, metadata_dict)."""
     info = {"original_shape": tuple(data.shape)}
 
     if ARGS.resolution == "512":
@@ -516,7 +530,7 @@ def preprocess_movie(
     if not ARGS.no_stripe:
         data, col_median = stripe_remove(data)
         info["stripe_removed"] = True
-        
+
         # Save stripe plot
         fig, axes = plt.subplots(1, 2, figsize=(13, 5))
         axes[0].imshow(data[data.shape[0] // 2], cmap="gray")
@@ -536,7 +550,7 @@ def preprocess_movie(
         data = apply_mask(data, mask)
         info["brain_mask_used"] = True
         info["mask_coverage_frac"] = float(mask.sum() / mask.size)
-        
+
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.imshow(data.mean(axis=0), cmap="gray")
         ax.contour(mask, levels=[0.5], colors="lime", linewidths=1.0)
@@ -603,10 +617,12 @@ def get_base_params(external_params: dict = None) -> dict:
         "only_init": external.get("only_init", False),
         "pw_rigid": external.get("pw_rigid", True),
         **mc,
-        **external
+        **external,
     }
 
-    print("  Base CNMF params:", {k: v for k, v in base.items() if k not in ("fnames",)})
+    print(
+        "  Base CNMF params:", {k: v for k, v in base.items() if k not in ("fnames",)}
+    )
     return base
 
 
@@ -629,9 +645,8 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
     )
 
 
-
 def _setup_cluster(nworkers=N_WORKERS):
-    workers = min(N_WORKERS, nworkers) 
+    workers = min(N_WORKERS, nworkers)
     try:
         _, cluster, n_processes = cm.cluster.setup_cluster(
             backend="multiprocessing", n_processes=workers, single_thread=False
@@ -640,14 +655,15 @@ def _setup_cluster(nworkers=N_WORKERS):
     except Exception as exc:
         print(f"  [STAGE:cluster_setup] failed: {exc}", flush=True)
         return None, 1
-    
+
+
 def _stop_cluster(cluster):
     # Sends the termination signal to the workers
     cm.stop_server(dview=cluster)
-    
+
     # Synchronously blocks the script until every single worker is dead
     for process in multiprocessing.active_children():
-        process.join() 
+        process.join()
 
 
 def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
@@ -667,6 +683,7 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
         p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
 
     return params_module.CNMFParams(params_dict=p)
+
 
 def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     """Stage: motion correction. Raises on failure — caller decides how to handle."""
@@ -692,9 +709,7 @@ def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
 
     print(f"[LOG] run_cnmf: Loading memmap...")
     Yr, dims, num_frames = cm.load_memmap(fname_to_use)
-    images = np.reshape(
-        Yr.T, [num_frames] + list(dims), order="F"
-    )  
+    images = np.reshape(Yr.T, [num_frames] + list(dims), order="F")
 
     print("[STAGE:fit] starting", flush=True)
     cnmf_obj.fit(images)
@@ -804,7 +819,7 @@ def run_cnmf(
                 "  [STAGE:motion_correction] skipped — using precomputed mmap",
                 flush=True,
             )
-        
+
         cluster, n_processes = _setup_cluster()
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
@@ -814,9 +829,9 @@ def run_cnmf(
 
         if do_refit and images is not None and cnmf_obj.estimates.A.shape[1] > 0:
             cnmf_obj = _refit(cnmf_obj, images, cluster)
-            
+
         if do_filter_caiman and images is not None:
-            _evaluate_and_select(cnmf_obj, images, cluster)        
+            _evaluate_and_select(cnmf_obj, images, cluster)
 
         return cnmf_obj, time.time() - t0, fname_to_use
 
@@ -832,6 +847,7 @@ def run_cnmf(
                 _stop_cluster(cluster)
             except Exception:
                 pass
+
 
 def quality_filter(
     cnmf_obj, dims: tuple[int, int], mask: np.ndarray, gSig: int
@@ -1037,7 +1053,7 @@ def test_cnmf(
     print(
         f"  Raw neurons: {n_pre}  kept: {n}  composite: {metrics['composite_score']:+.4f} stability: {stability:.3f}  t={rt:.0f}s"
     )
-    
+
     if cnmf_obj is not None and n > 0:
         safe = (
             label.replace(" ", "_").replace("/", "_").replace("(", "").replace(")", "")
@@ -1124,7 +1140,7 @@ def save_summary(
     with open(str(OUTPUT_DIR / "summary.json"), "w") as fh:
         json.dump(summary, fh, indent=2, default=str)
     print(f"\nSaved summary.json -> {OUTPUT_DIR}/")
-    
+
     # Append master CSV
     master = RESULTS_ROOT / "all_runs.csv"
     headline_test = next(iter(test_results.values()), None) if test_results else None
@@ -1188,17 +1204,18 @@ def mode_time_split():
     if T_full < 4:
         print(f"ERROR: only {T_full} frames; time-split needs >=4")
         sys.exit(1)
-        
+
     mid = T_full // 2
-    
-    print(f"[INFO] Time split established: tune on frames 0-{mid-1}, total test set: {T_full} frames.")
-    
+
+    print(
+        f"[INFO] Time split established: tune on frames 0-{mid-1}, total test set: {T_full} frames."
+    )
+
     dims = data.shape[1:]
 
     # Memory Mapping Stage
     print(f"[STAGE] Creating memory maps for processing...")
     tune_mmap = array_to_memmap(data[:mid], WORK_DIR / "tune_half")
-    
 
     print("\nRe-running best params on tune half...")
 
@@ -1207,12 +1224,12 @@ def mode_time_split():
     cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
 
     gSig_val = BASE_PARAMS["gSig"]
-    gSig_int = int(gSig_val[0]) if isinstance(gSig_val, (tuple, list)) else int(gSig_val)
-    
+    gSig_int = (
+        int(gSig_val[0]) if isinstance(gSig_val, (tuple, list)) else int(gSig_val)
+    )
+
     tune_keep, _ = (
-        quality_filter(cnmf_tune, dims, mask, gSig_int)
-        if cnmf_tune
-        else ([], {})
+        quality_filter(cnmf_tune, dims, mask, gSig_int) if cnmf_tune else ([], {})
     )
     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
 
@@ -1229,7 +1246,6 @@ def mode_time_split():
         tune_A=tune_A,
     )
 
-
     # Reporting Stage
     print(f"[STAGE] Finalizing run and saving summary...")
     fmt_info = {
@@ -1238,7 +1254,7 @@ def mode_time_split():
         "sample_shape": list(sample_shape),
         **prep_info,
     }
-    
+
     save_summary(
         "time-split",
         BASE_PARAMS,
@@ -1249,6 +1265,7 @@ def mode_time_split():
 
     print(f"[STAGE] Time-split mode completed successfully.")
     cleanup_shm()
+
 
 def mode_plane_split():
     pass

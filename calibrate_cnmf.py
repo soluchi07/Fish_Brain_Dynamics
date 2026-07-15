@@ -36,6 +36,7 @@ Usage examples:
 from __future__ import annotations
 
 import os
+
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
@@ -62,8 +63,6 @@ import multiprocessing
 import warnings
 from pathlib import Path
 from typing import Optional
-
-
 
 sys.stdout.reconfigure(line_buffering=True)
 
@@ -149,7 +148,7 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="CPU workers for CNMF patch processing (default: cpu_count - 1)",
     )
-    
+
     # Quality filter thresholds
     p.add_argument(
         "--min-circularity",
@@ -175,7 +174,6 @@ def parse_args() -> argparse.Namespace:
         help="Disable post-hoc quality filters (debug only)",
     )
 
-    
     p.add_argument(
         "--tune-p",
         type=int,
@@ -353,7 +351,7 @@ def discover(
     if override and override != fmt:
         print(f"  Format override: detected={fmt} -> using={override}")
         fmt = override
-        
+
     detected_n_planes: Optional[int] = None
     if fmt == "interleaved":
         if n_planes_override is not None:
@@ -471,11 +469,16 @@ def downsample(data: np.ndarray, target_h: int, target_w: int) -> np.ndarray:
 
 def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Subtract per-column temporal+row median (light-sheet stripe artifact)."""
-    col_median = np.median(data, axis=(0, 2), keepdims=True)
+    col_median = np.median(data, axis=(0, 1), keepdims=True)
     cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
     return cleaned, col_median
 
+
 def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
+    """
+    Build a binary mask of brain pixels using Otsu on the mean image.
+    Cleans up with morphological opening/closing and keeps the largest blob.
+    """
     mean_img = data.mean(axis=0)
     try:
         thr = threshold_otsu(mean_img)
@@ -484,6 +487,9 @@ def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
 
     mask = mean_img > thr
     if mask.sum() < 100:
+        print(
+            f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask."
+        )
         return np.ones_like(mask, dtype=bool)
 
     h, w = mask.shape
@@ -493,13 +499,16 @@ def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
     mask = remove_small_objects(mask, min_size=max(200, (h * w) // 5000))
 
     if mask.sum() < 100:
+        print(f"  WARNING: brain mask too small after cleanup. Disabling mask.")
         return np.ones_like(mask, dtype=bool)
+    
+    coverage = 100.0 * mask.sum() / mask.size
+    print(f"  Brain mask coverage: {coverage:.1f}% of frame")
     return mask
 
 
 def apply_mask(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
     return (data * mask[None, :, :]).astype(np.float32)
-
 
 
 def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dict]:
@@ -540,7 +549,7 @@ def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dic
         data = apply_mask(data, mask)
         info["brain_mask_used"] = True
         info["mask_coverage_frac"] = float(mask.sum() / mask.size)
-        
+
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.imshow(data.mean(axis=0), cmap="gray")
         ax.contour(mask, levels=[0.5], colors="lime", linewidths=1.0)
@@ -584,7 +593,7 @@ def get_search_space() -> list:
             Categorical([1, 2], name="p"),
         ]
     if ARGS.resolution == "1024":
-         return [
+        return [
             Integer(4, 10, name="gSig"),
             Integer(2, 8, name="gSig_filt"),
             Real(0.4, 0.85, name="min_corr"),
@@ -592,7 +601,7 @@ def get_search_space() -> list:
             Categorical([50, 80, 120, 160], name="rf"),
             Categorical([1, 2], name="p"),
         ]
-    
+
     return [
         Integer(4, 16, name="gSig"),
         Integer(4, 16, name="gSig_filt"),
@@ -681,8 +690,9 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
             pass
     return mmap_path
 
+
 def _setup_cluster(nworkers=N_WORKERS):
-    workers = min(N_WORKERS, nworkers) 
+    workers = min(N_WORKERS, nworkers)
     try:
         _, cluster, n_processes = cm.cluster.setup_cluster(
             backend="multiprocessing", n_processes=workers, single_thread=False
@@ -691,14 +701,16 @@ def _setup_cluster(nworkers=N_WORKERS):
     except Exception as exc:
         print(f"  [STAGE:cluster_setup] failed: {exc}", flush=True)
         return None, 1
-    
+
+
 def _stop_cluster(cluster):
     # Sends the termination signal to the workers
     cm.stop_server(dview=cluster)
-    
+
     # Synchronously blocks the script until every single worker is dead
     for process in multiprocessing.active_children():
-        process.join() 
+        process.join()
+
 
 def precompute_mc(fname_mmap: str) -> str:
     """Run motion correction once on the input mmap and return the MC'd output path.
@@ -781,6 +793,7 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
 
     return params_module.CNMFParams(params_dict=p)
 
+
 def _motion_correct(fname_mmap: str, opts, cluster) -> str:
     """Stage: motion correction. Raises on failure — caller decides how to handle."""
     print("  [STAGE:motion_correction] starting", flush=True)
@@ -805,9 +818,7 @@ def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
 
     print(f"[LOG] run_cnmf: Loading memmap...")
     Yr, dims, num_frames = cm.load_memmap(fname_to_use)
-    images = np.reshape(
-        Yr.T, [num_frames] + list(dims), order="F"
-    )  
+    images = np.reshape(Yr.T, [num_frames] + list(dims), order="F")
 
     print("[STAGE:fit] starting", flush=True)
     cnmf_obj.fit(images)
@@ -917,7 +928,7 @@ def run_cnmf(
                 "  [STAGE:motion_correction] skipped — using precomputed mmap",
                 flush=True,
             )
-        
+
         cluster, n_processes = _setup_cluster()
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
@@ -927,9 +938,9 @@ def run_cnmf(
 
         if do_refit and images is not None and cnmf_obj.estimates.A.shape[1] > 0:
             cnmf_obj = _refit(cnmf_obj, images, cluster)
-            
+
         if do_filter_caiman and images is not None:
-            _evaluate_and_select(cnmf_obj, images, cluster)        
+            _evaluate_and_select(cnmf_obj, images, cluster)
 
         return cnmf_obj, time.time() - t0, fname_to_use
 
@@ -1044,6 +1055,7 @@ def quality_filter(
 #         )
 #         return fallback_Yr
 
+
 def score_run(
     cnmf_obj,
     Yr,
@@ -1122,7 +1134,8 @@ def score_run(
         keep,
         counts,
     )
-    
+
+
 def compute_stability(A1, A2, threshold: float = 0.5) -> float:
     if A1 is None or A2 is None or A1.shape[1] == 0 or A2.shape[1] == 0:
         return 0.0
@@ -1131,6 +1144,7 @@ def compute_stability(A1, A2, threshold: float = 0.5) -> float:
     corr = np.asarray((A1.multiply(1.0 / n1).T @ A2.multiply(1.0 / n2)).todense())
     ri, ci = linear_sum_assignment(-corr)
     return float(np.mean(corr[ri, ci] >= threshold))
+
 
 # =============================================================================
 # BAYESIAN TUNING  (extracted from p4_universal.py, unchanged in behavior)
@@ -1214,7 +1228,9 @@ def bayesian_tune(
         "min_pnr": int(best["min_pnr"]),
         "rf": int(best["rf"]),
         "stride": int(best["rf"]) // 2,
-        "p": int(best["p"]), #ARGS.final_p,  # recorded for downstream final runs; upgrade via --final-p 2
+        "p": int(
+            best["p"]
+        ),  # ARGS.final_p,  # recorded for downstream final runs; upgrade via --final-p 2
         "merge_thr": 0.85,
     }
 
@@ -1239,7 +1255,7 @@ def bayesian_tune(
     plt.tight_layout()
     plt.savefig(str(OUTPUT_DIR / f"param_vs_score_{tag}.png"), dpi=120)
     plt.close(fig)
-    
+
     if not df_counts.empty:
         fig, ax = plt.subplots(figsize=(10, 4))
         df_counts_plot = df_counts.fillna(0)
@@ -1264,7 +1280,6 @@ def bayesian_tune(
         plt.close(fig)
 
     return best_params, df, counts_log
-
 
 
 # =============================================================================
