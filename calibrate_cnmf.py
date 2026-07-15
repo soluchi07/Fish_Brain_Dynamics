@@ -914,15 +914,19 @@ def run_cnmf(
     fit_file are fatal because downstream stages depend on their output.
     """
     opts = _prep_params(params_override, fname_mmap)
+    cluster = None
 
     t0 = time.time()
     try:
         fname_to_use = fname_mmap
         if do_mc:
-            cluster, n_processes = _setup_cluster(10)
-            fname_to_use = _motion_correct(fname_mmap, opts, cluster)
-            _stop_cluster(cluster)
-            cluster = None
+            try:
+                cluster, n_processes = _setup_cluster(10)
+                fname_to_use = _motion_correct(fname_mmap, opts, cluster)
+            finally:
+                if cluster is not None:
+                    _stop_cluster(cluster)
+                    cluster = None # Reset so the master finally block ignores it
         else:
             print(
                 "  [STAGE:motion_correction] skipped — using precomputed mmap",
@@ -942,6 +946,8 @@ def run_cnmf(
         if do_filter_caiman and images is not None:
             _evaluate_and_select(cnmf_obj, images, cluster)
 
+        _stop_cluster(cluster)
+        cluster = None # Reset so finally block doesn't stop it twice
         return cnmf_obj, time.time() - t0, fname_to_use
 
     except Exception as exc:
@@ -1314,7 +1320,7 @@ def main():
     dims = data.shape[1:]
     mmap_path = array_to_memmap(data, WORK_DIR / "calib_movie")
 
-    best_params, trials_df, _ = bayesian_tune(mmap_path, dims, tag="calib")
+    best_params, trials_df, _ = bayesian_tune(mmap_path, dims, mask, tag="calib")
 
     summary = {
         "run_name": ARGS.run_name,
