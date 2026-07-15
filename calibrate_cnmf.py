@@ -1294,12 +1294,12 @@ def main():
         max_frames=ARGS.max_frames,
         n_planes=_nplanes if _nplanes is not None else ARGS.n_planes,
     )
-    data, prep_info = preprocess_movie(raw, label="calib")
+    data, mask, prep_info = preprocess_movie(raw, label="calib")
 
     dims = data.shape[1:]
     mmap_path = array_to_memmap(data, WORK_DIR / "calib_movie")
 
-    best_params, trials_df = bayesian_tune(mmap_path, dims, tag="calib")
+    best_params, trials_df, _ = bayesian_tune(mmap_path, dims, tag="calib")
 
     summary = {
         "run_name": ARGS.run_name,
