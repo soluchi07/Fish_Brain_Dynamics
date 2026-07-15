@@ -646,10 +646,11 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
 
 
 def _setup_cluster(nworkers=N_WORKERS):
-    workers = min(N_WORKERS, nworkers)
+    # max_workers = N_WORKERS if N_WORKERS is not None else max(1, multiprocessing.cpu_count() - 1)
+    # workers = min(max_workers, nworkers)
     try:
         _, cluster, n_processes = cm.cluster.setup_cluster(
-            backend="multiprocessing", n_processes=workers, single_thread=False
+            backend="multiprocessing", n_processes=nworkers, single_thread=False
         )
         return cluster, n_processes
     except Exception as exc:
@@ -668,6 +669,7 @@ def _stop_cluster(cluster):
 
 def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFParams":
     """Stage: build CNMFParams from overrides. Normalizes gSig/gSig_filt to int tuples."""
+    print("  [STAGE:prepping parameters] starting", flush=True)
     p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
     for key in ("gSig", "gSig_filt"):
         val = p.get(key)
@@ -681,6 +683,8 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
     if "gSiz" not in params_override:
         g = p["gSig"]
         p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
+        
+    print("  [STAGE:prepping parameters] done", flush=True)
 
     return params_module.CNMFParams(params_dict=p)
 
@@ -726,6 +730,7 @@ def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
 def _reload_images(fname_to_use: str):
     """Stage: reload the mmap actually fit, for evaluate/refit. Returns None on failure
     (non-fatal — evaluate/refit are simply skipped downstream)."""
+    print(f"[STAGE:reloading images] starting...", flush=True)
     try:
         Yr, dims, T_loc = caiman.mmapping.load_memmap(fname_to_use)
         return np.reshape(Yr.T, [T_loc] + list(dims), order="F")
@@ -805,15 +810,20 @@ def run_cnmf(
     fit_file are fatal because downstream stages depend on their output.
     """
     opts = _prep_params(params_override, fname_mmap)
+    cluster = None
 
     t0 = time.time()
     try:
         fname_to_use = fname_mmap
         if do_mc:
-            cluster, n_processes = _setup_cluster(10)
-            fname_to_use = _motion_correct(fname_mmap, opts, cluster)
-            _stop_cluster(cluster)
-            cluster = None
+            try:
+                cluster, n_processes = _setup_cluster(10)
+                fname_to_use = _motion_correct(fname_mmap, opts, cluster)
+            finally:
+                if cluster is not None:
+                    _stop_cluster(cluster)
+                    cluster = None # Reset so the master finally block ignores it
+    
         else:
             print(
                 "  [STAGE:motion_correction] skipped — using precomputed mmap",
@@ -833,6 +843,8 @@ def run_cnmf(
         if do_filter_caiman and images is not None:
             _evaluate_and_select(cnmf_obj, images, cluster)
 
+        _stop_cluster(cluster)
+        cluster = None
         return cnmf_obj, time.time() - t0, fname_to_use
 
     except Exception as exc:

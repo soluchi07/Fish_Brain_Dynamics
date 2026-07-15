@@ -692,10 +692,11 @@ def array_to_memmap(array: np.ndarray, basename: Path) -> str:
 
 
 def _setup_cluster(nworkers=N_WORKERS):
-    workers = min(N_WORKERS, nworkers)
+    # max_workers = N_WORKERS if N_WORKERS is not None else max(1, multiprocessing.cpu_count() - 1)
+    # workers = min(max_workers, nworkers)
     try:
         _, cluster, n_processes = cm.cluster.setup_cluster(
-            backend="multiprocessing", n_processes=workers, single_thread=False
+            backend="multiprocessing", n_processes=nworkers, single_thread=False
         )
         return cluster, n_processes
     except Exception as exc:
