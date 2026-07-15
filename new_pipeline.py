@@ -7,13 +7,21 @@ Refactored to include:
   3. Execution Update (motion correction & .fit() instead of .fit_file())
   4. Cluster & Multiprocessing (CaImAn cluster setup with n_workers)
 """
-
+# Must be the first lines of the file, before ALL imports
 from __future__ import annotations
+
+import os
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["BLAS_NUM_THREADS"] = "1"
+
 
 import argparse
 import glob
 import json
-import os
 import re
 import sys
 import time
