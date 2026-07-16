@@ -1,0 +1,402 @@
+Monitoring started at 14:04:00.171822
+====================================================================== at time 14:04:05.103278
+calibrate_cnmf.py  |  run=calib_20iv26_512_mask30 at time 14:04:05.103332
+====================================================================== at time 14:04:05.103357
+Data dir   : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 14:04:05.103401
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/calib_20iv26_512_mask30 at time 14:04:05.103426
+Resolution : 512 at time 14:04:05.103449
+Brain mask : ON at time 14:04:05.103471
+Quality    : ON at time 14:04:05.103490
+Trials     : n_calls=30  n_initial=5 at time 14:04:05.103510
+Workers=None at time 14:04:05.103528
+Auto-detected n_planes=7 from metadata at time 14:04:05.111823
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 14:04:05.111868
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 14:04:05.111893
+Interleaved: z=3/7 planes -> 700 frames at time 14:04:05.111915
+ at time 14:09:55.449997
+[preprocess calib]  input shape=(700, 2048, 2048) at time 14:09:55.450050
+Downsampling -> (512, 512) at time 14:09:55.450068
+Brain mask coverage: 19.2% of frame at time 14:11:16.091627
+[precomputing motion correction — runs once for all trials] at time 14:11:21.884611
+Successfully initialized multicore processing with a pool of 10 CPU cores at time 14:11:22.375558
+[MC done in 24.7s → Yr_mc_d1_512_d2_512_d3_1_order_C_frames_700.mmap] at time 14:11:46.627258
+ at time 14:11:46.635082
+============================================================ at time 14:11:46.635126
+BAYESIAN TUNE (calib) at time 14:11:46.635150
+============================================================ at time 14:11:46.635175
+Trial  1: {'gSig': np.int64(4), 'gSig_filt': np.int64(2), 'min_corr': 0.7508609501227463, 'min_pnr': np.int64(8), 'rf': 40, 'p': 1, 'stride': 20} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:11:46.660962
+[LOG] run_cnmf: Initializing CNMF object... at time 14:11:51.107250
+[LOG] run_cnmf: Loading memmap... at time 14:11:51.113514
+[STAGE:fit] starting at time 14:11:51.113589
+[LOG] run_cnmf: .fit() completed at time 14:13:49.885144
+[STAGE:fit] done -> 46 components at time 14:13:49.885177
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:13:49.885890
+[STAGE:refit] done -> 30 neurons remain at time 14:14:00.187621
+[STAGE:evaluate_components] starting at time 14:14:00.188070
+*** Variable cnn_preds has not the same number of components as A *** at time 14:14:00.472989
+[STAGE:evaluate_components] done -> 22 components remain at time 14:14:00.474338
+raw= 22 kept=  1 composite=-0.5889 t=135s at time 14:14:02.449540
+Trial  2: {'gSig': np.int64(3), 'gSig_filt': np.int64(2), 'min_corr': 0.4642900680648734, 'min_pnr': np.int64(9), 'rf': 25, 'p': 2, 'stride': 12} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:14:02.457081
+[LOG] run_cnmf: Initializing CNMF object... at time 14:14:06.446137
+[LOG] run_cnmf: Loading memmap... at time 14:14:06.452996
+[STAGE:fit] starting at time 14:14:06.453035
+[LOG] run_cnmf: .fit() completed at time 14:15:06.459347
+[STAGE:fit] done -> 37 components at time 14:15:06.459366
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:15:06.460301
+[STAGE:refit] done -> 24 neurons remain at time 14:15:18.320452
+[STAGE:evaluate_components] starting at time 14:15:18.321595
+*** Variable cnn_preds has not the same number of components as A *** at time 14:15:18.664719
+[STAGE:evaluate_components] done -> 23 components remain at time 14:15:18.665621
+raw= 23 kept=  2 composite=-0.5004 t=77s at time 14:15:20.647121
+Trial  3: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.846495201681048, 'min_pnr': np.int64(9), 'rf': 60, 'p': 1, 'stride': 30} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:15:20.653468
+[LOG] run_cnmf: Initializing CNMF object... at time 14:15:24.905528
+[LOG] run_cnmf: Loading memmap... at time 14:15:24.911759
+[STAGE:fit] starting at time 14:15:24.911803
+[LOG] run_cnmf: .fit() completed at time 14:20:24.404623
+[STAGE:fit] done -> 40 components at time 14:20:24.404655
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:20:24.405304
+[STAGE:refit] done -> 35 neurons remain at time 14:20:33.481952
+[STAGE:evaluate_components] starting at time 14:20:33.482142
+*** Variable cnn_preds has not the same number of components as A *** at time 14:20:33.673380
+[STAGE:evaluate_components] done -> 28 components remain at time 14:20:33.674074
+raw= 28 kept=  2 composite=-0.5326 t=314s at time 14:20:35.654571
+Trial  4: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.5799374372718651, 'min_pnr': np.int64(3), 'rf': 80, 'p': 1, 'stride': 40} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:20:35.661857
+[LOG] run_cnmf: Initializing CNMF object... at time 14:20:40.141008
+[LOG] run_cnmf: Loading memmap... at time 14:20:40.147232
+[STAGE:fit] starting at time 14:20:40.147272
+[LOG] run_cnmf: .fit() completed at time 14:23:52.057638
+[STAGE:fit] done -> 56 components at time 14:23:52.057704
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:23:52.058241
+[STAGE:refit] done -> 45 neurons remain at time 14:24:02.544049
+[STAGE:evaluate_components] starting at time 14:24:02.544313
+*** Variable cnn_preds has not the same number of components as A *** at time 14:24:02.846779
+[STAGE:evaluate_components] done -> 27 components remain at time 14:24:02.847124
+raw= 27 kept=  2 composite=-0.3818 t=208s at time 14:24:04.721272
+Trial  5: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.5721078960702233, 'min_pnr': np.int64(12), 'rf': 40, 'p': 2, 'stride': 20} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:24:04.728492
+[LOG] run_cnmf: Initializing CNMF object... at time 14:24:09.068031
+[LOG] run_cnmf: Loading memmap... at time 14:24:09.074034
+[STAGE:fit] starting at time 14:24:09.074166
+[LOG] run_cnmf: .fit() completed at time 14:25:02.943223
+[STAGE:fit] done -> 19 components at time 14:25:02.943256
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:25:02.944014
+[STAGE:refit] done -> 16 neurons remain at time 14:25:14.326900
+[STAGE:evaluate_components] starting at time 14:25:14.327648
+*** Variable cnn_preds has not the same number of components as A *** at time 14:25:14.600536
+[STAGE:evaluate_components] done -> 16 components remain at time 14:25:14.601360
+raw= 16 kept=  0 composite=-inf t=71s at time 14:25:15.907950
+Trial  6: {'gSig': np.int64(2), 'gSig_filt': np.int64(2), 'min_corr': 0.6683892225807853, 'min_pnr': np.int64(8), 'rf': np.int64(25), 'p': np.int64(1), 'stride': np.int64(12)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:25:16.093602
+[LOG] run_cnmf: Initializing CNMF object... at time 14:25:20.245000
+[LOG] run_cnmf: Loading memmap... at time 14:25:20.251349
+[STAGE:fit] starting at time 14:25:20.251410
+[LOG] run_cnmf: .fit() completed at time 14:26:04.945244
+[STAGE:fit] done -> 38 components at time 14:26:04.945278
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:26:04.946013
+[STAGE:refit] done -> 26 neurons remain at time 14:26:15.981336
+[STAGE:evaluate_components] starting at time 14:26:15.982559
+*** Variable cnn_preds has not the same number of components as A *** at time 14:26:16.371694
+[STAGE:evaluate_components] done -> 18 components remain at time 14:26:16.372944
+raw= 18 kept=  2 composite=-0.5118 t=62s at time 14:26:18.508768
+Trial  7: {'gSig': np.int64(3), 'gSig_filt': np.int64(2), 'min_corr': 0.649089809115627, 'min_pnr': np.int64(9), 'rf': np.int64(60), 'p': np.int64(2), 'stride': np.int64(30)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:26:18.694945
+[LOG] run_cnmf: Initializing CNMF object... at time 14:26:22.935171
+[LOG] run_cnmf: Loading memmap... at time 14:26:22.941328
+[STAGE:fit] starting at time 14:26:22.941479
+[LOG] run_cnmf: .fit() completed at time 14:28:56.588334
+[STAGE:fit] done -> 39 components at time 14:28:56.588355
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:28:56.588956
+[STAGE:refit] done -> 30 neurons remain at time 14:29:07.240156
+[STAGE:evaluate_components] starting at time 14:29:07.240850
+*** Variable cnn_preds has not the same number of components as A *** at time 14:29:07.453218
+[STAGE:evaluate_components] done -> 30 components remain at time 14:29:07.454356
+raw= 30 kept=  9 composite=-0.5273 t=170s at time 14:29:09.742027
+Trial  8: {'gSig': np.int64(5), 'gSig_filt': np.int64(4), 'min_corr': 0.85, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(2), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:29:09.911953
+[LOG] run_cnmf: Initializing CNMF object... at time 14:29:13.938497
+[LOG] run_cnmf: Loading memmap... at time 14:29:13.944628
+[STAGE:fit] starting at time 14:29:13.944710
+[LOG] run_cnmf: .fit() completed at time 14:36:59.437909
+[STAGE:fit] done -> 45 components at time 14:36:59.437938
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:36:59.438532
+[STAGE:refit] done -> 30 neurons remain at time 14:37:09.413755
+[STAGE:evaluate_components] starting at time 14:37:09.413827
+*** Variable cnn_preds has not the same number of components as A *** at time 14:37:09.597312
+[STAGE:evaluate_components] done -> 29 components remain at time 14:37:09.598579
+raw= 29 kept=  7 composite=-0.5040 t=481s at time 14:37:11.907483
+Trial  9: {'gSig': np.int64(4), 'gSig_filt': np.int64(2), 'min_corr': 0.4872005190680956, 'min_pnr': np.int64(5), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:37:12.107786
+[LOG] run_cnmf: Initializing CNMF object... at time 14:37:16.528005
+[LOG] run_cnmf: Loading memmap... at time 14:37:16.534326
+[STAGE:fit] starting at time 14:37:16.534364
+[LOG] run_cnmf: .fit() completed at time 14:44:59.393570
+[STAGE:fit] done -> 62 components at time 14:44:59.393593
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:44:59.394161
+[STAGE:refit] done -> 42 neurons remain at time 14:45:09.330241
+[STAGE:evaluate_components] starting at time 14:45:09.331354
+*** Variable cnn_preds has not the same number of components as A *** at time 14:45:09.573162
+[STAGE:evaluate_components] done -> 25 components remain at time 14:45:09.574282
+raw= 25 kept=  2 composite=-0.5155 t=479s at time 14:45:11.562135
+Trial 10: {'gSig': np.int64(2), 'gSig_filt': np.int64(4), 'min_corr': 0.4, 'min_pnr': np.int64(12), 'rf': np.int64(60), 'p': np.int64(1), 'stride': np.int64(30)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:45:11.733051
+[LOG] run_cnmf: Initializing CNMF object... at time 14:45:16.204595
+[LOG] run_cnmf: Loading memmap... at time 14:45:16.210754
+[STAGE:fit] starting at time 14:45:16.210823
+[LOG] run_cnmf: .fit() completed at time 14:46:53.299754
+[STAGE:fit] done -> 11 components at time 14:46:53.299785
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:46:53.300880
+[STAGE:refit] done -> 10 neurons remain at time 14:47:02.728548
+[STAGE:evaluate_components] starting at time 14:47:02.728723
+*** Variable cnn_preds has not the same number of components as A *** at time 14:47:03.028013
+[STAGE:evaluate_components] done -> 7 components remain at time 14:47:03.028798
+raw=  7 kept=  0 composite=-inf t=113s at time 14:47:04.288570
+Trial 11: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.6810283868997509, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:47:04.409421
+[LOG] run_cnmf: Initializing CNMF object... at time 14:47:08.553890
+[LOG] run_cnmf: Loading memmap... at time 14:47:08.559830
+[STAGE:fit] starting at time 14:47:08.559926
+[LOG] run_cnmf: .fit() completed at time 14:51:14.558900
+[STAGE:fit] done -> 47 components at time 14:51:14.558934
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:51:14.559522
+[STAGE:refit] done -> 38 neurons remain at time 14:51:24.599279
+[STAGE:evaluate_components] starting at time 14:51:24.599603
+*** Variable cnn_preds has not the same number of components as A *** at time 14:51:24.914341
+[STAGE:evaluate_components] done -> 29 components remain at time 14:51:24.915141
+raw= 29 kept=  4 composite=-0.5047 t=262s at time 14:51:26.887961
+Trial 12: {'gSig': np.int64(3), 'gSig_filt': np.int64(4), 'min_corr': 0.6177085546229144, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(2), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:51:27.048614
+[LOG] run_cnmf: Initializing CNMF object... at time 14:51:31.483206
+[LOG] run_cnmf: Loading memmap... at time 14:51:31.489341
+[STAGE:fit] starting at time 14:51:31.489402
+[LOG] run_cnmf: .fit() completed at time 14:55:54.638642
+[STAGE:fit] done -> 49 components at time 14:55:54.638686
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 14:55:54.639351
+[STAGE:refit] done -> 34 neurons remain at time 14:56:05.586804
+[STAGE:evaluate_components] starting at time 14:56:05.587306
+*** Variable cnn_preds has not the same number of components as A *** at time 14:56:05.862213
+[STAGE:evaluate_components] done -> 34 components remain at time 14:56:05.863419
+raw= 34 kept=  9 composite=-0.4887 t=280s at time 14:56:07.964052
+Trial 13: {'gSig': np.int64(2), 'gSig_filt': np.int64(3), 'min_corr': 0.4, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 14:56:08.146219
+[LOG] run_cnmf: Initializing CNMF object... at time 14:56:12.527566
+[LOG] run_cnmf: Loading memmap... at time 14:56:12.533878
+[STAGE:fit] starting at time 14:56:12.533916
+[LOG] run_cnmf: .fit() completed at time 15:00:49.204590
+[STAGE:fit] done -> 65 components at time 15:00:49.204611
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:00:49.205230
+[STAGE:refit] done -> 45 neurons remain at time 15:00:59.585585
+[STAGE:evaluate_components] starting at time 15:00:59.585648
+*** Variable cnn_preds has not the same number of components as A *** at time 15:00:59.887532
+[STAGE:evaluate_components] done -> 21 components remain at time 15:00:59.888641
+raw= 21 kept=  2 composite=-0.4186 t=293s at time 15:01:01.821922
+Trial 14: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.5914389740870134, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:01:02.079217
+[LOG] run_cnmf: Initializing CNMF object... at time 15:01:06.444192
+[LOG] run_cnmf: Loading memmap... at time 15:01:06.450298
+[STAGE:fit] starting at time 15:01:06.450337
+[LOG] run_cnmf: .fit() completed at time 15:05:48.222962
+[STAGE:fit] done -> 48 components at time 15:05:48.222985
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:05:48.223566
+[STAGE:refit] done -> 35 neurons remain at time 15:05:58.181568
+[STAGE:evaluate_components] starting at time 15:05:58.182096
+*** Variable cnn_preds has not the same number of components as A *** at time 15:05:58.451336
+[STAGE:evaluate_components] done -> 18 components remain at time 15:05:58.452155
+raw= 18 kept=  1 composite=-0.4852 t=298s at time 15:06:00.403564
+Trial 15: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.5877131777983272, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:06:00.678788
+[LOG] run_cnmf: Initializing CNMF object... at time 15:06:05.613792
+[LOG] run_cnmf: Loading memmap... at time 15:06:05.620062
+[STAGE:fit] starting at time 15:06:05.620138
+[LOG] run_cnmf: .fit() completed at time 15:10:53.435977
+[STAGE:fit] done -> 57 components at time 15:10:53.435995
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:10:53.436604
+[STAGE:refit] done -> 37 neurons remain at time 15:11:03.758600
+[STAGE:evaluate_components] starting at time 15:11:03.758951
+*** Variable cnn_preds has not the same number of components as A *** at time 15:11:04.069032
+[STAGE:evaluate_components] done -> 23 components remain at time 15:11:04.070024
+raw= 23 kept=  1 composite=-0.5069 t=305s at time 15:11:06.270932
+Trial 16: {'gSig': np.int64(2), 'gSig_filt': np.int64(2), 'min_corr': 0.5774352897127422, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(2), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:11:06.575376
+[LOG] run_cnmf: Initializing CNMF object... at time 15:11:10.881471
+[LOG] run_cnmf: Loading memmap... at time 15:11:10.888294
+[STAGE:fit] starting at time 15:11:10.888332
+[LOG] run_cnmf: .fit() completed at time 15:14:24.487409
+[STAGE:fit] done -> 49 components at time 15:14:24.487429
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:14:24.488020
+[STAGE:refit] done -> 34 neurons remain at time 15:14:35.910654
+[STAGE:evaluate_components] starting at time 15:14:35.911071
+*** Variable cnn_preds has not the same number of components as A *** at time 15:14:36.213710
+[STAGE:evaluate_components] done -> 33 components remain at time 15:14:36.214688
+raw= 33 kept=  3 composite=-0.5183 t=211s at time 15:14:38.572188
+Trial 17: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.5903183907758334, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:14:38.818393
+[LOG] run_cnmf: Initializing CNMF object... at time 15:14:43.330995
+[LOG] run_cnmf: Loading memmap... at time 15:14:43.337329
+[STAGE:fit] starting at time 15:14:43.337371
+[LOG] run_cnmf: .fit() completed at time 15:19:21.974016
+[STAGE:fit] done -> 57 components at time 15:19:21.974048
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:19:21.974644
+[STAGE:refit] done -> 39 neurons remain at time 15:19:32.552916
+[STAGE:evaluate_components] starting at time 15:19:32.553289
+*** Variable cnn_preds has not the same number of components as A *** at time 15:19:32.844306
+[STAGE:evaluate_components] done -> 29 components remain at time 15:19:32.845465
+raw= 29 kept=  3 composite=-0.5366 t=295s at time 15:19:34.978573
+Trial 18: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.8161760206127264, 'min_pnr': np.int64(9), 'rf': np.int64(25), 'p': np.int64(2), 'stride': np.int64(12)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:19:35.148497
+[LOG] run_cnmf: Initializing CNMF object... at time 15:19:39.371265
+[LOG] run_cnmf: Loading memmap... at time 15:19:39.377350
+[STAGE:fit] starting at time 15:19:39.377392
+[LOG] run_cnmf: .fit() completed at time 15:21:16.808205
+[STAGE:fit] done -> 39 components at time 15:21:16.808226
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:21:16.809002
+[STAGE:refit] done -> 27 neurons remain at time 15:21:28.550833
+[STAGE:evaluate_components] starting at time 15:21:28.551836
+*** Variable cnn_preds has not the same number of components as A *** at time 15:21:28.820101
+[STAGE:evaluate_components] done -> 26 components remain at time 15:21:28.820814
+raw= 26 kept=  5 composite=-0.4765 t=115s at time 15:21:31.070278
+Trial 19: {'gSig': np.int64(3), 'gSig_filt': np.int64(2), 'min_corr': 0.8299023041037352, 'min_pnr': np.int64(9), 'rf': np.int64(25), 'p': np.int64(1), 'stride': np.int64(12)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:21:31.271771
+[LOG] run_cnmf: Initializing CNMF object... at time 15:21:35.736253
+[LOG] run_cnmf: Loading memmap... at time 15:21:35.742440
+[STAGE:fit] starting at time 15:21:35.742506
+[LOG] run_cnmf: .fit() completed at time 15:22:31.292319
+[STAGE:fit] done -> 29 components at time 15:22:31.292363
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:22:31.293014
+[STAGE:refit] done -> 24 neurons remain at time 15:22:42.243424
+[STAGE:evaluate_components] starting at time 15:22:42.244499
+*** Variable cnn_preds has not the same number of components as A *** at time 15:22:42.598914
+[STAGE:evaluate_components] done -> 18 components remain at time 15:22:42.600141
+raw= 18 kept=  1 composite=-0.5144 t=73s at time 15:22:44.746245
+Trial 20: {'gSig': np.int64(4), 'gSig_filt': np.int64(1), 'min_corr': 0.6412795799928194, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(2), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:22:45.024897
+[LOG] run_cnmf: Initializing CNMF object... at time 15:22:49.520570
+[LOG] run_cnmf: Loading memmap... at time 15:22:49.527624
+[STAGE:fit] starting at time 15:22:49.527793
+[LOG] run_cnmf: .fit() completed at time 15:24:47.270422
+[STAGE:fit] done -> 39 components at time 15:24:47.270454
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:24:47.271036
+[STAGE:refit] done -> 32 neurons remain at time 15:24:58.033004
+[STAGE:evaluate_components] starting at time 15:24:58.033645
+*** Variable cnn_preds has not the same number of components as A *** at time 15:24:58.302028
+[STAGE:evaluate_components] done -> 32 components remain at time 15:24:58.302733
+raw= 32 kept=  2 composite=-0.3353 t=135s at time 15:25:00.604285
+Trial 21: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.5800141000879266, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:25:00.878302
+[LOG] run_cnmf: Initializing CNMF object... at time 15:25:05.128216
+[LOG] run_cnmf: Loading memmap... at time 15:25:05.133578
+[STAGE:fit] starting at time 15:25:05.133616
+[LOG] run_cnmf: .fit() completed at time 15:29:50.599330
+[STAGE:fit] done -> 61 components at time 15:29:50.599351
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:29:50.599977
+[STAGE:refit] done -> 48 neurons remain at time 15:30:01.113765
+[STAGE:evaluate_components] starting at time 15:30:01.113982
+*** Variable cnn_preds has not the same number of components as A *** at time 15:30:01.372918
+[STAGE:evaluate_components] done -> 37 components remain at time 15:30:01.373805
+raw= 37 kept=  5 composite=-0.5303 t=302s at time 15:30:03.396441
+Trial 22: {'gSig': np.int64(3), 'gSig_filt': np.int64(3), 'min_corr': 0.5958160765290744, 'min_pnr': np.int64(3), 'rf': np.int64(80), 'p': np.int64(1), 'stride': np.int64(40)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:30:03.727766
+[LOG] run_cnmf: Initializing CNMF object... at time 15:30:08.450501
+[LOG] run_cnmf: Loading memmap... at time 15:30:08.456742
+[STAGE:fit] starting at time 15:30:08.456780
+[LOG] run_cnmf: .fit() completed at time 15:34:55.383355
+[STAGE:fit] done -> 56 components at time 15:34:55.383385
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:34:55.383989
+[STAGE:refit] done -> 39 neurons remain at time 15:35:05.727500
+[STAGE:evaluate_components] starting at time 15:35:05.727900
+*** Variable cnn_preds has not the same number of components as A *** at time 15:35:06.031010
+[STAGE:evaluate_components] done -> 27 components remain at time 15:35:06.031876
+raw= 27 kept=  1 composite=-0.5270 t=303s at time 15:35:07.956761
+Trial 23: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.7397078752983042, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(2), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:35:08.176764
+[LOG] run_cnmf: Initializing CNMF object... at time 15:35:12.901331
+[LOG] run_cnmf: Loading memmap... at time 15:35:12.908038
+[STAGE:fit] starting at time 15:35:12.908136
+[LOG] run_cnmf: .fit() completed at time 15:37:56.844316
+[STAGE:fit] done -> 42 components at time 15:37:56.844333
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:37:56.844967
+[STAGE:refit] done -> 27 neurons remain at time 15:38:08.351456
+[STAGE:evaluate_components] starting at time 15:38:08.351890
+*** Variable cnn_preds has not the same number of components as A *** at time 15:38:08.595264
+[STAGE:evaluate_components] done -> 27 components remain at time 15:38:08.595983
+raw= 27 kept=  8 composite=-0.5183 t=182s at time 15:38:10.883389
+Trial 24: {'gSig': np.int64(2), 'gSig_filt': np.int64(1), 'min_corr': 0.5620586920390207, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(1), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:38:11.153938
+[LOG] run_cnmf: Initializing CNMF object... at time 15:38:15.380568
+[LOG] run_cnmf: Loading memmap... at time 15:38:15.386721
+[STAGE:fit] starting at time 15:38:15.386759
+[LOG] run_cnmf: .fit() completed at time 15:39:17.913335
+[STAGE:fit] done -> 43 components at time 15:39:17.913353
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:39:17.914091
+[STAGE:refit] done -> 36 neurons remain at time 15:39:29.400380
+[STAGE:evaluate_components] starting at time 15:39:29.400928
+*** Variable cnn_preds has not the same number of components as A *** at time 15:39:30.347347
+[STAGE:evaluate_components] done -> 22 components remain at time 15:39:30.348260
+raw= 22 kept=  1 composite=-0.4930 t=81s at time 15:39:32.524157
+Trial 25: {'gSig': np.int64(2), 'gSig_filt': np.int64(1), 'min_corr': 0.4726033484412815, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(2), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:39:32.707523
+[LOG] run_cnmf: Initializing CNMF object... at time 15:39:36.938261
+[LOG] run_cnmf: Loading memmap... at time 15:39:36.944360
+[STAGE:fit] starting at time 15:39:36.944455
+[LOG] run_cnmf: .fit() completed at time 15:40:38.917041
+[STAGE:fit] done -> 42 components at time 15:40:38.917059
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:40:38.917749
+[STAGE:refit] done -> 29 neurons remain at time 15:40:50.135177
+[STAGE:evaluate_components] starting at time 15:40:50.135855
+*** Variable cnn_preds has not the same number of components as A *** at time 15:40:50.529949
+[STAGE:evaluate_components] done -> 28 components remain at time 15:40:50.531461
+raw= 28 kept=  0 composite=-inf t=79s at time 15:40:51.821008
+Trial 26: {'gSig': np.int64(2), 'gSig_filt': np.int64(1), 'min_corr': 0.5652194404184026, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(1), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:40:52.153940
+[LOG] run_cnmf: Initializing CNMF object... at time 15:40:56.472597
+[LOG] run_cnmf: Loading memmap... at time 15:40:56.478642
+[STAGE:fit] starting at time 15:40:56.478759
+[LOG] run_cnmf: .fit() completed at time 15:41:58.632745
+[STAGE:fit] done -> 42 components at time 15:41:58.632793
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:41:58.633308
+[STAGE:refit] done -> 35 neurons remain at time 15:42:09.714771
+[STAGE:evaluate_components] starting at time 15:42:09.715276
+*** Variable cnn_preds has not the same number of components as A *** at time 15:42:10.532766
+[STAGE:evaluate_components] done -> 24 components remain at time 15:42:10.533600
+raw= 24 kept=  1 composite=-0.4930 t=80s at time 15:42:12.548198
+Trial 27: {'gSig': np.int64(2), 'gSig_filt': np.int64(1), 'min_corr': 0.5664784693708373, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(1), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:42:12.862462
+[LOG] run_cnmf: Initializing CNMF object... at time 15:42:17.301600
+[LOG] run_cnmf: Loading memmap... at time 15:42:17.308144
+[STAGE:fit] starting at time 15:42:17.308228
+[LOG] run_cnmf: .fit() completed at time 15:43:21.166572
+[STAGE:fit] done -> 39 components at time 15:43:21.166594
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:43:21.167327
+[STAGE:refit] done -> 32 neurons remain at time 15:43:32.380632
+[STAGE:evaluate_components] starting at time 15:43:32.381159
+*** Variable cnn_preds has not the same number of components as A *** at time 15:43:32.811774
+[STAGE:evaluate_components] done -> 22 components remain at time 15:43:32.812640
+raw= 22 kept=  1 composite=-0.4930 t=81s at time 15:43:34.789869
+Trial 28: {'gSig': np.int64(2), 'gSig_filt': np.int64(1), 'min_corr': 0.5673587053407108, 'min_pnr': np.int64(9), 'rf': np.int64(40), 'p': np.int64(1), 'stride': np.int64(20)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:43:35.067478
+[LOG] run_cnmf: Initializing CNMF object... at time 15:43:39.892979
+[LOG] run_cnmf: Loading memmap... at time 15:43:39.899136
+[STAGE:fit] starting at time 15:43:39.899236
+[LOG] run_cnmf: .fit() completed at time 15:44:41.299519
+[STAGE:fit] done -> 38 components at time 15:44:41.299538
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:44:41.300118
+[STAGE:refit] done -> 31 neurons remain at time 15:44:52.248237
+[STAGE:evaluate_components] starting at time 15:44:52.248628
+*** Variable cnn_preds has not the same number of components as A *** at time 15:44:52.676109
+[STAGE:evaluate_components] done -> 21 components remain at time 15:44:52.677150
+raw= 21 kept=  0 composite=-inf t=79s at time 15:44:53.934737
+Trial 29: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.7929192777213867, 'min_pnr': np.int64(7), 'rf': np.int64(60), 'p': np.int64(1), 'stride': np.int64(30)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:44:54.336699
+[LOG] run_cnmf: Initializing CNMF object... at time 15:44:59.001842
+[LOG] run_cnmf: Loading memmap... at time 15:44:59.007864
+[STAGE:fit] starting at time 15:44:59.007982
+[LOG] run_cnmf: .fit() completed at time 15:50:41.259710
+[STAGE:fit] done -> 45 components at time 15:50:41.259738
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:50:41.260409
+[STAGE:refit] done -> 33 neurons remain at time 15:50:50.663608
+[STAGE:evaluate_components] starting at time 15:50:50.664213
+*** Variable cnn_preds has not the same number of components as A *** at time 15:50:50.903895
+[STAGE:evaluate_components] done -> 26 components remain at time 15:50:50.905250
+raw= 26 kept=  2 composite=-0.4800 t=358s at time 15:50:52.898306
+Trial 30: {'gSig': np.int64(5), 'gSig_filt': np.int64(1), 'min_corr': 0.85, 'min_pnr': np.int64(7), 'rf': np.int64(60), 'p': np.int64(1), 'stride': np.int64(30)} ...   [STAGE:motion_correction] skipped — using precomputed mmap at time 15:50:53.306583
+[LOG] run_cnmf: Initializing CNMF object... at time 15:50:57.959053
+[LOG] run_cnmf: Loading memmap... at time 15:50:57.965147
+[STAGE:fit] starting at time 15:50:57.965279
+[LOG] run_cnmf: .fit() completed at time 15:56:28.204505
+[STAGE:fit] done -> 36 components at time 15:56:28.204522
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 15:56:28.205115
+[STAGE:refit] done -> 25 neurons remain at time 15:56:37.851754
+[STAGE:evaluate_components] starting at time 15:56:37.852014
+*** Variable cnn_preds has not the same number of components as A *** at time 15:56:38.040062
+[STAGE:evaluate_components] done -> 20 components remain at time 15:56:38.041362
+raw= 20 kept=  3 composite=-0.5073 t=346s at time 15:56:40.147141
+ at time 15:56:40.500650
+Best params (calib): at time 15:56:40.500756
+gSig: 4 at time 15:56:40.500772
+gSig_filt: 1 at time 15:56:40.500784
+min_corr: 0.6412795799928194 at time 15:56:40.500798
+min_pnr: 9 at time 15:56:40.500809
+rf: 40 at time 15:56:40.500821
+stride: 20 at time 15:56:40.500832
+p: 2 at time 15:56:40.500843
+merge_thr: 0.85 at time 15:56:40.500855
+ at time 15:56:41.996773
+====================================================================== at time 15:56:41.996817
+DONE  |  calibrate_cnmf  |  calib_20iv26_512_mask30  |  112.6 min at time 15:56:41.996833
+Best params saved -> /home/abl-dell/Fish_Brain_Dynamics/results/calib_20iv26_512_mask30/calibration_summary.json at time 15:56:41.996848
+====================================================================== at time 15:56:41.996861
+Monitoring ended at 15:56:43.364304

@@ -511,8 +511,8 @@ def apply_mask(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
     return (data * mask[None, :, :]).astype(np.float32)
 
 
-def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, dict]:
-    """Full preprocessing pipeline. Returns (preprocessed_movie, metadata_dict)."""
+def preprocess_movie(data: np.ndarray, label: str = "") -> tuple[np.ndarray, np.ndarray, dict]:
+    """Full preprocessing pipeline. Returns (preprocessed_movie, mask, metadata_dict)."""
     info = {"original_shape": tuple(data.shape)}
     print(f"\n[preprocess {label}]  input shape={data.shape}")
 
@@ -643,7 +643,7 @@ def get_base_params() -> dict:
         # get_base_params() and the real acquisition frame rate — a mismatch
         # here means params are calibrated against one timescale and deployed
         # against another.
-        "fr": 30,
+        "fr": 5,
         "decay_time": 1.0,
         "method_init": "corr_pnr",
         "K": None,

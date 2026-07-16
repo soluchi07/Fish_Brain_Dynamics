@@ -514,6 +514,7 @@ def preprocess_movie(
 ) -> tuple[np.ndarray, np.ndarray, dict]:
     """Full preprocessing pipeline. Returns (preprocessed_movie, mask, metadata_dict)."""
     info = {"original_shape": tuple(data.shape)}
+    print(f"\n[preprocess {label}]  input shape={data.shape}")
 
     if ARGS.resolution == "512":
         target = (512, 512)
@@ -616,6 +617,7 @@ def get_base_params(external_params: dict = None) -> dict:
         "tsub": external.get("tsub", 1),
         "only_init": external.get("only_init", False),
         "pw_rigid": external.get("pw_rigid", True),
+        "border_nan": "copy",
         **mc,
         **external,
     }

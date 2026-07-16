@@ -1,0 +1,136 @@
+Monitoring started at 04:41:04.064482
+====================================================================== at time 04:41:09.119816
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512_mask30 at time 04:41:09.119859
+====================================================================== at time 04:41:09.119879
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_mask30 at time 04:41:09.119895
+Resolution : 512 at time 04:41:09.119909
+Best params: results/calib_20iv26_512_mask30/calibration_summary.json at time 04:41:09.119923
+Brain mask : ON at time 04:41:09.119943
+Filters    : ON at time 04:41:09.119955
+CPU pin    : unpinned  workers=95 at time 04:41:09.119968
+Loaded best params from results/calib_20iv26_512_mask30/calibration_summary.json: at time 04:41:09.120000
+gSig: 3 at time 04:41:09.120013
+gSig_filt: 2 at time 04:41:09.120027
+min_corr: 0.634535605289647 at time 04:41:09.120040
+min_pnr: 8 at time 04:41:09.120052
+rf: 60 at time 04:41:09.120064
+stride: 30 at time 04:41:09.120076
+p: 2 at time 04:41:09.120089
+merge_thr: 0.85 at time 04:41:09.120102
+ at time 04:41:09.120115
+--- TIME-SPLIT mode --- at time 04:41:09.120129
+Auto-detected n_planes=7 from metadata at time 04:41:09.124824
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 04:41:09.124858
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 04:41:09.124875
+Interleaved: z=3/7 planes -> 700 frames at time 04:41:09.124889
+ at time 04:46:59.627335
+[preprocess movie]  input shape=(700, 2048, 2048) at time 04:46:59.627376
+Downsampling -> (512, 512) at time 04:46:59.627395
+Brain mask coverage: 19.4% of frame at time 04:48:15.674339
+ at time 04:48:16.516773
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 04:48:16.516827
+ at time 04:48:18.910126
+Running CNMF with configured params on reference half (for stability)... at time 04:48:18.910177
+[STAGE:motion_correction] starting at time 04:48:24.480996
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 04:48:42.429810
+[STAGE:fit] starting at time 04:48:42.436787
+CNMF failed: math domain error at time 04:50:06.118283
+ at time 04:50:06.591928
+============================================================ at time 04:50:06.591972
+TEST: test_half (frames 350-699) at time 04:50:06.591993
+============================================================ at time 04:50:06.592010
+[STAGE:motion_correction] starting at time 04:50:11.957704
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 04:50:30.627782
+[STAGE:fit] starting at time 04:50:30.633985
+CNMF failed: math domain error at time 04:51:38.328579
+Raw neurons: 0  kept: 0  composite: -inf  stability: 0.000  t=86s at time 04:51:38.869283
+ at time 04:51:43.829221
+============================================================ at time 04:51:43.829273
+TEST: full_movie at time 04:51:43.829290
+============================================================ at time 04:51:43.829303
+[STAGE:motion_correction] starting at time 04:51:49.220114
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_700.mmap at time 04:52:09.624650
+[STAGE:fit] starting at time 04:52:09.632337
+[STAGE:fit] done -> 24 components at time 04:53:15.517278
+[STAGE:evaluate_components] starting at time 04:53:15.517845
+*** Variable cnn_preds has not the same number of components as A *** at time 04:53:15.622046
+[STAGE:evaluate_components] done -> 23 components remain at time 04:53:15.623357
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 04:53:15.623393
+[STAGE:refit] done -> 2 neurons remain at time 04:53:20.895605
+Raw neurons: 2  kept: 0  composite: -inf  stability: 0.000  t=92s at time 04:53:21.962390
+ at time 04:53:21.964973
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_mask30/ at time 04:53:21.964987
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 04:53:21.969425
+ at time 04:53:22.016132
+====================================================================== at time 04:53:22.016183
+DONE  |  time-split  |  145544_timesplit_512_mask30  |  12.2 min at time 04:53:22.016192
+====================================================================== at time 04:53:22.016200
+Monitoring ended at 04:53:23.345354
+Monitoring started at 17:59:37.152576
+====================================================================== at time 17:59:41.985129
+p4_universal.py  |  mode=time-split  |  run=145544_timesplit_512_mask30 at time 17:59:41.985181
+====================================================================== at time 17:59:41.985200
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_mask30 at time 17:59:41.985214
+Resolution : 512 at time 17:59:41.985229
+Best params: results/calib_20iv26_512_mask30/calibration_summary.json at time 17:59:41.985243
+Brain mask : ON at time 17:59:41.985261
+Filters    : ON at time 17:59:41.985274
+CPU pin    : unpinned  workers=95 at time 17:59:41.985288
+Loaded best params from results/calib_20iv26_512_mask30/calibration_summary.json: at time 17:59:41.985329
+gSig: 4 at time 17:59:41.985342
+gSig_filt: 1 at time 17:59:41.985357
+min_corr: 0.6412795799928194 at time 17:59:41.985369
+min_pnr: 9 at time 17:59:41.985382
+rf: 40 at time 17:59:41.985394
+stride: 20 at time 17:59:41.985405
+p: 2 at time 17:59:41.985418
+merge_thr: 0.85 at time 17:59:41.985431
+ at time 17:59:41.985445
+--- TIME-SPLIT mode --- at time 17:59:41.985458
+Auto-detected n_planes=7 from metadata at time 17:59:41.990143
+Folder : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 17:59:41.990175
+Format : interleaved  (1 file(s), sample shape=(4900, 2048, 2048)) at time 17:59:41.990191
+Interleaved: z=3/7 planes -> 700 frames at time 17:59:41.990204
+ at time 18:05:26.646066
+[preprocess movie]  input shape=(700, 2048, 2048) at time 18:05:26.646117
+Downsampling -> (512, 512) at time 18:05:26.646137
+Brain mask coverage: 19.4% of frame at time 18:06:39.895789
+ at time 18:06:40.801429
+Time split: reference frames 0-349 (350), test frames 350-699 (350) at time 18:06:40.801474
+ at time 18:06:43.431491
+Running CNMF with configured params on reference half (for stability)... at time 18:06:43.431548
+[STAGE:motion_correction] starting at time 18:06:51.403027
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 18:07:10.798189
+[STAGE:fit] starting at time 18:07:10.804503
+CNMF failed: math domain error at time 18:09:57.219762
+ at time 18:09:57.943602
+============================================================ at time 18:09:57.943632
+TEST: test_half (frames 350-699) at time 18:09:57.943640
+============================================================ at time 18:09:57.943648
+[STAGE:motion_correction] starting at time 18:10:03.581063
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_350.mmap at time 18:10:24.295555
+[STAGE:fit] starting at time 18:10:24.301780
+CNMF failed: math domain error at time 18:13:18.162036
+Raw neurons: 0  kept: 0  composite: -inf  stability: 0.000  t=195s at time 18:13:18.927197
+ at time 18:13:24.144907
+============================================================ at time 18:13:24.144952
+TEST: full_movie at time 18:13:24.144968
+============================================================ at time 18:13:24.144982
+[STAGE:motion_correction] starting at time 18:13:30.645839
+[STAGE:motion_correction] done -> /home/abl-dell/caiman_data/temp/memmap_d1_512_d2_512_d3_1_order_C_frames_700.mmap at time 18:13:51.973460
+[STAGE:fit] starting at time 18:13:51.980011
+[STAGE:fit] done -> 179 components at time 18:16:07.611202
+[STAGE:evaluate_components] starting at time 18:16:07.611635
+*** Variable cnn_preds has not the same number of components as A *** at time 18:16:07.781510
+[STAGE:evaluate_components] done -> 168 components remain at time 18:16:07.782334
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 18:16:07.782358
+[STAGE:refit] done -> 34 neurons remain at time 18:16:14.378185
+Raw neurons: 34  kept: 0  composite: -inf  stability: 0.000  t=164s at time 18:16:15.696979
+ at time 18:16:15.698941
+Saved summary.json -> /home/abl-dell/Fish_Brain_Dynamics/results/145544_timesplit_512_mask30/ at time 18:16:15.698964
+Appended row to /home/abl-dell/Fish_Brain_Dynamics/results/all_runs.csv at time 18:16:15.701777
+ at time 18:16:15.755767
+====================================================================== at time 18:16:15.755795
+DONE  |  time-split  |  145544_timesplit_512_mask30  |  16.6 min at time 18:16:15.755812
+====================================================================== at time 18:16:15.755826
+Monitoring ended at 18:16:17.150275
