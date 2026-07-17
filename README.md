@@ -1,56 +1,149 @@
-# Fish Brain Dynamics — CNMF Pipeline
+# Zebrafish Calcium Imaging Pipeline & Parameter Calibration Engine
 
-Automated calcium imaging analysis for zebrafish brain recordings. The pipeline uses CaImAn's CNMF (Constrained Nonnegative Matrix Factorization) to detect and extract single-neuron activity traces, with Bayesian hyperparameter optimization and post-hoc quality filtering to suppress false positives.
+An automated, robust pipeline for whole-brain and multi-plane calcium imaging analysis in larval zebrafish (*Danio rerio*), powered by **CaImAn** and custom spatial-temporal preprocessing routines. 
 
----
-
-## Goals
-
-- Reliably detect active neurons across multiple zebrafish brain imaging datasets acquired with different rigs and acquisition schemes.
-- Automatically tune CNMF parameters per dataset without manual grid search.
-- Validate parameter generalizability across time windows, z-planes, and behavioral tasks.
-- Suppress non-neuronal detections (noise blobs, out-of-brain pixels) using geometry- and signal-based quality filters.
+This repository provides an end-to-end framework to process calcium imaging datasets, perform automated hyper-parameter tuning, enforce strict spatial/signal quality control, and validate parameter transferability across experimental conditions.
 
 ---
 
-## Quick Setup
+## 📌 Project Overview & Key Objectives
 
-CaImAn must be installed via conda-forge. The project was developed and run on Linux.
+In large-scale larval zebrafish calcium imaging, variance in optical setups (light-sheet/SPIM, two-photon, spinning disk), acquisition framerates, signal-to-noise ratios (SNR), and optical artifacts makes standard fixed-parameter CNMF (Constrained Non-negative Matrix Factorization) fragile and prone to false detections. 
 
-```bash
-# Create and activate the caiman environment
-conda create -n caiman -c conda-forge caiman
-conda activate caiman
+This project addresses these challenges through four core objectives:
 
-# Install Bayesian optimizer (not bundled with caiman)
-pip install scikit-optimize
+1. **Reliable Cross-Rig Neuronal Detection**: Detect active neurons consistently across multiple zebrafish brain imaging datasets acquired with different optical rigs, magnification factors, and acquisition schemes.
+2. **Automated Parameter Tuning**: Automatically optimize CNMF parameters per dataset on representative calibration windows, eliminating tedious manual grid searches and subjective parameter tweaking.
+3. **Validation of Parameter Generalizability**: Test and validate parameter robustness and transferability across different recording time windows, optical z-planes, and behavioral tasks.
+4. **Noise & Non-Neuronal Artifact Suppression**: Suppress out-of-brain pixels, excitation light stripe artifacts, and non-neuronal spatial noise blobs using geometry- and signal-based quality filters.
+
+---
+
+## 🏗 System Architecture & Workflow
+
+The pipeline is organized into modular processing stages, accessible via main scripts: `calibrate_cnmf.py` (for automated calibration) and `new_pipeline.py` (for production execution).
+
+```
+                    Raw TIFF / Movie
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│ 1. Preprocessing & Artifact Mitigation                 │
+│    ├─ Spatial Downsampling (downsample)                │
+│    ├─ Illumination Stripe Removal (stripe_remove)      │
+│    └─ Brain Mask Generation & Cropping (apply_mask)    │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│ 2. Automated Parameter Tuning (calibrate_cnmf.py)       │ 
+│    ├─ Calculate PNR & Spatial Correlation Maps          │
+│    ├─ Estimate Noise Floor & Expected Radius (gSig)     │
+│    └─ Export Optimal Hyper-parameters (best_params.json)│
+└───────────────────────────┬─────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│ 3. Rigid / Non-Rigid Motion Correction (McMap)         │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│ 4. CNMF Factorization & Trace Extraction               │
+│    ├─ Spatial Initialization (GreedyROI/Greedymult)    │
+│    └─ Temporal Deconvolution & AR Modeling (p=1/p=2)   │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│ 5. Quality Control & Component Filtering               │
+│    ├─ Spatial Geometry & Compactness Filters           │
+│    ├─ SNR & Trace Correlation Cutoffs (rval_thr)       │
+│    └─ Out-of-Brain Spatial Masking Validation          │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼
+Structured Results (HDF5 / NPY / Diagnostic PNG Plots)
 ```
 
-All other dependencies (h5py, scikit-image, tifffile, scipy, matplotlib, pandas) are included with the conda-forge caiman build. The `requirements.txt` in this repo is a full pip freeze of the development environment and is provided for reference only — do not use it to install from scratch.
+---
+
+## ⚙️ Core Components & Features
+
+### 1. Preprocessing (`preprocess_movie`)
+- **Stripe Removal**: Eliminates characteristic illumination lines and laser scanning artifacts from light-sheet imaging using FFT and row/column spatial median filtering.
+- **Anatomical Brain Masking**: Uses Otsu thresholding, Gaussian smoothing, and morphological contour detection to restrict signal extraction strictly to brain tissue, eliminating background noise.
+- **Memory Optimization**: Memory-maps raw datasets to allow smooth processing of multi-gigabyte files under restricted RAM footprints.
+
+### 2. Automated Calibration Engine (`calibrate_cnmf.py`)
+- Automatically evaluates Peak-to-Noise Ratio (PNR) and spatial correlation across calibration frames (`preprocess_calib`).
+- Infers dataset-specific parameters (such as `gSig`, `min_corr`, `min_pnr`, `decay_time`, and frame rates `fr`).
+- Pre-computes motion correction maps (`precompute_mc`) to prevent dual mmap conflict errors during re-fitting routines.
+
+### 3. Dual-Stage Quality Filtering
+- **Geometry-Based Filters**: Rejects components based on non-somatic aspect ratios, irregular spatial extent, or spatial overlap with out-of-brain masks.
+- **Signal-Based Filters**: Evaluates spatial footprint correlation (`rval_thr`), transient baseline stability, and signal-to-noise ratio (`min_SNR`).
 
 ---
 
-## Running the Pipeline
+## 🚀 Installation & Environment Setup
+
+### Prerequisites
+- Python 3.9 or 3.10
+- Conda / Mamba environment
+- CUDA / OpenMP enabled for multi-core CaImAn processing
+
+### Step-by-Step Setup
+```bash
+# 1. Clone the repository
+git clone [https://github.com/your-org/zebrafish-caiman-pipeline.git](https://github.com/your-org/zebrafish-caiman-pipeline.git)
+cd zebrafish-caiman-pipeline
+
+# 2. Create and activate conda environment
+conda create -n fish_caiman python=3.10 -y
+conda activate fish_caiman
+
+# 3. Install CaImAn dependencies
+conda install -c conda-forge caiman
+
+# 4. Install additional Python requirements
+pip install numpy scipy matplotlib scikit-image h5py openpyxl
+
+```
+
+---
+
+## 💻 Usage
+
+### Step 1: Automated Calibration (`calibrate_cnmf.py`)
+
+Run parameter calibration on a representative dataset slice or trial to automatically generate optimal parameter settings:
 
 ```bash
-# Time-split validation — tune on first half of frames, test on second half
-python p4_universal.py --mode time-split \
-    --data-dir "/path/to/data_dir" \
-    --run-name my_run \
-    --resolution 512 --n-calls 10
+python calibrate_cnmf.py \
+    --input_file /data/zebrafish_plane01.tif \
+    --output_dir ./calibration_output \
+    --save_plots
 
-# Cross-task generalization — tune on Task 1, test on Task 3
-python p4_universal.py --mode file-plane-split \
-    --tune-dir "/path/to/task1" \
-    --test-dir  "/path/to/task3" \
-    --run-name task1_to_task3 \
-    --resolution 512 --n-calls 10
-
-# Smoke test (2 trials, fast)
-python p4_universal.py --mode time-split \
-    --data-dir <DIR> --run-name smoke --resolution 512 \
-    --n-calls 2 --n-initial 2
 ```
+
+*Outputs:* `best_params.json`, `preprocess_calib.png`, `brain_mask_calib.png`.
+
+### Step 2: Production Execution (`new_pipeline.py`)
+
+Execute the production pipeline using pre-tuned parameters across complete experiments:
+
+```bash
+python orig_pipeline_refactored.py \
+    --input_file /data/zebrafish_full_session.tif \
+    --params_file best_params.json \
+    --output_dir ./production_output
+
+```
+
+*Outputs:* `preprocess_movie.png`, `brain_mask_movie.png`, extracted traces, and HDF5 component files.
+
+---
 
 **Monitor long runs** by piping stdout through `monitor.py`, which timestamps key CNMF events and appends them to `logs/`:
 
@@ -60,8 +153,26 @@ python p4_universal.py ... 2>&1 | python monitor.py --filename my_run_logs.txt
 
 All outputs (plots, traces, CSVs, `summary.json`) are written to `results/<run-name>/`.
 
----
 
+`results/all_runs.csv` aggregates headline metrics across every run.
+
+
+## 🛠 Configuration Parameters
+
+Primary parameters are defined in `BASE_PARAMS` and overridden via `best_params.json`:
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `fr` | float | `30` / `5` | Acquisition frame rate (Hz) |
+| `decay_time` | float | `0.75` | Calcium indicator decay half-life (seconds) |
+| `gSig` | tuple | `(3, 3)` | Expected half-size of target neurons (pixels) |
+| `min_corr` | float | `0.85` | Minimum spatial correlation threshold |
+| `min_pnr` | float | `10.0` | Minimum Peak-to-Noise Ratio cutoff |
+| `p` | int | `1` / `2` | Order of autoregressive AR model |
+| `rval_thr` | float | `0.85` | Spatial profile correlation threshold |
+| `border_nan` | str | `"copy"` | Boundary handling mode for motion correction |
+
+---
 ## Validation Modes
 
 | Mode | Description |
@@ -70,30 +181,6 @@ All outputs (plots, traces, CSVs, `summary.json`) are written to `results/<run-n
 | `plane-split` | Tune on one z-plane, test on every other z-plane in the same recording. |
 | `file-plane-split` | Tune on File A at a given z-plane, test on File B at the same z-plane. |
 | `file-split` | Tune on File A, test on File B across all z-planes. |
-
----
-
-## Completed Runs
-
-| Run folder | Dataset | Mode | Resolution | Neurons (kept / raw) | Notes |
-|---|---|---|---|---|---|
-| `7iii25_Task4` | Task 4 | time-split | 2048×2048 | 2509 / — | Early full-res run |
-| `7iii25_Task5` | Task 5 | time-split | 2048×2048 | 482 / — | |
-| `7iii25_Task6` | Task 6 | time-split | 2048×2048 | 168 / — | |
-| `Task4_timesplit_z3` | Task 4 z=3 | time-split | — | — | Single-plane z3 |
-| `13iii26_task1_timesplit` | 13iii26 Task 1 | time-split | 512×512 | 66 / 266 (full movie) | multi-cam format, 50 frames |
-| `13iii26_task1_to_task3` | 13iii26 Task 1→3 | file-plane-split | 512×512 | — | Cross-task generalization |
-| `13iii26_task3_timesplit` | 13iii26 Task 3 | time-split | 512×512 | — | |
-| `13iii26_task3_to_task1` | 13iii26 Task 3→1 | file-plane-split | 512×512 | — | Reverse cross-task |
-| `20iv26_142407_time_split_full` | 20iv26 #142407 | time-split | full (2048×2048) | — | single-movie format |
-| `20iv26_144159_time_split_full` | 20iv26 #144159 | time-split | full (2048×2048) | — | |
-| `20iv26_144321_time_split_full` | 20iv26 #144321 | time-split | full (2048×2048) | 2 / 15 (test half) | 1000 frames, heavy max-area filtering |
-
-`results/all_runs.csv` aggregates headline metrics across every run.
-
----
-
-## Changes from the Original Pipeline (p3 → p4)
 
 ### Input format auto-detection
 p3 assumed a fixed file layout. p4 auto-detects five formats:
@@ -106,39 +193,25 @@ p3 assumed a fixed file layout. p4 auto-detects five formats:
 | `interleaved` | One `*.lux*.h5` with z-planes packed into the T axis; `n_planes` read from HDF5 metadata |
 | `legacy` | Any `*.h5` with a `Data` key |
 
-Format can also be overridden via `--format`.
-
-### Brain mask preprocessing
-An Otsu-threshold brain mask is computed from the mean image, cleaned with morphological opening/closing, and applied before CNMF to zero out dark periphery pixels. This prevents CNMF from initialising components in regions the biology team flagged as outside the imaging plane. Disabled with `--no-mask`.
-
-The mask is **hard** during preprocessing (pixels are zeroed to keep CNMF fast), but the quality filter uses a **soft boundary** controlled by `--soft-mask-margin` (default: 15 px). Components whose centroids fall just outside the hard mask edge but within this margin are still kept. This prevents the Otsu mask from falsely rejecting legitimate neurons near the brain boundary. Set `--soft-mask-margin 0` to reproduce the original hard-rejection behavior.
-
-### Quality filters inside Bayesian tuning
-p3 ran quality filters only post-hoc. p4 applies them **inside every Bayesian trial**: the composite score that the optimizer maximises is computed on the **filtered** neuron count, not the raw count. This means the optimizer is rewarded for finding real neurons rather than accumulating noise blobs.
-
-Filters applied per component:
-- **Circularity** `4π·area / perimeter²` ≥ `--min-circularity` (default 0.5)
-- **Max area** ≤ `--max-area-factor × π × gSig²` (default 4×)
-- **In-mask** centroid must fall inside the brain mask
-
-### Composite scoring
-The Bayesian objective balances:
-```
-score = 1.0 × (1 − recon_error)
-      + 0.5 × spatial_compactness
-      − 0.3 × log(1 + trace_sparsity)
-      + 1.0 × stability          # cross-half footprint overlap
-      + 0.001 × log(1 + n_kept)  # small bonus for real neuron count
-```
-
 ### Configurable resolution
 `--resolution {full, 1024, 512}` — search space bounds for `gSig`, `rf`, and motion-correction parameters scale automatically with resolution.
-
-### CPU pinning
-`--pin-cpus 0-31` binds the process to specific cores via `os.sched_setaffinity` (Linux only), useful on shared HPC nodes. `--n-workers N` sets the CNMF worker count explicitly. When neither flag is provided, workers default to `os.cpu_count() - 1`.
 
 ### Stripe removal
 Per-column temporal median subtraction removes light-sheet illumination stripes before CNMF. Disabled with `--no-stripe`.
 
 ### Monitoring script
 `monitor.py` is a stdin-pipe logger that timestamps CNMF lifecycle events (`fit_file starting`, `fit_file done`, time-split boundaries) and appends them to `logs/` without blocking the main run.
+
+## 🔬 Validation Strategy
+
+To ensure parameters remain reliable across experimental conditions:
+
+* **Time Windows**: Test stability across early baseline vs. late behavioral engagement windows.
+* **Z-Planes**: Validate spatial bounding box sizes (`gSig`, `gSiz`) across dorsal, intermediate, and ventral brain planes where cell packing density varies.
+* **Behavioral Tasks**: Validate signal fidelity during spontaneous activity, visual stimulation, and motor execution sessions.
+
+---
+
+## 📄 License & Acknowledgments
+
+This project builds upon the open-source **CaImAn** framework (Flatiron Institute) adapted specifically for whole-brain larval zebrafish dynamics. Distributed under the MIT License.
