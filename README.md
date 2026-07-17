@@ -4,9 +4,7 @@ An automated, robust pipeline for whole-brain and multi-plane calcium imaging an
 
 This repository provides an end-to-end framework to process calcium imaging datasets, perform automated hyper-parameter tuning, enforce strict spatial/signal quality control, and validate parameter transferability across experimental conditions.
 
----
-
-## 📌 Project Overview & Key Objectives
+## Project Overview & Key Objectives
 
 In large-scale larval zebrafish calcium imaging, variance in optical setups (light-sheet/SPIM, two-photon, spinning disk), acquisition framerates, signal-to-noise ratios (SNR), and optical artifacts makes standard fixed-parameter CNMF (Constrained Non-negative Matrix Factorization) fragile and prone to false detections. 
 
@@ -17,9 +15,7 @@ This project addresses these challenges through four core objectives:
 3. **Validation of Parameter Generalizability**: Test and validate parameter robustness and transferability across different recording time windows, optical z-planes, and behavioral tasks.
 4. **Noise & Non-Neuronal Artifact Suppression**: Suppress out-of-brain pixels, excitation light stripe artifacts, and non-neuronal spatial noise blobs using geometry- and signal-based quality filters.
 
----
-
-## 🏗 System Architecture & Workflow
+## System Architecture & Workflow
 
 The pipeline is organized into modular processing stages, accessible via main scripts: `calibrate_cnmf.py` (for automated calibration) and `new_pipeline.py` (for production execution).
 
@@ -66,9 +62,7 @@ The pipeline is organized into modular processing stages, accessible via main sc
 Structured Results (HDF5 / NPY / Diagnostic PNG Plots)
 ```
 
----
-
-## ⚙️ Core Components & Features
+## Core Components & Features
 
 ### 1. Preprocessing (`preprocess_movie`)
 - **Stripe Removal**: Eliminates characteristic illumination lines and laser scanning artifacts from light-sheet imaging using FFT and row/column spatial median filtering.
@@ -84,9 +78,8 @@ Structured Results (HDF5 / NPY / Diagnostic PNG Plots)
 - **Geometry-Based Filters**: Rejects components based on non-somatic aspect ratios, irregular spatial extent, or spatial overlap with out-of-brain masks.
 - **Signal-Based Filters**: Evaluates spatial footprint correlation (`rval_thr`), transient baseline stability, and signal-to-noise ratio (`min_SNR`).
 
----
 
-## 🚀 Installation & Environment Setup
+## Installation & Environment Setup
 
 ### Prerequisites
 - Python 3.9 or 3.10
@@ -111,9 +104,7 @@ pip install numpy scipy matplotlib scikit-image h5py openpyxl
 
 ```
 
----
-
-## 💻 Usage
+## Usage
 
 ### Step 1: Automated Calibration (`calibrate_cnmf.py`)
 
@@ -143,7 +134,6 @@ python orig_pipeline_refactored.py \
 
 *Outputs:* `preprocess_movie.png`, `brain_mask_movie.png`, extracted traces, and HDF5 component files.
 
----
 
 **Monitor long runs** by piping stdout through `monitor.py`, which timestamps key CNMF events and appends them to `logs/`:
 
@@ -157,7 +147,7 @@ All outputs (plots, traces, CSVs, `summary.json`) are written to `results/<run-n
 `results/all_runs.csv` aggregates headline metrics across every run.
 
 
-## 🛠 Configuration Parameters
+## Configuration Parameters
 
 Primary parameters are defined in `BASE_PARAMS` and overridden via `best_params.json`:
 
@@ -172,7 +162,6 @@ Primary parameters are defined in `BASE_PARAMS` and overridden via `best_params.
 | `rval_thr` | float | `0.85` | Spatial profile correlation threshold |
 | `border_nan` | str | `"copy"` | Boundary handling mode for motion correction |
 
----
 ## Validation Modes
 
 | Mode | Description |
@@ -202,16 +191,6 @@ Per-column temporal median subtraction removes light-sheet illumination stripes 
 ### Monitoring script
 `monitor.py` is a stdin-pipe logger that timestamps CNMF lifecycle events (`fit_file starting`, `fit_file done`, time-split boundaries) and appends them to `logs/` without blocking the main run.
 
-## 🔬 Validation Strategy
-
-To ensure parameters remain reliable across experimental conditions:
-
-* **Time Windows**: Test stability across early baseline vs. late behavioral engagement windows.
-* **Z-Planes**: Validate spatial bounding box sizes (`gSig`, `gSiz`) across dorsal, intermediate, and ventral brain planes where cell packing density varies.
-* **Behavioral Tasks**: Validate signal fidelity during spontaneous activity, visual stimulation, and motor execution sessions.
-
----
-
-## 📄 License & Acknowledgments
+## License & Acknowledgments
 
 This project builds upon the open-source **CaImAn** framework (Flatiron Institute) adapted specifically for whole-brain larval zebrafish dynamics. Distributed under the MIT License.
