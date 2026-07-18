@@ -5,3 +5,5 @@ results/*/_work/*.tif
 .claude
 .github
 venv
+
+.env

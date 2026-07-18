@@ -1288,6 +1288,83 @@ def bayesian_tune(
 
     return best_params, df, counts_log
 
+import json
+import matplotlib.pyplot as plt
+from caiman.utils.visualization import plot_contours
+
+def generate_optimized_plots(images, cnm, output_dir):
+    """
+    Generates spatial contour and temporal trace plots using the fitted 
+    CNMF object after parameter calibration.
+    """
+    print("[STAGE: plotting] Generating diagnostic contour and trace plots...")
+    
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # ---------------------------------------------------------
+    # 1. Spatial Contour Plot
+    # ---------------------------------------------------------
+    # Calculate local correlation image for the background
+    Cn = cm.local_correlations(images, swap_dim=False)
+    Cn[np.isnan(Cn)] = 0
+    
+    fig_spatial, ax_spatial = plt.subplots(figsize=(10, 10), dpi=100)
+    
+    # Plot components over the correlation image
+    plot_contours(cnm.estimates.A, Cn, ax=ax_spatial, display_numbers=False, thr=0.9)
+    ax_spatial.set_title("Optimized Spatial Footprints (Contours)")
+    ax_spatial.axis('off')
+    
+    contour_path = os.path.join(output_dir, "optimized_contours.png")
+    fig_spatial.savefig(contour_path, bbox_inches="tight")
+    plt.close(fig_spatial)
+    print(f"Saved contour plot to {contour_path}")
+
+    # ---------------------------------------------------------
+    # 2. Temporal Traces Plot
+    # ---------------------------------------------------------
+    # Use delta F/F if available, otherwise fallback to raw temporal components
+    if hasattr(cnm.estimates, 'F_dff') and cnm.estimates.F_dff is not None:
+        traces = cnm.estimates.F_dff
+        ylabel = "Normalized $\\Delta F/F$ + Offset"
+    else:
+        traces = cnm.estimates.C
+        ylabel = "Normalized Fluoresence + Offset"
+        
+    num_components = traces.shape[0]
+    
+    if num_components > 0:
+        fig_traces, ax_traces = plt.subplots(figsize=(13, 5), dpi=100)
+        
+        # Plot up to the top 15 components to avoid visual clutter
+        components_to_plot = min(15, num_components)
+        offset = 0
+        
+        for i in range(components_to_plot):
+            trace = traces[i, :]
+            # Normalize the trace to a [0, 1] range for clean stacking
+            trace_norm = (trace - np.min(trace)) / (np.max(trace) - np.min(trace) + 1e-6)
+            ax_traces.plot(trace_norm + offset, lw=1.2)
+            offset += 1.2  # Vertical stagger
+            
+        ax_traces.set_title(f"Temporal Traces (Top {components_to_plot} of {num_components} Components)")
+        ax_traces.set_xlabel("Frames")
+        ax_traces.set_ylabel(ylabel)
+        
+        # Remove y-ticks as the offset makes absolute values arbitrary
+        ax_traces.set_yticks([]) 
+        
+        trace_path = os.path.join(output_dir, "optimized_traces.png")
+        fig_traces.tight_layout()
+        fig_traces.savefig(trace_path)
+        plt.close(fig_traces)
+        print(f"Saved temporal traces plot to {trace_path}")
+    else:
+        print("[WARNING] No components found to plot traces.")
+
+
+
 
 # =============================================================================
 # MAIN — load one dataset, preprocess, calibrate, save best params
@@ -1323,6 +1400,16 @@ def main():
 
     best_params, trials_df, _ = bayesian_tune(mmap_path, dims, mask, tag="calib")
 
+    # ... [Existing calibrate_cnmf.py optimization logic] ...
+    # Assume `cnm` is your fitted CNMF object and `images` is your loaded memory-mapped movie
+    # TODO edit this to show contours of the best run
+    # Load the newly generated best parameters to confirm they saved correctly
+    params_file = os.path.join(OUTPUT_DIR, "best_params.json")
+    _reload_images()
+    # Generate the validation plots
+    generate_optimized_plots(images, cnm, OUTPUT_DIR)
+
+
     summary = {
         "run_name": ARGS.run_name,
         "data_dir": str(ARGS.data_dir),
@@ -1352,5 +1439,8 @@ def main():
     print(f"{'='*70}")
 
 
+# =========================================================
+# Execution Hook
+# =========================================================
 if __name__ == "__main__":
     main()
