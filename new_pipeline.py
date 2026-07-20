@@ -179,7 +179,6 @@ from skimage.morphology import (
 )
 from skimage.filters import threshold_otsu
 from scipy.optimize import linear_sum_assignment
-from skopt.space import Integer, Real, Categorical
 
 import caiman as cm
 import caiman
@@ -517,7 +516,7 @@ def preprocess_movie(
 
 
 def get_base_params(external_params: dict = None) -> dict:
-    """[UPGRADE 1] Merges external best_params JSON with hardcoded ones."""
+    """ Merges external best_params JSON with hardcoded ones."""
     external = external_params or {}
 
     if ARGS.resolution == "512":
