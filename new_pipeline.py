@@ -25,7 +25,7 @@ import argparse
 import glob
 import json
 import re
-import sys
+from scipy.ndimage import binary_fill_holes
 import multiprocessing
 import time
 import warnings
@@ -57,7 +57,9 @@ RESULTS_ROOT = SCRIPT_DIR / "results"
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Universal CNMF pipeline with quality filters and 4 validation modes.",
+        description="Universal CaImAn CNMF pipeline (motion correction optional, preprocessing "
+        "with downsampling/striping-removal/brain-masking, patch-wise CNMF, "
+        "refit, component evaluation and DF/F0).",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     p.add_argument(
@@ -79,8 +81,21 @@ def parse_args() -> argparse.Namespace:
         required=True,
         type=Path,
         default=None,
-        help="Folder for run",
+        help="Path to the raw movie (e.g. an HDF5 file/folder)",
     )
+    p.add_argument(
+        "--var-name-hdf5",
+        default="Data",
+        help="Variable name to load from the HDF5 file",
+    )
+    p.add_argument(
+        "--save-path",
+        default="pipeline_results.hdf5",
+        help="Filename (within --output-dir) for the saved CNMF results",
+    )
+    p.add_argument(
+        "--save-traces", action="store_true", help="Also save estimates.C to a CSV file"
+    )  # TODO save by default
 
     # Z-plane selection
     p.add_argument(
@@ -105,7 +120,7 @@ def parse_args() -> argparse.Namespace:
         help="Spatial resolution (default 512)",
     )
     p.add_argument(
-        "--mask", action="store_true", help="Disable brain mask (default: mask ON)"
+        "--mask", action="store_true", help="Enable brain mask (default: mask OFF)"
     )
     p.add_argument(
         "--no-stripe", action="store_true", help="Disable column-median stripe removal"
@@ -117,6 +132,13 @@ def parse_args() -> argparse.Namespace:
         help="Cap loaded frames at N (useful for huge single-movie files)",
     )
 
+    p.add_argument(
+        "--no-mc",
+        action="store_true",
+        help="Don't run NoRMCorre piecewise-rigid motion correction before CNMF "
+        "(disabled by default, matching the source notebook)",
+    )
+
     # Format override
     p.add_argument(
         "--format",
@@ -124,14 +146,6 @@ def parse_args() -> argparse.Namespace:
         choices=["multi-tp", "multi-cam", "single-movie", "stacked", "legacy"],
         default=None,
         help="Override auto-detect format",
-    )
-
-    
-    p.add_argument(
-        "--min-snr-trace",
-        type=float,
-        default=1.5,
-        help="Reject components with trace SNR below this",
     )
 
     p.add_argument(
@@ -148,6 +162,14 @@ def parse_args() -> argparse.Namespace:
         help="CPU workers for CNMF patch processing (default: cpu_count - 1)",
     )
 
+    p.add_argument(
+        "--no-play",
+        action="store_true",
+        help="Skip generating/saving diagnostic plots (headless-friendly; movie playback "
+        "and interactive Bokeh widgets from the notebook are always skipped in this "
+        "CLI script)",
+    )
+
     return p.parse_args()
 
 
@@ -160,6 +182,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 WORK_DIR = OUTPUT_DIR / "_work"
 WORK_DIR.mkdir(parents=True, exist_ok=True)
 
+N_WORKERS = ARGS.n_workers
+
 
 # =============================================================================
 # IMPORTS
@@ -169,11 +193,9 @@ import h5py
 import numpy as np
 import pandas as pd
 import tifffile
-import skimage.transform
 from skimage.morphology import (
-    convex_hull_image,
-    binary_closing,
-    binary_opening,
+    closing,
+    opening,
     disk,
     remove_small_objects,
 )
@@ -181,13 +203,13 @@ from skimage.filters import threshold_otsu
 from scipy.optimize import linear_sum_assignment
 
 import caiman as cm
-import caiman
 import caiman.mmapping
 import caiman.base.movies
 from caiman.source_extraction.cnmf import cnmf as cnmf_module
 from caiman.source_extraction.cnmf import params as params_module
 
 from caiman.motion_correction import MotionCorrect
+from caiman.utils.visualization import plot_contours
 
 if not hasattr(cm, "load"):
     cm.load = caiman.base.movies.load
@@ -198,7 +220,7 @@ if not hasattr(cm, "paths"):
 
 
 # =============================================================================
-# EXTERNAL PARAMETERS 
+# EXTERNAL PARAMETERS
 # =============================================================================
 
 
@@ -348,12 +370,12 @@ def load_movie(
         if z_index >= nz:
             raise ValueError(f"z_index {z_index} >= n_planes {nz}")
         frames_per_plane = T_full // nz
-        
+
         if max_frames:
             frames_per_plane = min(frames_per_plane, max_frames)
         print(f"  Stacked: z={z_index}/{nz} planes -> {frames_per_plane} frames")
         with h5py.File(files[0], "r") as fh:
-            data = fh["Data"][:].astype(np.float32)
+            data = fh["Data"][z_index::nz][:frames_per_plane].astype(np.float32)
         return data
 
     if fmt == "multi-tp":
@@ -401,49 +423,56 @@ def load_movie(
 # PREPROCESSING
 # =============================================================================
 
+
 def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Subtract the per-column median to remove scan-line striping artifacts."""
     col_median = np.median(data, axis=(0, 1), keepdims=True)
     cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
     return cleaned, col_median
 
-def make_brain_mask(data: np.ndarray, label: str = "") -> np.ndarray:
+
+def make_brain_mask(data: np.ndarray, ratio: float, label: str = "") -> np.ndarray:
     """
-    Build a binary mask of brain pixels using Otsu on the mean image.
-    Cleans up with morphological opening/closing and keeps the largest blob.
+    Build a binary mask of brain pixels using Otsu on a low-percentile
+    (motion-robust, baseline-like) projection. Cleans up with morphological
+    opening/closing and fills holes.
     """
-    ref_img = np.percentile(data, 20, axis=0)  # low percentile ≈ baseline, motion-robust
-    
+    ref_img = np.percentile(data, 20, axis=0)
+
     try:
         thr = threshold_otsu(ref_img)
     except Exception:
-        pass
-        
+        print(
+            "[STAGE:make_brain_mask] WARNING: Otsu failed. Falling back to mean threshold."
+        )
+        thr = np.mean(ref_img)
+
     mask = ref_img > thr
-    
+
     if mask.sum() < 100:
         print(
-            f"  WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask."
+            f"[STAGE:make_brain_mask] WARNING: Otsu mask is tiny ({mask.sum()} px). Falling back to no mask."
         )
         return np.ones_like(mask, dtype=bool)
 
-    from scipy.ndimage import binary_fill_holes
     mask = binary_fill_holes(mask)
 
-    # 4. Tie structuring element to pixel size
-    um_per_px = 0.208
+    um_per_px = 0.208 / ratio
     se_radius = max(3, int(10 / um_per_px))  # ~10 µm in pixel units
 
-    mask = binary_opening(mask, disk(se_radius))
-    mask = binary_closing(mask, disk(se_radius * 2))
+    mask = opening(mask, disk(se_radius))
+    mask = closing(mask, disk(se_radius * 2))
     mask = binary_fill_holes(mask)  # again after closing
     mask = remove_small_objects(mask, min_size=int(500 / um_per_px**2))
-    
+
     if mask.sum() < 100:
         print(f"  WARNING: brain mask too small after cleanup. Disabling mask.")
         return np.ones_like(mask, dtype=bool)
 
     coverage = 100.0 * mask.sum() / mask.size
-    print(f"  Brain mask coverage: {coverage:.1f}% of frame")
+    print(
+        f"[STAGE:make_brain_mask] INFO: Brain mask coverage: {coverage:.1f}% of frame ({label})"
+    )
     return mask
 
 
@@ -458,18 +487,18 @@ def preprocess_movie(
     info = {"original_shape": tuple(data.shape)}
     print(f"\n[preprocess {label}]  input shape={data.shape}")
 
-    # Downsample if necessary
-    res = ARGS.resolution
-    if data.shape[1] != res:
-        ratio = res / data.shape[1]
+    data = cm.movie(data)
+    target = int(ARGS.resolution) if ARGS.resolution != "full" else data.shape[1]
+    ratio = target / data.shape[1]
 
-        print(f"  Downsampling -> {(res, res)}")
+    if ratio != 1:
+        print(f"  Downsampling -> {(target, target)}")
         data = data.resize(fx=ratio, fy=ratio, fz=1.0)
-        info["downsampled_to"] = (res, res)
+        info["downsampled_to"] = (target, target)
 
     if not ARGS.no_stripe:
         data, col_median = stripe_remove(data)
-        
+
         data = cm.movie(data)
 
         info["stripe_removed"] = True
@@ -488,8 +517,8 @@ def preprocess_movie(
     else:
         info["stripe_removed"] = False
 
-    if not ARGS.no_mask:
-        mask = make_brain_mask(data, label=label)
+    if ARGS.mask:
+        mask = make_brain_mask(data, ratio=ratio, label=label)
         data = cm.movie(apply_mask(data, mask))
         info["brain_mask_used"] = True
         info["mask_coverage_frac"] = float(mask.sum() / mask.size)
@@ -516,7 +545,7 @@ def preprocess_movie(
 
 
 def get_base_params(external_params: dict = None) -> dict:
-    """ Merges external best_params JSON with hardcoded ones."""
+    """Merges external best_params JSON with hardcoded ones."""
     external = external_params or {}
 
     if ARGS.resolution == "512":
@@ -542,23 +571,23 @@ def get_base_params(external_params: dict = None) -> dict:
         )
 
     base = {
-        "fr": external.get("fr", 5),
-        "decay_time": external.get("decay_time", 1.0),
-        "method_init": external.get("method_init", "corr_pnr"),
-        "K": external.get("K", None),
-        "nb": external.get("nb", 0),
-        "nb_patch": external.get("nb_patch", 0),
-        "center_psf": external.get("center_psf", True),
-        "ring_size_factor": external.get("ring_size_factor", 1.4),
-        "merge_thr": external.get("merge_thr", 0.85),
-        "use_cnn": external.get("use_cnn", False),
-        "min_SNR": ARGS.min_snr_trace,
-        "rval_thr": external.get("rval_thr", 0.85),
-        "del_duplicates": external.get("del_duplicates", True),
-        "ssub": external.get("ssub", 1),
-        "tsub": external.get("tsub", 1),
-        "only_init": external.get("only_init", False),
-        "pw_rigid": external.get("pw_rigid", True),
+        "fr": 5,
+        "decay_time": external.get("decay_time", 0.25), #tuned
+        "method_init": "greedy_roi", 
+        "K": external.get("K", None),  #tuned
+        # TODO compute gSiz from gSig here instead of run_cnmf
+        "nb": external.get("nb", 1), #tuned
+        "nb_patch": external.get("nb_patch", 1), # same as nb
+        "merge_thr": 0.9,
+        "use_cnn": True,
+        "min_cnn_thr": 0.99,  # threshold for CNN based classifier
+        "cnn_lowest": 0.1,  # neurons with cnn probability lower than this value are rejected
+        "min_SNR": 2.0,
+        "rval_thr": 0.85,
+        "del_duplicates": True,
+        "ssub": 1,
+        "tsub": 1,
+        "pw_rigid": True,
         "border_nan": "copy",
         **mc,
         **external,
@@ -579,18 +608,23 @@ BASE_PARAMS = get_base_params(LOADED_BEST_PARAMS)
 
 
 def array_to_memmap(array: np.ndarray, basename: Path) -> str:
+    """Write an array to a temporary TIFF and memory-map it via Caiman."""
     tif = str(basename) + ".tif"
     tifffile.imwrite(tif, array.astype(np.float32))
-    return caiman.mmapping.save_memmap(
+    mmap_path = caiman.mmapping.save_memmap(
         [tif],
         base_name=str(basename),
         order="C",
         border_to_0=0,
     )
+    if not ARGS.keep_temp and os.path.exists(tif):
+        os.remove(tif)
+    return mmap_path
 
 
 def _setup_cluster(nworkers=N_WORKERS):
     try:
+        print(f"    [STAGE]:Setting up cluster")
         _, cluster, n_processes = cm.cluster.setup_cluster(
             backend="multiprocessing", n_processes=nworkers, single_thread=False
         )
@@ -613,38 +647,78 @@ def _prep_params(params_override: dict, fname_mmap: str) -> "params_module.CNMFP
     """Stage: build CNMFParams from overrides. Normalizes gSig/gSig_filt to int tuples."""
     print("  [STAGE:prepping parameters] starting", flush=True)
     p = {**BASE_PARAMS, **params_override, "fnames": [fname_mmap]}
-    for key in ("gSig", "gSig_filt"):
-        val = p.get(key)
-        if val is None:
-            continue
-        if isinstance(val, tuple):
-            p[key] = (int(val[0]), int(val[1]))
-        else:
-            p[key] = (int(val), int(val))
+    g = int(p["gSig"])
+    p["gSig"] = (g, g)
 
     if "gSiz" not in params_override:
-        g = p["gSig"]
-        p["gSiz"] = (4 * int(g[0]) + 1, 4 * int(g[1]) + 1)
+        siz = int(round((2 * g) + 1))
+        p["gSiz"] = (siz, siz)
 
     print("  [STAGE:prepping parameters] done", flush=True)
 
     return params_module.CNMFParams(params_dict=p)
 
+def _motion_correct(fname_mmap: str) -> str:
+    """Run motion correction once on the input mmap and return the MC'd output path.
 
-def _motion_correct(fname_mmap: str, opts, cluster) -> str:
-    """Stage: motion correction. Raises on failure — caller decides how to handle."""
-    print("  [STAGE:motion_correction] starting", flush=True)
-    mc = MotionCorrect([fname_mmap], dview=cluster, **opts.get_group("motion"))
-    mc.motion_correct(save_movie=True)
-    fname_to_use = cm.save_memmap(
-        mc.mmap_file,
-        base_name="memmap_",
-        order="C",
-        border_to_0=0,  # exclude borders, if that was done
-        dview=cluster,
+    Called once before the Bayesian optimization loop so MC is not repeated
+    per trial (MC params are constant across trials).
+
+    CaImAn names the MC output by appending to the input filename, so the
+    output ends up with two 'order_X' substrings, e.g.:
+      ...order_C_frames_350_els__d1_..._order_F_frames_350.mmap
+    CaImAn's load_memmap uses re.search and hits 'order_C' (from the input)
+    first, but the file is actually F-order — causing scrambled data and SVD
+    failure when fit_file(motion_correct=False) loads it. We fix this by
+    force-loading the raw MC output as F-order and writing a clean, unambiguously
+    named C-order mmap that load_memmap will parse correctly.
+    """
+    mc_keys = ("max_shifts", "strides", "overlaps", "max_deviation_rigid", "pw_rigid", "border_nan")
+    mc_params = {k: BASE_PARAMS[k] for k in mc_keys if k in BASE_PARAMS}
+    t0 = time.time()
+    print("  [precomputing motion correction — runs once for all trials]", flush=True)
+    cluster, n_processes = _setup_cluster(10)
+    print(
+        f"Successfully initialized multicore processing with a pool of {n_processes} CPU cores"
     )
-    print(f"  [STAGE:motion_correction] done -> {fname_to_use}", flush=True)
-    return fname_to_use
+    try:
+        mc = MotionCorrect([fname_mmap], dview=cluster, **mc_params)
+        mc.motion_correct(save_movie=True)
+        pw = BASE_PARAMS.get("pw_rigid", True)
+        mc_raw = mc.fname_tot_els[-1] if pw else mc.fname_tot_rig[-1]
+
+        # Parse the true output dimensions from the filename (last d1/d2/d3/frames match).
+        m = re.search(r"d1_(\d+)_d2_(\d+)_d3_(\d+).*frames_(\d+)\.mmap$", mc_raw)
+        d1, d2, d3, T = (
+            int(m.group(1)),
+            int(m.group(2)),
+            int(m.group(3)),
+            int(m.group(4)),
+        )
+
+        # Force-load as F-order (the true MC output format) and write a clean C-order
+        # mmap with an unambiguous single-'order' filename.
+        out_path = str(
+            Path(mc_raw).parent
+            / f"Yr_mc_d1_{d1}_d2_{d2}_d3_{d3}_order_C_frames_{T}.mmap"
+        )
+        src = np.memmap(
+            mc_raw, dtype=np.float32, mode="r", shape=(d1 * d2 * d3, T), order="F"
+        )
+        dst = np.memmap(
+            out_path, dtype=np.float32, mode="w+", shape=(d1 * d2 * d3, T), order="C"
+        )
+        np.copyto(dst, src)
+        dst[~np.isfinite(dst)] = 0  # zero NaN/Inf border pixels left by MC
+        del dst  # flush to disk
+    finally:
+        try:
+            _stop_cluster(cluster)
+        except Exception:
+            pass
+
+    print(f"  [MC done in {time.time()-t0:.1f}s → {Path(out_path).name}]", flush=True)
+    return out_path
 
 
 def _fit_cnmf(fname_to_use: str, opts, n_processes: int, cluster):
@@ -726,8 +800,6 @@ def run_cnmf(
     params_override: dict,
     fname_mmap: str,
     do_mc: bool = True,
-    do_filter_caiman: bool = True,
-    do_refit: bool = True,
 ):
     """
     Run CNMF, then validate found neurons in two passes:
@@ -759,8 +831,9 @@ def run_cnmf(
         fname_to_use = fname_mmap
         if do_mc:
             try:
-                cluster, n_processes = _setup_cluster(10)
-                fname_to_use = _motion_correct(fname_mmap, opts, cluster)
+                fname_to_use = _motion_correct(fname_mmap)
+            except:
+                print("Motion correction failed. Using original memmap", flush=True)
             finally:
                 if cluster is not None:
                     _stop_cluster(cluster)
@@ -768,26 +841,34 @@ def run_cnmf(
 
         else:
             print(
-                "  [STAGE:motion_correction] skipped — using precomputed mmap",
+                "  [STAGE:motion_correction] skipped — using orignal memmap",
                 flush=True,
             )
 
         cluster, n_processes = _setup_cluster()
+
         cnmf_obj = _fit_cnmf(fname_to_use, opts, n_processes, cluster)
 
+        cnmf_refit = cnmf_obj
+
         images = None
-        if cnmf_obj.estimates.A.shape[1] > 0:
+        if cnmf_obj.estimates.A is not None and cnmf_obj.estimates.A.shape[1] > 0:
             images = _reload_images(fname_to_use)
 
-        if do_refit and images is not None and cnmf_obj.estimates.A.shape[1] > 0:
-            cnmf_obj = _refit(cnmf_obj, images, cluster)
+        
+        if (
+            images is not None
+            and cnmf_obj.estimates.A is not None
+            and cnmf_obj.estimates.A.shape[1] > 0
+        ):
+            cnmf_refit = _refit(cnmf_obj, images, cluster)
 
-        if do_filter_caiman and images is not None:
-            _evaluate_and_select(cnmf_obj, images, cluster)
+        if images is not None:
+            _evaluate_and_select(cnmf_refit, images, cluster)
 
         _stop_cluster(cluster)
         cluster = None
-        return cnmf_obj, time.time() - t0, fname_to_use
+        return cnmf_refit, time.time() - t0, fname_to_use
 
     except Exception as exc:
         # Only _motion_correct and _fit_cnmf raise past this point (fatal stages).
@@ -803,173 +884,158 @@ def run_cnmf(
                 pass
 
 
-
-
-def compute_stability(A1, A2, threshold: float = 0.5) -> float:
-    if A1 is None or A2 is None or A1.shape[1] == 0 or A2.shape[1] == 0:
-        return 0.0
-    n1 = np.asarray(np.sqrt(A1.power(2).sum(axis=0))).flatten() + 1e-9
-    n2 = np.asarray(np.sqrt(A2.power(2).sum(axis=0))).flatten() + 1e-9
-    corr = np.asarray((A1.multiply(1.0 / n1).T @ A2.multiply(1.0 / n2)).todense())
-    ri, ci = linear_sum_assignment(-corr)
-    return float(np.mean(corr[ri, ci] >= threshold))
-
-
-# =============================================================================
-# TEST PHASE
-# =============================================================================
-
-
-# def test_cnmf(
-#     best_params: dict,
-#     mmap_path: str,
-#     data: np.ndarray,
-#     dims: tuple[int, int],
-#     mask: np.ndarray,
-#     label: str,
-#     tune_A=None,
-# ) -> dict:
-#     print(f"\n{'='*60}\nTEST: {label}\n{'='*60}")
-
-#     Yr, _, _ = caiman.mmapping.load_memmap(mmap_path)
-#     cnmf_obj, rt = run_cnmf(best_params, mmap_path)
-
-#     stability = 0.0
-#     if tune_A is not None and cnmf_obj is not None:
-#         keep_pre, _ = quality_filter(cnmf_obj, dims, mask, int(best_params["gSig"]))
-#         if keep_pre:
-#             stability = compute_stability(tune_A, cnmf_obj.estimates.A[:, keep_pre])
-
-#     metrics, keep, counts = score_run(
-#         cnmf_obj,
-#         Yr,
-#         dims,
-#         mask,
-#         gSig=int(best_params["gSig"]),
-#         stability=stability,
-#     )
-#     metrics["label"] = label
-#     metrics["runtime_s"] = round(rt, 1)
-#     metrics["filter_counts"] = counts
-
-#     n_pre = metrics["n_neurons_pre"]
-#     n = metrics["n_neurons"]
-#     print(
-#         f"  Raw neurons: {n_pre}  kept: {n}  composite: {metrics['composite_score']:+.4f} stability: {stability:.3f}  t={rt:.0f}s"
-#     )
-
-#     if cnmf_obj is not None and n > 0:
-#         safe = (
-#             label.replace(" ", "_").replace("/", "_").replace("(", "").replace(")", "")
-#         )
-#         H_val, W_val = dims
-
-#         # Contour plot
-#         mean_frame = data.mean(axis=0)
-#         fig, ax = plt.subplots(figsize=(11, 11))
-#         ax.imshow(mean_frame, cmap="gray")
-#         ax.set_title(f"{label}: {n} kept neurons (raw {n_pre})", fontsize=10)
-#         ax.axis("off")
-#         if not ARGS.no_mask:
-#             ax.contour(mask, levels=[0.5], colors="lime", linewidths=0.5, alpha=0.5)
-#         for i in keep:
-#             fp = (
-#                 np.asarray(cnmf_obj.estimates.A[:, i].todense())
-#                 .flatten()
-#                 .reshape(H_val, W_val)
-#             )
-#             if fp.max() == 0:
-#                 continue
-#             ax.contour(
-#                 fp, levels=[fp.max() * 0.5], colors="cyan", linewidths=0.4, alpha=0.85
-#             )
-#         plt.tight_layout()
-#         plt.savefig(str(OUTPUT_DIR / f"contours_{safe}.png"), dpi=150)
-#         plt.close(fig)
-
-#         # Sample traces
-#         traces = cnmf_obj.estimates.C[keep]
-#         n_plot = min(8, traces.shape[0])
-#         T = data.shape[0]
-#         t_axis = np.arange(T)
-#         fig, axes_t = plt.subplots(n_plot, 1, figsize=(12, 2 * n_plot), sharex=True)
-#         if n_plot == 1:
-#             axes_t = [axes_t]
-#         for i, ax in enumerate(axes_t):
-#             ax.plot(t_axis, traces[i], lw=1)
-#             ax.set_ylabel(f"N{i}", fontsize=8)
-#             ax.grid(True, alpha=0.3)
-#         axes_t[-1].set_xlabel("Frame")
-#         plt.suptitle(f"Traces — {label}")
-#         plt.tight_layout()
-#         plt.savefig(str(OUTPUT_DIR / f"traces_{safe}.png"), dpi=120)
-#         plt.close(fig)
-
-#         np.save(str(OUTPUT_DIR / f"traces_{safe}.npy"), traces)
-
-#     return metrics
-
-
 # =============================================================================
 # OUTPUT
 # =============================================================================
 
-
 def save_summary(
     mode: str,
     best_params: dict,
-    test_results: dict,
-    fmt_info: dict,
+    fmt: str,
+    prep_info: dict,
+    cnmf_obj,
     extra: dict | None = None,
 ):
+    """
+    Saves a JSON summary and appends key metrics to a master CSV.
+    Updated to capture actual data from the new CNMF run and preprocessing stages.
+    """
+    # Safely extract the number of neurons kept after evaluation/refit
+    n_neurons = 0
+    if cnmf_obj and hasattr(cnmf_obj, 'estimates') and cnmf_obj.estimates.A is not None:
+        n_neurons = cnmf_obj.estimates.A.shape[1]
+
+    # Build the comprehensive JSON summary
     summary = {
         "mode": mode,
         "run_name": ARGS.run_name,
         "resolution": ARGS.resolution,
-        "brain_mask": not ARGS.no_mask,
+        "brain_mask": ARGS.mask,
         "stripe_removal": not ARGS.no_stripe,
-        "quality_filters": not ARGS.no_quality_filters,
         "best_params": best_params,
-        "format_info": fmt_info,
-        "tests": {},
+        "format_info": fmt,
+        "preprocessing_info": prep_info,
+        "n_neurons_found": n_neurons,
     }
-    for label, m in test_results.items():
-        if isinstance(m, dict):
-            summary["tests"][label] = {
-                k: v for k, v in m.items() if not isinstance(v, (np.ndarray,))
-            }
+    
     if extra:
         summary.update(extra)
 
+    # Save to JSON in the run's specific output directory
     with open(str(OUTPUT_DIR / "summary.json"), "w") as fh:
         json.dump(summary, fh, indent=2, default=str)
     print(f"\nSaved summary.json -> {OUTPUT_DIR}/")
 
-    # Append master CSV
+    # Build the row for the master CSV file
     master = RESULTS_ROOT / "all_runs.csv"
-    headline_test = next(iter(test_results.values()), None) if test_results else None
-    if isinstance(headline_test, dict):
-        row = {
-            "run_name": ARGS.run_name,
-            "mode": mode,
-            "resolution": ARGS.resolution,
-            "brain_mask": not ARGS.no_mask,
-            "n_neurons_kept": headline_test.get("n_neurons", 0),
-            "n_neurons_raw": headline_test.get("n_neurons_pre", 0),
-            "composite_score": headline_test.get("composite_score", float("nan")),
-            "stability": headline_test.get("stability", 0.0),
-            "gSig": best_params.get("gSig"),
-            "min_corr": best_params.get("min_corr"),
-            "min_pnr": best_params.get("min_pnr"),
-            "rf": best_params.get("rf"),
-            "p": best_params.get("p"),
-        }
-        df_row = pd.DataFrame([row])
-        if master.is_file():
-            df_row.to_csv(master, mode="a", header=False, index=False)
-        else:
-            df_row.to_csv(master, index=False)
-        print(f"Appended row to {master}")
+    row = {
+        "run_name": ARGS.run_name,
+        "mode": mode,
+        "format": fmt,
+        "resolution": ARGS.resolution,
+        "brain_mask": ARGS.mask,
+        "stripe_removal": not ARGS.no_stripe,
+        "n_neurons_kept": n_neurons,
+        "mask_coverage_frac": prep_info.get("mask_coverage_frac", float("nan")),
+        "gSig": best_params.get("gSig"),
+        "rf": best_params.get("rf"),
+        "p": best_params.get("p"),
+    }
+    
+    df_row = pd.DataFrame([row])
+    
+    # Append or create the master CSV
+    if master.is_file():
+        df_row.to_csv(master, mode="a", header=False, index=False)
+    else:
+        df_row.to_csv(master, index=False)
+    print(f"Appended row to {master}")
+
+
+def generate_optimized_plots(images, cnm, output_dir=OUTPUT_DIR):
+    print("[STAGE: plotting] Generating diagnostic contour and trace plots...")
+
+    # --- 1. Spatial Footprints (Contours) ---
+    Cn = cm.local_correlations(images, swap_dim=False)
+    Cn[np.isnan(Cn)] = 0
+
+    fig_spatial, ax_spatial = plt.subplots(figsize=(10, 10), dpi=100)
+    plot_contours(cnm.estimates.A, Cn, ax=ax_spatial, display_numbers=False, thr=0.9)
+    ax_spatial.set_title("Optimized Spatial Footprints (Contours)")
+    ax_spatial.axis("off")
+
+    contour_path = os.path.join(output_dir, "optimized_contours.png")
+    fig_spatial.savefig(contour_path, bbox_inches="tight")
+    plt.close(fig_spatial)
+    
+    # --- 2. Extract / Calculate Traces ---
+    if hasattr(cnm.estimates, "F_dff") and cnm.estimates.F_dff is not None:
+        print("[STAGE: traces] estimates.F_dff already defined.")
+        traces = cnm.estimates.F_dff
+    else:
+        try:
+            print("[STAGE: traces] Calculating estimates.F_dff...")
+            cnm.estimates.detrend_df_f(
+                quantileMin=8, 
+                frames_window=250,
+                flag_auto=False,
+                use_residuals=False
+            )
+            # Fetch the newly calculated dF/F traces
+            traces = cnm.estimates.F_dff 
+        except Exception as e:
+            print(f"[STAGE: traces] Detrend failed ({e}). Falling back to estimates.C")
+            traces = cnm.estimates.C
+            
+    # --- 3. Save Results as Data ---
+    # Attach correlation image to the object before saving
+    cnm.estimates.Cn = Cn  
+    save_path = str(os.path.join(output_dir, "pipeline_results.hdf5"))
+    cnm.save(save_path)
+    print(f"[STAGE: Save] Saved CNMF results to {save_path}")
+
+    # Save full traces as a raw numpy array
+    npy_save_path = str(os.path.join(output_dir, "neuron_traces.npy"))
+    np.save(npy_save_path, traces)
+    print(f"[STAGE: Save] Saved raw traces as numpy array to {npy_save_path}")
+
+    # Calculate frame times to build a proper DataFrame
+    num_frames = images.shape[0]
+    frame_rate = cnm.params.data.get("fr", 30) # Defaults to 30fps if 'fr' is missing
+    frame_times = np.linspace(0, num_frames / frame_rate, num_frames)
+
+    # Save full traces as a CSV with a time index
+    data_to_save = np.vstack((frame_times, traces)).T
+    save_df = pd.DataFrame(data_to_save)
+    save_df.rename(columns={0: "time"}, inplace=True)
+    c_save_path = os.path.join(output_dir, "neuron_traces.csv")
+    save_df.to_csv(c_save_path, index=False)
+    print(f"[STAGE: Save] Saved traces CSV to {c_save_path}")
+
+    # --- 4. Plot Sample Traces ---
+    num_comps = traces.shape[0]
+    if num_comps > 0:
+        fig_traces, ax_traces = plt.subplots(figsize=(13, 5), dpi=100)
+        components_to_plot = min(15, num_comps)
+        offset = 0
+
+        for i in range(components_to_plot):
+            trace = traces[i, :]
+            # Normalize trace between 0 and 1 for clean stacked plotting
+            trace_norm = (trace - np.min(trace)) / (np.max(trace) - np.min(trace) + 1e-6)
+            ax_traces.plot(frame_times, trace_norm + offset, lw=1.2)
+            offset += 1.2
+
+        ax_traces.set_title(f"Temporal Traces (Top {components_to_plot} of {num_comps} Components)")
+        ax_traces.set_xlabel("Time (s)")
+        ax_traces.set_yticks([])
+
+        trace_path = os.path.join(output_dir, "optimized_traces.png")
+        fig_traces.tight_layout()
+        fig_traces.savefig(trace_path)
+        plt.close(fig_traces)
+        print(f"[STAGE: Save] Saved sample trace plot to {trace_path}")
+
 
 
 # =============================================================================
@@ -977,121 +1043,60 @@ def save_summary(
 # =============================================================================
 
 
-# def mode_time_split():
-#     print(f"\n--- TIME-SPLIT mode ---")
-#     fmt, files, sample_shape, det_n_planes = discover(
-#         ARGS.data_dir, ARGS.format_override, ARGS.n_planes
-#     )
-
-#     z_index = ARGS.z_index
-#     if fmt == "multi-tp":
-#         Z = sample_shape[0]
-#         z_index = Z // 2 if z_index is None else z_index
-
-#     # Data Loading Stage
-#     print(f"[STAGE] Loading movie data (Format: {fmt})...")
-#     raw = load_movie(
-#         ARGS.data_dir,
-#         fmt,
-#         files,
-#         sample_shape,
-#         z_index=z_index,
-#         max_frames=ARGS.max_frames,
-#         n_planes=det_n_planes,
-#     )
-
-#     # Preprocessing Stage
-#     print(f"[STAGE] Running preprocessing (masking, stripe removal, downsampling)...")
-#     data, mask, prep_info = preprocess_movie(raw, label="movie")
-
-#     T_full = data.shape[0]
-#     if T_full < 4:
-#         print(f"ERROR: only {T_full} frames; time-split needs >=4")
-#         sys.exit(1)
-
-#     mid = T_full // 2
-
-#     print(
-#         f"[INFO] Time split established: tune on frames 0-{mid-1}, total test set: {T_full} frames."
-#     )
-
-#     dims = data.shape[1:]
-
-#     # Memory Mapping Stage
-#     print(f"[STAGE] Creating memory maps for processing...")
-#     tune_mmap = array_to_memmap(data[:mid], WORK_DIR / "tune_half")
-
-#     print("\nRe-running best params on tune half...")
-
-#     # Tuning Stage
-#     print(f"[STAGE] Running initial CNMF on tuning half for stability metrics...")
-#     cnmf_tune, _ = run_cnmf(BASE_PARAMS, tune_mmap)
-
-#     gSig_val = BASE_PARAMS["gSig"]
-#     gSig_int = (
-#         int(gSig_val[0]) if isinstance(gSig_val, (tuple, list)) else int(gSig_val)
-#     )
-
-#     tune_keep, _ = (
-#         quality_filter(cnmf_tune, dims, mask, gSig_int) if cnmf_tune else ([], {})
-#     )
-#     tune_A = cnmf_tune.estimates.A[:, tune_keep] if cnmf_tune and tune_keep else None
-
-#     # Full Pipeline Execution Stage
-#     print(f"[STAGE] Running final CNMF pipeline on full dataset...")
-#     full_mmap = array_to_memmap(data, WORK_DIR / "full_movie")
-#     full_metrics = test_cnmf(
-#         BASE_PARAMS,
-#         full_mmap,
-#         data,
-#         dims,
-#         mask,
-#         label="full_movie",
-#         tune_A=tune_A,
-#     )
-
-#     # Reporting Stage
-#     print(f"[STAGE] Finalizing run and saving summary...")
-#     fmt_info = {
-#         "format": fmt,
-#         "n_files": len(files),
-#         "sample_shape": list(sample_shape),
-#         **prep_info,
-#     }
-
-#     save_summary(
-#         "time-split",
-#         BASE_PARAMS,
-#         {"full_movie": full_metrics},
-#         fmt_info,
-#         extra={"z_index": z_index, "T_total": T_full, "data_dir": str(ARGS.data_dir)},
-#     )
-
-#     print(f"[STAGE] Time-split mode completed successfully.")
-
-
 def mode_single_plane():
-    print(f"\n--- SINGLE-PLANE mode ---") 
+    print(f"\n--- SINGLE-PLANE mode ---")
     fmt, files, sample_shape, det_n_planes = discover(
         ARGS.data_dir, ARGS.format_override, ARGS.n_planes
     )
+
     T, _, _ = sample_shape
-    # frames_per_plane = T // det_n_planes
     n_frames = T if ARGS.max_frames is None else (ARGS.max_frames * det_n_planes)
-    
+    z = det_n_planes // 2 if ARGS.z_index is None else ARGS.z_index #TODO possibly remove n_planes argument
+
     # Data Loading Stage
     print(f"[STAGE] Loading movie data (Format: {fmt})...")
-    movie_orig = cm.load(files[0], var_name_hdf5='Data', subindices=slice(0, n_frames, 7)) # TODO assumes interleaved format. edit to include discover and other formats as well
-    
-    # Preprocessing Stage
+    data_raw = load_movie(
+        folder=ARGS.data_dir,
+        fmt=fmt,
+        files=files,
+        shape=sample_shape,
+        z_index=z,
+        max_frames=ARGS.max_frames,
+        n_planes=det_n_planes,
+    )
+    movie_orig = cm.movie(data_raw)
+
+    if not ARGS.no_play:
+        max_projection_orig = np.max(movie_orig, axis=0)
+        correlation_image_orig = caiman.local_correlations(movie_orig, swap_dim=False)
+        correlation_image_orig[np.isnan(correlation_image_orig)] = 0
+        import matplotlib.pyplot as plt
+
+        f, (ax_max, ax_corr) = plt.subplots(1, 2, figsize=(6, 3))
+        ax_max.imshow(
+            max_projection_orig,
+            cmap="viridis",
+            vmin=np.percentile(np.ravel(max_projection_orig), 50),
+            vmax=np.percentile(np.ravel(max_projection_orig), 99.5),
+        )
+        ax_max.set_title("Max Projection Orig", fontsize=12)
+        ax_corr.imshow(
+            correlation_image_orig,
+            cmap="viridis",
+            vmin=np.percentile(np.ravel(correlation_image_orig), 50),
+            vmax=np.percentile(np.ravel(correlation_image_orig), 99.5),
+        )
+        ax_corr.set_title("Correlation Image Orig", fontsize=12)
+        plt.tight_layout()
+        plt.savefig(str(OUTPUT_DIR / "orig_projections.png"), dpi=100)
+        plt.close(f)
+
+    # ---- preprocess ---------------------------------------------------
     print(f"[STAGE] Running preprocessing (masking, stripe removal, downsampling)...")
     data, mask, prep_info = preprocess_movie(movie_orig, label="movie")
-    
-    T_full = data.shape[0]
 
-    print(
-        f"[INFO] Single plane established: Run with {T_full} frames."
-    )
+    T_full = data.shape[0]
+    print(f"[INFO] Single plane established: Run with {T_full} frames.")
 
     dims = data.shape[1:]
 
@@ -1099,42 +1104,35 @@ def mode_single_plane():
     print(f"[STAGE] Creating memory maps for processing...")
     processed_mmap = array_to_memmap(data, WORK_DIR / "full_movie")
 
-    z = det_n_planes // 2 if ARGS.z_index is None else ARGS.z_index
-    
     print(f"[STAGE] Running CNMF on plane {z}")
-    cnmf_obj, _, fname = run_cnmf(BASE_PARAMS, processed_mmap)
-
-    # Full Pipeline Execution Stage
-    print(f"[STAGE] Getting traces for full dataset...")
-    
-    # TODO fill out the rest of this pipeline with traces
-
+    cnmf_obj, _, fname = run_cnmf(BASE_PARAMS, processed_mmap, do_mc=not ARGS.no_mc)
 
     # Reporting Stage
-    print(f"[STAGE] Finalizing run and saving summary...")
-    # fmt_info = {
-    #     "format": fmt,
-    #     "n_files": len(files),
-    #     "sample_shape": list(sample_shape),
-    #     **prep_info,
-    # }
-
-    # save_summary(
-    #     "time-split",
-    #     BASE_PARAMS,
-    #     {"full_movie": full_metrics},
-    #     fmt_info,
-    #     extra={"z_index": z_index, "T_total": T_full, "data_dir": str(ARGS.data_dir)},
-    # )
+    print(f"[STAGE] Generating traces and contours...")
+    mmap_file_path = cnmf_obj.params.data['fnames'][0]
+    
+    # 2. Load the 2D memory-mapped array (Yr)
+    # Yr is flattened to (pixels x frames) to speed up math operations
+    Yr, dims, num_frames = cm.load_memmap(mmap_file_path)
+    
+    # 3. Reshape the 2D array back into a 3D movie: (frames, x, y)
+    # The order="F" (Fortran) parameter is required because of how CaImAn flattens the data
+    images = np.reshape(Yr.T, [num_frames] + list(dims), order="F")
+    generate_optimized_plots(images=images, cnm=cnmf_obj)
+    
+    print("[STAGE] Saving summary...")
+    save_summary(mode="single_plane", best_params=LOADED_BEST_PARAMS, fmt=fmt, prep_info=prep_info, cnmf_obj=cnmf_obj)
 
     print(f"[STAGE] Single-Plane mode completed successfully.")
-    
+
 
 def mode_all_planes():
-    print(f"\n--- ALL-PLANES mode ---") # TODO assumes interleaved format. edit to include discover and other formats as well
-    fmt, files, sample_shape, det_n_planes = discover(
-        ARGS.data_dir, ARGS.format_override, ARGS.n_planes
-    )
+    print(f"\n--- ALL-PLANES mode ---")
+    # fmt, files, sample_shape, det_n_planes = discover(
+    #     ARGS.data_dir, ARGS.format_override, ARGS.n_planes
+    # )
+    # TODO implement for multi-plane too
+    
 
 
 MODES = {
