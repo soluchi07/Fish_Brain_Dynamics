@@ -66,6 +66,7 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument("--resolution", choices=["full", "1024", "512"], default="512")
     p.add_argument("--no-stripe", action="store_true", help="Disable stripe removal (default: stripe ON)")
+    p.add_argument("--no-mc", action="store_true", help="Disable motion correction (default: mc ON)")
     p.add_argument("--mask", action="store_true", help="Enable brain mask (default: mask OFF)")
     p.add_argument("--max-frames", type=int, default=None, help="Cap loaded frames")
     p.add_argument(
@@ -355,8 +356,8 @@ SEARCH_SPACE = [
     Integer(3, 12, name="gSig"),
     Categorical([15, 25, 40, 60, 80], name="rf"),
     Real(0.2, 0.5, name="overlap_fraction"),
-    Integer(1, 2, name="nb"),
-    Categorical([0.2, 0.25, 0.3, 0.35, 0.4], name="decay_time"),
+    Integer(3, 4, name="nb"), # changed nb search sace from 1, 2 -> 3, 4 to avoid background leakage
+    Categorical([0.1, 0.15, 0.2, 0.25, 0.3], name="decay_time"), # changed decay_time search space from 0.2 to 0.4 -> 0.1 to 0.3 to avoid decay time issues
     Real(0.05, 0.3, name="occupancy_frac"),
 ]
 
@@ -946,13 +947,22 @@ def bayesian_tune(mmap_path, dims, mask, tag="calib"):
     df.to_csv(str(OUTPUT_DIR / f"tune_{tag}_log.csv"), index=False)
 
     df_sorted = df.sort_values("composite_score", ascending=False)
-    best = df_sorted.iloc[0].to_dict()
+    best_full = df_sorted.iloc[0].to_dict()
+
+    # Filter the best parameters to return only the requested metrics
+    best = {
+        "gSig": int(best_full.get("gSig")),
+        "rf": int(best_full.get("rf")),
+        "nb": int(best_full.get("nb")),
+        "nb_patch": int(best_full.get("nb_patch")),
+        "decay_time": float(best_full.get("decay_time")),
+        "stride": int(best_full.get("stride")),
+        "K": int(best_full.get("K"))
+    }
 
     print(f"\nBest params ({tag}):")
-    for k in ["gSig", "rf", "stride", "K", "nb", "nb_patch", "decay_time",
-               "overlap_fraction", "occupancy_frac"]:
-        if k in best:
-            print(f"  {k}: {best[k]}")
+    for k, v in best.items():
+        print(f"  {k}: {v}")
 
     fig, ax = plt.subplots(figsize=(10, 4))
     plot_convergence(opt_result, ax=ax)
@@ -1085,7 +1095,7 @@ def main():
     print(
         "\n[STAGE: Validation] Re-fitting final model with best parameters to save outputs..."
     )
-    final_cnmf, _, final_mmap = run_cnmf(best_params, mmap_path, do_mc=True)
+    final_cnmf, _, final_mmap = run_cnmf(best_params, mmap_path)
 
     if (
         final_cnmf
@@ -1106,7 +1116,6 @@ def main():
         "n_planes": _nplanes if _nplanes is not None else ARGS.n_planes,
         "resolution": ARGS.resolution,
         "stripe_removal": not ARGS.no_stripe,
-        "min_snr_trace": ARGS.min_snr_trace,
         "n_calls": ARGS.n_calls,
         "n_initial": ARGS.n_initial,
         "best_params": best_params,

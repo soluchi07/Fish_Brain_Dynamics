@@ -1,0 +1,47 @@
+{
+  "run_name": "new_pipeline_512_default",
+  "format": "interleaved",
+  "data_dir": "/home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom",
+  "n_files": 1,
+  "sample_shape": [
+    4900,
+    2048,
+    2048
+  ],
+  "z_index": 3,
+  "n_planes": 7,
+  "resolution": "512",
+  "stripe_removal": true,
+  "n_calls": 20,
+  "n_initial": 5,
+  "best_params": {
+    "gSig": 3,
+    "rf": 60,
+    "nb": 2,
+    "nb_patch": 2,
+    "decay_time": 0.3,
+    "stride": 37,
+    "K": 58
+  },
+  "best_trial_metrics": {
+    "n_neurons": 136.0,
+    "Q": 0.6486146653587985,
+    "F": 0.9484135367176612,
+    "D": 0.0,
+    "Psi": 0.08088137080360469,
+    "B": 0.3219578556281707,
+    "Phi": 0.4187420342523264,
+    "N": 0.046743904586908344,
+    "composite_score": 1.608412486858696,
+    "gSig": 3.0,
+    "rf": 60.0,
+    "overlap_fraction": 0.31413777026582185,
+    "nb": 2.0,
+    "decay_time": 0.3,
+    "occupancy_frac": 0.19370414648742768,
+    "stride": 37.0,
+    "K": 58.0,
+    "nb_patch": 2.0,
+    "runtime_s": 53.6
+  }
+}

@@ -4,7 +4,7 @@ from datetime import datetime
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--filename", default=f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt", help="Log file path")
+parser.add_argument("--filename", default=f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}", help="Log file path")
 args = parser.parse_args()
 output_file = args.filename
 
@@ -14,7 +14,7 @@ os.makedirs("logs", exist_ok=True)
 
 trigger_count = 0
 
-with open(f"logs/{output_file}", "a") as f:
+with open(f"logs/{output_file}.txt", "a") as f:
     f.write(f"Monitoring started at {datetime.now().time()}\n")
 
     for line in sys.stdin:
