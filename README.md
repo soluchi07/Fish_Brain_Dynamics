@@ -25,6 +25,7 @@ The pipeline automatically detects and loads several imaging formats, including:
 - Interleaved multi-plane recordings
 - Legacy datasets
 
+---
 
 ### Preprocessing
 
@@ -35,6 +36,7 @@ The preprocessing pipeline includes:
 - Automatic brain masking using Otsu thresholding
 - Optional motion correction (NoRMCorre)
 
+---
 
 ### Bayesian Parameter Optimization
 
@@ -59,6 +61,7 @@ Each candidate is evaluated using a composite objective that considers:
 - Calcium decay consistency
 - Neuron yield
 
+---
 
 ### CNMF Pipeline
 
@@ -244,4 +247,4 @@ This project is licensed under the **BSD 3-Clause License**.
 
 ## Acknowledgements
 
-This project builds upon the excellent work of the **CaImAn** developers for calcium imaging analysis and the **NoRMCorre** motion correction framework and my colleague @github.com/Mikito-Coder.
+This project builds upon the excellent work of the **CaImAn** developers for calcium imaging analysis and the **NoRMCorre** motion correction framework and my colleague [@Mikito-Coder](https://github.com/Mikito-Coder).
