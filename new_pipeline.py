@@ -143,7 +143,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--format",
         dest="format_override",
-        choices=["multi-tp", "multi-cam", "single-movie", "stacked", "legacy"],
+        choices=["multi-tp", "multi-cam", "single-movie", "interleaved", "legacy"],
         default=None,
         help="Override auto-detect format",
     )
@@ -168,6 +168,11 @@ def parse_args() -> argparse.Namespace:
         help="Skip generating/saving diagnostic plots (headless-friendly; movie playback "
         "and interactive Bokeh widgets from the notebook are always skipped in this "
         "CLI script)",
+    )
+    p.add_argument(
+        "--keep-temp",
+        action="store_true",
+        help="Keep temporary files (mmap, intermediate TIFFs) instead of deleting them after CNMF",
     )
 
     return p.parse_args()
@@ -209,7 +214,8 @@ from caiman.source_extraction.cnmf import cnmf as cnmf_module
 from caiman.source_extraction.cnmf import params as params_module
 
 from caiman.motion_correction import MotionCorrect
-from caiman.utils.visualization import plot_contours
+from caiman.utils.visualization import plot_contours, get_contours
+
 
 if not hasattr(cm, "load"):
     cm.load = caiman.base.movies.load
@@ -275,7 +281,7 @@ def read_n_planes(filepath: str) -> int:
 
 def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
     """
-    Return (format_name, file_list, sample_shape). Includes 'interleaved' detection.
+    Return (format_name, file_list, sample_shape). Includes 'Interleaved' detection.
     """
     folder = Path(folder)
 
@@ -301,7 +307,7 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
             return "single-movie", cam_files, shape
         # Check interleaved based on n_planes
         if read_n_planes(cam_files[0]) > 1:
-            return "stacked", cam_files, shape
+            return "Interleaved", cam_files, shape
         return "single-movie", cam_files, shape
 
     lux_files = sorted(glob.glob(str(folder / "*.lux*.h5")))
@@ -310,7 +316,7 @@ def detect_format(folder: Path) -> tuple[str, list[str], tuple]:
             if "Data" in fh:
                 shape = tuple(fh["Data"].shape)
                 if read_n_planes(lux_files[0]) > 1:
-                    return "stacked", lux_files, shape
+                    return "Interleaved", lux_files, shape
                 return "single-movie", lux_files, shape
 
     h5_files = sorted(glob.glob(str(folder / "*.h5")))
@@ -336,7 +342,7 @@ def discover(
         fmt = override
 
     detected_n_planes = None
-    if fmt == "stacked":
+    if fmt == "Interleaved":
         detected_n_planes = (
             n_planes_override if n_planes_override else read_n_planes(files[0])
         )
@@ -362,7 +368,7 @@ def load_movie(
     n_planes: Optional[int] = None,
 ) -> np.ndarray:
     """Build (T, H, W) float32 movie regardless of source format."""
-    if fmt == "stacked":
+    if fmt == "Interleaved":
         T_full, H, W = shape
         nz = n_planes or 1
         if z_index is None:
@@ -373,7 +379,7 @@ def load_movie(
 
         if max_frames:
             frames_per_plane = min(frames_per_plane, max_frames)
-        print(f"  Stacked: z={z_index}/{nz} planes -> {frames_per_plane} frames")
+        print(f"  Interleaved: z={z_index}/{nz} planes -> {frames_per_plane} frames")
         with h5py.File(files[0], "r") as fh:
             data = fh["Data"][z_index::nz][:frames_per_plane].astype(np.float32)
         return data
@@ -423,12 +429,10 @@ def load_movie(
 # PREPROCESSING
 # =============================================================================
 
-
-def stripe_remove(data: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Subtract the per-column median to remove scan-line striping artifacts."""
+def stripe_remove(data: np.ndarray):
     col_median = np.median(data, axis=(0, 1), keepdims=True)
-    cleaned = np.clip(data - col_median, 0, None).astype(np.float32)
-    return cleaned, col_median
+    return np.clip(data - col_median, 0, None).astype(np.float32), col_median
+
 
 
 def make_brain_mask(data: np.ndarray, ratio: float, label: str = "") -> np.ndarray:
@@ -480,29 +484,22 @@ def apply_mask(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
     return (data * mask[None, :, :]).astype(np.float32)
 
 
-def preprocess_movie(
-    data: np.ndarray, label: str = ""
-) -> tuple[np.ndarray, np.ndarray, dict]:
-    """Full preprocessing pipeline. Returns (preprocessed_movie, mask, metadata_dict)."""
+def preprocess_movie(data: np.ndarray, label: str = ""):
     info = {"original_shape": tuple(data.shape)}
-    print(f"\n[preprocess {label}]  input shape={data.shape}")
+    data_cm = cm.movie(data)
 
-    data = cm.movie(data)
-    target = int(ARGS.resolution) if ARGS.resolution != "full" else data.shape[1]
-    ratio = target / data.shape[1]
+    target_res = int(ARGS.resolution) if ARGS.resolution != "full" else data.shape[1]
+    ratio = target_res / data.shape[1]
 
     if ratio != 1:
-        print(f"  Downsampling -> {(target, target)}")
-        data = data.resize(fx=ratio, fy=ratio, fz=1.0)
-        info["downsampled_to"] = (target, target)
+        data_cm = data_cm.resize(fx=ratio, fy=ratio, fz=1.0)
+        info["downsampled_to"] = (target_res, target_res)
 
     if not ARGS.no_stripe:
-        data, col_median = stripe_remove(data)
-
-        data = cm.movie(data)
-
+        data_arr, col_median = stripe_remove(np.array(data_cm))
+        data_cm = cm.movie(data_arr)
         info["stripe_removed"] = True
-
+        
         # Save stripe plot
         fig, axes = plt.subplots(1, 2, figsize=(13, 5))
         axes[0].imshow(data[data.shape[0] // 2], cmap="gray")
@@ -518,11 +515,11 @@ def preprocess_movie(
         info["stripe_removed"] = False
 
     if ARGS.mask:
-        mask = make_brain_mask(data, ratio=ratio, label=label)
-        data = cm.movie(apply_mask(data, mask))
+        mask = make_brain_mask(data_cm, ratio=ratio, label=label)
+        data_cm = cm.movie(apply_mask(data_cm, mask))
         info["brain_mask_used"] = True
         info["mask_coverage_frac"] = float(mask.sum() / mask.size)
-
+        
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.imshow(data.mean(axis=0), cmap="gray")
         ax.contour(mask, levels=[0.5], colors="lime", linewidths=1.0)
@@ -532,11 +529,11 @@ def preprocess_movie(
         plt.savefig(str(OUTPUT_DIR / f"brain_mask_{label or 'main'}.png"), dpi=100)
         plt.close(fig)
     else:
-        mask = np.ones(data.shape[1:], dtype=bool)
+        mask = np.ones(data_cm.shape[1:], dtype=bool)
         info["brain_mask_used"] = False
 
-    info["final_shape"] = tuple(data.shape)
-    return data, mask, info
+    info["final_shape"] = tuple(data_cm.shape)
+    return data_cm, mask, info
 
 
 # =============================================================================
@@ -603,7 +600,7 @@ BASE_PARAMS = get_base_params(LOADED_BEST_PARAMS)
 
 
 # =============================================================================
-# CNMF + QUALITY FILTERS [UPGRADE 3 & 4]
+# CNMF EXECUTION
 # =============================================================================
 
 
@@ -952,23 +949,56 @@ def save_summary(
     print(f"Appended row to {master}")
 
 
+def plot_contours_via_coordinates(images, cnm, output_dir):
+    print("[STAGE: plotting] Extracting contour coordinates...")
+    
+    # 1. Generate the anatomical background (Mean Image)
+    mean_frame = images.mean(axis=0)
+    H_val, W_val = mean_frame.shape
+
+    # 2. Filter for accepted components only
+    if hasattr(cnm.estimates, "idx_components") and cnm.estimates.idx_components is not None and len(cnm.estimates.idx_components) > 0:
+        A_accepted = cnm.estimates.A[:, cnm.estimates.idx_components]
+    else:
+        A_accepted = cnm.estimates.A
+        
+    num_accepted = A_accepted.shape[1]
+
+    # 3. Extract the (X, Y) coordinates of the footprint boundaries
+    # thr=0.2 (or 0.8) uses CaImAn's cumulative energy math to find the boundary
+    coors = get_contours(A_accepted, (H_val, W_val)) #, thr=0.8)
+
+    # 4. Plotting
+    fig, ax = plt.subplots(figsize=(11, 11), dpi=150)
+    ax.imshow(mean_frame, cmap="gray")
+    ax.set_title(f"Optimized Spatial Footprints: {num_accepted} kept neurons", fontsize=10)
+    ax.axis("off")
+
+    # 5. Draw the coordinates as clean cyan lines
+    for c in coors:
+        # c['coordinates'] is an array of shape (N, 2) containing X, Y points
+        coords = c['coordinates']
+        
+        # Plot a line connecting the boundary points
+        ax.plot(coords[:, 0], coords[:, 1], color="cyan", linewidth=0.6, alpha=0.85)
+
+    plt.tight_layout()
+    contour_path = os.path.join(output_dir, "optimized_contours_coords.png")
+    plt.savefig(contour_path)
+    plt.close(fig)
+    print(f"[STAGE: Save] Saved coordinate-based contour plot to {contour_path}")
+
+
 def generate_optimized_plots(images, cnm, output_dir=OUTPUT_DIR):
     print("[STAGE: plotting] Generating diagnostic contour and trace plots...")
 
-    # --- 1. Spatial Footprints (Contours) ---
-    Cn = cm.local_correlations(images, swap_dim=False)
-    Cn[np.isnan(Cn)] = 0
+    # --- 1. Plot Contours via Coordinates ---
+    plot_contours_via_coordinates(images, cnm, output_dir)
 
-    fig_spatial, ax_spatial = plt.subplots(figsize=(10, 10), dpi=100)
-    plot_contours(cnm.estimates.A, Cn, ax=ax_spatial, display_numbers=False, thr=0.9)
-    ax_spatial.set_title("Optimized Spatial Footprints (Contours)")
-    ax_spatial.axis("off")
-
-    contour_path = os.path.join(output_dir, "optimized_contours.png")
-    fig_spatial.savefig(contour_path, bbox_inches="tight")
-    plt.close(fig_spatial)
     
     # --- 2. Extract / Calculate Traces ---
+    Cn = cm.local_correlations(images, swap_dim=False)
+    # Cn[np.isnan(Cn)] = 0
     if hasattr(cnm.estimates, "F_dff") and cnm.estimates.F_dff is not None:
         print("[STAGE: traces] estimates.F_dff already defined.")
         traces = cnm.estimates.F_dff

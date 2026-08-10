@@ -1,0 +1,5 @@
+run_name,mode,format,resolution,brain_mask,stripe_removal,n_neurons_kept,mask_coverage_frac,gSig,rf,p
+new_pipeline_512_default_120calls,single_plane,Interleaved,512,False,True,103,,3,15,
+pipeline_res_512_default_60calls,single_plane,Interleaved,512,False,True,87,,3,60,
+pipeline_res_512_default_60calls2,single_plane,Interleaved,512,False,True,97,,3,60,
+pipeline_res_512_default_60calls2,single_plane,Interleaved,512,False,True,100,,3,60,

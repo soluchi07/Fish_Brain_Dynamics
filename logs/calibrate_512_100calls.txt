@@ -1,0 +1,1459 @@
+Monitoring started at 16:24:45.649187
+====================================================================== at time 16:24:50.528948
+calibrate_cnmf.py  |  run=calibrate_512_100calls at time 16:24:50.528992
+====================================================================== at time 16:24:50.529017
+Data dir   : /home/abl-dell/Downloads/caiman_dataset/2026-04-20_145544-20260622T020740Z-3-002/2026-04-20_145544/raw/stack_1-A1-GCaMP8M_channel_1_obj_bottom at time 16:24:50.529034
+Output dir : /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls at time 16:24:50.529051
+Resolution : 512 at time 16:24:50.529064
+Brain mask : OFF at time 16:24:50.529077
+Trials     : n_calls=100  n_initial=5 at time 16:24:50.529091
+Workers=None at time 16:24:50.529105
+ at time 16:31:04.646998
+============================================================ at time 16:31:04.647053
+BAYESIAN TUNE (calib) at time 16:31:04.647073
+============================================================ at time 16:31:04.647090
+[precomputing motion correction — runs once for all trials] at time 16:31:04.647110
+Successfully initialized multicore processing with a pool of 10 CPU cores at time 16:31:05.090445
+[MC done in 24.3s → Yr_mc_d1_512_d2_512_d3_1_order_C_frames_700.mmap] at time 16:31:28.948181
+ at time 16:31:28.957083
+============================================================ at time 16:31:28.957114
+BAYESIAN TUNE (calib) at time 16:31:28.957128
+============================================================ at time 16:31:28.957145
+Trial  1: {'gSig': 10, 'rf': 20, 'overlap_fraction': 0.43390730008183087, 'nb': np.int64(4), 'decay_time': 0.2, 'occupancy_frac': 0.07499372895450074, 'stride': 17, 'K': 1, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:31:28.977465
+[STAGE:prepping parameters] done at time 16:31:28.977493
+[LOG] run_cnmf: Initializing CNMF object... at time 16:31:32.916071
+[LOG] run_cnmf: Loading memmap... at time 16:31:32.922522
+[STAGE:fit] starting at time 16:31:32.922642
+[LOG] run_cnmf: .fit() completed at time 16:31:48.630564
+[STAGE:fit] done -> 122 components at time 16:31:48.630585
+[STAGE:reloading images] starting... at time 16:31:48.630599
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:31:48.630750
+[STAGE:refit] done -> 121 neurons remain at time 16:32:11.286749
+[STAGE:evaluate_components] starting at time 16:32:11.287426
+[1m1/4[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 61ms/step[1m3/4[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 49ms/step[1m4/4[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step at time 16:32:12.099230
+[STAGE:evaluate_components] done -> 26 components remain at time 16:32:12.101194
+kept= 26  composite=+1.2880  t=44s at time 16:32:14.758973
+Trial  2: {'gSig': 7, 'rf': 25, 'overlap_fraction': 0.24286004537658226, 'nb': np.int64(4), 'decay_time': 0.1, 'occupancy_frac': 0.2304996930667062, 'stride': 12, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:32:14.762565
+[STAGE:prepping parameters] done at time 16:32:14.762593
+[LOG] run_cnmf: Initializing CNMF object... at time 16:32:18.845505
+[LOG] run_cnmf: Loading memmap... at time 16:32:18.851569
+[STAGE:fit] starting at time 16:32:18.851711
+[LOG] run_cnmf: .fit() completed at time 16:32:31.281788
+[STAGE:fit] done -> 153 components at time 16:32:31.281821
+[STAGE:reloading images] starting... at time 16:32:31.281827
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:32:31.281995
+[STAGE:refit] done -> 148 neurons remain at time 16:32:52.270512
+[STAGE:evaluate_components] starting at time 16:32:52.271320
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 85ms/step[1m2/5[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 51ms/step[1m4/5[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 50ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step at time 16:32:53.218311
+[STAGE:evaluate_components] done -> 36 components remain at time 16:32:53.220806
+kept= 36  composite=+1.5799  t=39s at time 16:32:55.988869
+Trial  3: {'gSig': 11, 'rf': 22, 'overlap_fraction': 0.4976634677873653, 'nb': np.int64(4), 'decay_time': 0.25, 'occupancy_frac': 0.051766576304929354, 'stride': 21, 'K': 1, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:32:55.992073
+[STAGE:prepping parameters] done at time 16:32:55.992115
+[LOG] run_cnmf: Initializing CNMF object... at time 16:32:59.852048
+[LOG] run_cnmf: Loading memmap... at time 16:32:59.857956
+[STAGE:fit] starting at time 16:32:59.858056
+[LOG] run_cnmf: .fit() completed at time 16:33:17.023045
+[STAGE:fit] done -> 67 components at time 16:33:17.023067
+[STAGE:reloading images] starting... at time 16:33:17.023072
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:33:17.023207
+[STAGE:refit] done -> 67 neurons remain at time 16:33:35.823387
+[STAGE:evaluate_components] starting at time 16:33:35.824517
+[1m1/3[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 56ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 28ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 28ms/step at time 16:33:36.470253
+[STAGE:evaluate_components] done -> 14 components remain at time 16:33:36.471910
+kept= 14  composite=+1.3054  t=42s at time 16:33:39.338363
+Trial  4: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.31995829151457666, 'nb': np.int64(3), 'decay_time': 0.3, 'occupancy_frac': 0.10819283510757607, 'stride': 25, 'K': 14, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:33:39.342745
+[STAGE:prepping parameters] done at time 16:33:39.342788
+[LOG] run_cnmf: Initializing CNMF object... at time 16:33:43.386282
+[LOG] run_cnmf: Loading memmap... at time 16:33:43.390554
+[STAGE:fit] starting at time 16:33:43.390653
+[LOG] run_cnmf: .fit() completed at time 16:33:59.732529
+[STAGE:fit] done -> 219 components at time 16:33:59.732578
+[STAGE:reloading images] starting... at time 16:33:59.732593
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:33:59.732739
+[STAGE:refit] done -> 209 neurons remain at time 16:34:17.019660
+[STAGE:evaluate_components] starting at time 16:34:17.020083
+[1m1/7[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m3/7[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m5/7[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m7/7[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m7/7[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step at time 16:34:18.110150
+[STAGE:evaluate_components] done -> 79 components remain at time 16:34:18.112836
+kept= 79  composite=+1.6825  t=40s at time 16:34:21.139961
+Trial  5: {'gSig': 4, 'rf': 60, 'overlap_fraction': 0.31473859738014887, 'nb': np.int64(4), 'decay_time': 0.2, 'occupancy_frac': 0.2649851016840802, 'stride': 37, 'K': 48, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:34:21.142516
+[STAGE:prepping parameters] done at time 16:34:21.142553
+[LOG] run_cnmf: Initializing CNMF object... at time 16:34:25.016551
+[LOG] run_cnmf: Loading memmap... at time 16:34:25.021120
+[STAGE:fit] starting at time 16:34:25.021161
+[LOG] run_cnmf: .fit() completed at time 16:34:49.354842
+[STAGE:fit] done -> 198 components at time 16:34:49.354877
+[STAGE:reloading images] starting... at time 16:34:49.354882
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:34:49.355101
+[STAGE:refit] done -> 188 neurons remain at time 16:35:11.349965
+[STAGE:evaluate_components] starting at time 16:35:11.350180
+[1m1/6[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m3/6[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m5/6[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m6/6[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 16:35:12.390247
+[STAGE:evaluate_components] done -> 84 components remain at time 16:35:12.392810
+kept= 84  composite=+1.6946  t=53s at time 16:35:15.617379
+Trial  6: {'gSig': 12, 'rf': 60, 'overlap_fraction': 0.44329231829136306, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.3, 'stride': 53, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:35:15.916734
+[STAGE:prepping parameters] done at time 16:35:15.916769
+[LOG] run_cnmf: Initializing CNMF object... at time 16:35:19.718391
+[LOG] run_cnmf: Loading memmap... at time 16:35:19.724427
+[STAGE:fit] starting at time 16:35:19.724470
+[LOG] run_cnmf: .fit() completed at time 16:35:38.952178
+[STAGE:fit] done -> 57 components at time 16:35:38.952212
+[STAGE:reloading images] starting... at time 16:35:38.952217
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:35:38.952424
+[STAGE:refit] done -> 56 neurons remain at time 16:35:57.541460
+[STAGE:evaluate_components] starting at time 16:35:57.541636
+[1m1/2[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m2/2[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 16:35:58.147349
+[STAGE:evaluate_components] done -> 14 components remain at time 16:35:58.148781
+kept= 14  composite=+1.5508  t=44s at time 16:36:01.468941
+Trial  7: {'gSig': 3, 'rf': 60, 'overlap_fraction': 0.2374480368000988, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.3, 'stride': 28, 'K': 90, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:36:01.743862
+[STAGE:prepping parameters] done at time 16:36:01.743908
+[LOG] run_cnmf: Initializing CNMF object... at time 16:36:05.603660
+[LOG] run_cnmf: Loading memmap... at time 16:36:05.609714
+[STAGE:fit] starting at time 16:36:05.609828
+[LOG] run_cnmf: .fit() completed at time 16:36:40.643215
+[STAGE:fit] done -> 354 components at time 16:36:40.643264
+[STAGE:reloading images] starting... at time 16:36:40.643280
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:36:40.643363
+[STAGE:refit] done -> 336 neurons remain at time 16:37:06.586214
+[STAGE:evaluate_components] starting at time 16:37:06.586825
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 65ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 8/11[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 49ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 47ms/step at time 16:37:07.994955
+[STAGE:evaluate_components] done -> 185 components remain at time 16:37:07.998419
+kept=185  composite=+1.6940  t=68s at time 16:37:11.389528
+Trial  8: {'gSig': 3, 'rf': 60, 'overlap_fraction': 0.2738816873289128, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.3, 'stride': 32, 'K': 90, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:37:11.675803
+[STAGE:prepping parameters] done at time 16:37:11.675847
+[LOG] run_cnmf: Initializing CNMF object... at time 16:37:15.712470
+[LOG] run_cnmf: Loading memmap... at time 16:37:15.718512
+[STAGE:fit] starting at time 16:37:15.718632
+[LOG] run_cnmf: .fit() completed at time 16:37:51.104515
+[STAGE:fit] done -> 333 components at time 16:37:51.104566
+[STAGE:reloading images] starting... at time 16:37:51.104582
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:37:51.104690
+[STAGE:refit] done -> 313 neurons remain at time 16:38:16.481202
+[STAGE:evaluate_components] starting at time 16:38:16.481546
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 48ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 48ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 48ms/step at time 16:38:17.933267
+[STAGE:evaluate_components] done -> 177 components remain at time 16:38:17.936910
+kept=177  composite=+1.5718  t=68s at time 16:38:21.126782
+Trial  9: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.37032923848297794, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 29, 'K': 7, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:38:21.324766
+[STAGE:prepping parameters] done at time 16:38:21.324811
+[LOG] run_cnmf: Initializing CNMF object... at time 16:38:25.528507
+[LOG] run_cnmf: Loading memmap... at time 16:38:25.534609
+[STAGE:fit] starting at time 16:38:25.534741
+[LOG] run_cnmf: .fit() completed at time 16:38:41.723503
+[STAGE:fit] done -> 146 components at time 16:38:41.723534
+[STAGE:reloading images] starting... at time 16:38:41.723544
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:38:41.723688
+[STAGE:refit] done -> 144 neurons remain at time 16:38:55.395026
+[STAGE:evaluate_components] starting at time 16:38:55.395408
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m3/5[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step at time 16:38:56.224921
+[STAGE:evaluate_components] done -> 72 components remain at time 16:38:56.227056
+kept= 72  composite=+1.7491  t=36s at time 16:38:59.322572
+Trial 10: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.5, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 40, 'K': 7, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:38:59.607991
+[STAGE:prepping parameters] done at time 16:38:59.608033
+[LOG] run_cnmf: Initializing CNMF object... at time 16:39:03.687104
+[LOG] run_cnmf: Loading memmap... at time 16:39:03.693069
+[STAGE:fit] starting at time 16:39:03.693162
+[LOG] run_cnmf: .fit() completed at time 16:39:20.701707
+[STAGE:fit] done -> 136 components at time 16:39:20.701728
+[STAGE:reloading images] starting... at time 16:39:20.701733
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:39:20.701887
+[STAGE:refit] done -> 131 neurons remain at time 16:39:34.962309
+[STAGE:evaluate_components] starting at time 16:39:34.965069
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 75ms/step[1m3/5[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 36ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 36ms/step at time 16:39:35.920089
+[STAGE:evaluate_components] done -> 73 components remain at time 16:39:35.923916
+kept= 73  composite=+1.7378  t=38s at time 16:39:39.033260
+Trial 11: {'gSig': 6, 'rf': 40, 'overlap_fraction': 0.3385442369493443, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 27, 'K': 2, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:39:39.365570
+[STAGE:prepping parameters] done at time 16:39:39.365616
+[LOG] run_cnmf: Initializing CNMF object... at time 16:39:43.592797
+[LOG] run_cnmf: Loading memmap... at time 16:39:43.598896
+[STAGE:fit] starting at time 16:39:43.598963
+[LOG] run_cnmf: .fit() completed at time 16:39:54.083162
+[STAGE:fit] done -> 55 components at time 16:39:54.083188
+[STAGE:reloading images] starting... at time 16:39:54.083196
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:39:54.083318
+[STAGE:refit] done -> 54 neurons remain at time 16:40:06.550632
+[STAGE:evaluate_components] starting at time 16:40:06.551760
+[1m1/2[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 57ms/step[1m2/2[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 36ms/step at time 16:40:07.053136
+[STAGE:evaluate_components] done -> 11 components remain at time 16:40:07.054620
+kept= 11  composite=+1.1922  t=29s at time 16:40:09.929135
+Trial 12: {'gSig': 4, 'rf': 80, 'overlap_fraction': 0.2, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 32, 'K': 16, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:40:10.263935
+[STAGE:prepping parameters] done at time 16:40:10.263970
+[LOG] run_cnmf: Initializing CNMF object... at time 16:40:14.551162
+[LOG] run_cnmf: Loading memmap... at time 16:40:14.557357
+[STAGE:fit] starting at time 16:40:14.557456
+[LOG] run_cnmf: .fit() completed at time 16:40:32.624524
+[STAGE:fit] done -> 84 components at time 16:40:32.624559
+[STAGE:reloading images] starting... at time 16:40:32.624574
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:40:32.624724
+[STAGE:refit] done -> 79 neurons remain at time 16:40:45.149650
+[STAGE:evaluate_components] starting at time 16:40:45.149733
+[1m1/3[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 37ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 38ms/step at time 16:40:45.687073
+[STAGE:evaluate_components] done -> 36 components remain at time 16:40:45.688819
+kept= 36  composite=+1.5976  t=37s at time 16:40:48.600101
+Trial 13: {'gSig': 3, 'rf': 15, 'overlap_fraction': 0.2, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 6, 'K': 1, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:40:48.948505
+[STAGE:prepping parameters] done at time 16:40:48.948551
+[LOG] run_cnmf: Initializing CNMF object... at time 16:40:53.266236
+[LOG] run_cnmf: Loading memmap... at time 16:40:53.272522
+[STAGE:fit] starting at time 16:40:53.272706
+[LOG] run_cnmf: .fit() completed at time 16:41:02.342823
+[STAGE:fit] done -> 205 components at time 16:41:02.342845
+[STAGE:reloading images] starting... at time 16:41:02.342850
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:41:02.342989
+[STAGE:refit] done -> 202 neurons remain at time 16:41:16.851706
+[STAGE:evaluate_components] starting at time 16:41:16.855720
+[1m1/7[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m3/7[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 55ms/step[1m5/7[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 52ms/step[1m7/7[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m7/7[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step at time 16:41:18.159046
+[STAGE:evaluate_components] done -> 122 components remain at time 16:41:18.161594
+kept=122  composite=+1.7284  t=30s at time 16:41:21.017829
+Trial 14: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.4983333489308292, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 39, 'K': 7, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:41:21.266576
+[STAGE:prepping parameters] done at time 16:41:21.266623
+[LOG] run_cnmf: Initializing CNMF object... at time 16:41:25.634964
+[LOG] run_cnmf: Loading memmap... at time 16:41:25.641582
+[STAGE:fit] starting at time 16:41:25.641699
+[LOG] run_cnmf: .fit() completed at time 16:41:42.616247
+[STAGE:fit] done -> 120 components at time 16:41:42.616267
+[STAGE:reloading images] starting... at time 16:41:42.616273
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:41:42.616423
+[STAGE:refit] done -> 115 neurons remain at time 16:41:55.555886
+[STAGE:evaluate_components] starting at time 16:41:55.558103
+[1m1/4[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m3/4[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 49ms/step[1m4/4[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 16:41:56.267083
+[STAGE:evaluate_components] done -> 73 components remain at time 16:41:56.268987
+kept= 73  composite=+1.7493  t=36s at time 16:41:59.316703
+Trial 15: {'gSig': 9, 'rf': 25, 'overlap_fraction': 0.3950671943866499, 'nb': np.int64(3), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1103487693690145, 'stride': 19, 'K': 1, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:41:59.598312
+[STAGE:prepping parameters] done at time 16:41:59.598358
+[LOG] run_cnmf: Initializing CNMF object... at time 16:42:03.777987
+[LOG] run_cnmf: Loading memmap... at time 16:42:03.784021
+[STAGE:fit] starting at time 16:42:03.784063
+[LOG] run_cnmf: .fit() completed at time 16:42:14.011697
+[STAGE:fit] done -> 70 components at time 16:42:14.011720
+[STAGE:reloading images] starting... at time 16:42:14.011785
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:42:14.011894
+[STAGE:refit] done -> 70 neurons remain at time 16:42:28.238210
+[STAGE:evaluate_components] starting at time 16:42:28.241524
+[1m1/3[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 78ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 34ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 35ms/step at time 16:42:29.074288
+[STAGE:evaluate_components] done -> 25 components remain at time 16:42:29.076044
+kept= 25  composite=+1.2883  t=31s at time 16:42:31.954428
+Trial 16: {'gSig': 4, 'rf': 40, 'overlap_fraction': 0.5, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 40, 'K': 4, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:42:32.391443
+[STAGE:prepping parameters] done at time 16:42:32.391473
+[LOG] run_cnmf: Initializing CNMF object... at time 16:42:36.722920
+[LOG] run_cnmf: Loading memmap... at time 16:42:36.729148
+[STAGE:fit] starting at time 16:42:36.729284
+[LOG] run_cnmf: .fit() completed at time 16:42:54.199809
+[STAGE:fit] done -> 80 components at time 16:42:54.199855
+[STAGE:reloading images] starting... at time 16:42:54.199873
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:42:54.200020
+[STAGE:refit] done -> 79 neurons remain at time 16:43:07.219663
+[STAGE:evaluate_components] starting at time 16:43:07.221391
+[1m1/3[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 59ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 38ms/step[1m3/3[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 39ms/step at time 16:43:07.779203
+[STAGE:evaluate_components] done -> 39 components remain at time 16:43:07.781195
+kept= 39  composite=+1.5534  t=37s at time 16:43:10.856270
+Trial 17: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.2564238796027186, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.05, 'stride': 20, 'K': 7, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:43:11.081693
+[STAGE:prepping parameters] done at time 16:43:11.081739
+[LOG] run_cnmf: Initializing CNMF object... at time 16:43:15.737639
+[LOG] run_cnmf: Loading memmap... at time 16:43:15.743580
+[STAGE:fit] starting at time 16:43:15.743619
+[LOG] run_cnmf: .fit() completed at time 16:43:29.765925
+[STAGE:fit] done -> 134 components at time 16:43:29.765964
+[STAGE:reloading images] starting... at time 16:43:29.765978
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:43:29.766063
+[STAGE:refit] done -> 128 neurons remain at time 16:43:43.826500
+[STAGE:evaluate_components] starting at time 16:43:43.826824
+[1m1/4[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 87ms/step[1m2/4[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 50ms/step[1m3/4[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 52ms/step[1m4/4[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 51ms/step[1m4/4[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 52ms/step at time 16:43:44.619813
+[STAGE:evaluate_components] done -> 56 components remain at time 16:43:44.621850
+kept= 56  composite=+1.6133  t=35s at time 16:43:47.516006
+Trial 18: {'gSig': 5, 'rf': 60, 'overlap_fraction': 0.24381156718042532, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.18243094374126223, 'stride': 29, 'K': 22, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:43:47.713955
+[STAGE:prepping parameters] done at time 16:43:47.713990
+[LOG] run_cnmf: Initializing CNMF object... at time 16:43:52.181754
+[LOG] run_cnmf: Loading memmap... at time 16:43:52.187744
+[STAGE:fit] starting at time 16:43:52.187787
+[LOG] run_cnmf: .fit() completed at time 16:44:12.455898
+[STAGE:fit] done -> 150 components at time 16:44:12.455920
+[STAGE:reloading images] starting... at time 16:44:12.455925
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:44:12.456060
+[STAGE:refit] done -> 146 neurons remain at time 16:44:31.234836
+[STAGE:evaluate_components] starting at time 16:44:31.235146
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 75ms/step[1m3/5[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 16:44:32.139303
+[STAGE:evaluate_components] done -> 54 components remain at time 16:44:32.141496
+kept= 54  composite=+1.6130  t=46s at time 16:44:35.549513
+Trial 19: {'gSig': 12, 'rf': 60, 'overlap_fraction': 0.41294002486229575, 'nb': np.int64(3), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.08165813173162409, 'stride': 49, 'K': 2, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:44:35.771571
+[STAGE:prepping parameters] done at time 16:44:35.771604
+[LOG] run_cnmf: Initializing CNMF object... at time 16:44:40.296426
+[LOG] run_cnmf: Loading memmap... at time 16:44:40.301708
+[STAGE:fit] starting at time 16:44:40.301748
+[LOG] run_cnmf: .fit() completed at time 16:44:54.660026
+[STAGE:fit] done -> 21 components at time 16:44:54.660072
+[STAGE:reloading images] starting... at time 16:44:54.660088
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:44:54.660164
+[STAGE:refit] done -> 21 neurons remain at time 16:45:05.995237
+[STAGE:evaluate_components] starting at time 16:45:05.995656
+[1m1/1[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step[1m1/1[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step at time 16:45:06.297955
+[STAGE:evaluate_components] done -> 8 components remain at time 16:45:06.299056
+kept=  8  composite=+1.4075  t=32s at time 16:45:09.516953
+Trial 20: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1525343295841776, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:45:09.899039
+[STAGE:prepping parameters] done at time 16:45:09.899085
+[LOG] run_cnmf: Initializing CNMF object... at time 16:45:14.407215
+[LOG] run_cnmf: Loading memmap... at time 16:45:14.413174
+[STAGE:fit] starting at time 16:45:14.413275
+[LOG] run_cnmf: .fit() completed at time 16:45:39.012230
+[STAGE:fit] done -> 358 components at time 16:45:39.012285
+[STAGE:reloading images] starting... at time 16:45:39.012302
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:45:39.012478
+[STAGE:refit] done -> 344 neurons remain at time 16:46:01.711126
+[STAGE:evaluate_components] starting at time 16:46:01.713096
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 68ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 49ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 48ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 16:46:03.298271
+[STAGE:evaluate_components] done -> 171 components remain at time 16:46:03.306640
+kept=171  composite=+1.7723  t=55s at time 16:46:06.378498
+Trial 21: {'gSig': 3, 'rf': 15, 'overlap_fraction': 0.5, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.08324208756657539, 'stride': 15, 'K': 2, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:46:06.785941
+[STAGE:prepping parameters] done at time 16:46:06.785976
+[LOG] run_cnmf: Initializing CNMF object... at time 16:46:10.977254
+[LOG] run_cnmf: Loading memmap... at time 16:46:10.983261
+[STAGE:fit] starting at time 16:46:10.983389
+[LOG] run_cnmf: .fit() completed at time 16:46:33.113657
+[STAGE:fit] done -> 327 components at time 16:46:33.113690
+[STAGE:reloading images] starting... at time 16:46:33.113698
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:46:33.113908
+[STAGE:refit] done -> 317 neurons remain at time 16:46:52.552217
+[STAGE:evaluate_components] starting at time 16:46:52.554809
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 68ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 46ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step at time 16:46:53.960139
+[STAGE:evaluate_components] done -> 181 components remain at time 16:46:53.963363
+kept=181  composite=+1.6650  t=48s at time 16:46:56.848558
+Trial 22: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.19725554622354896, 'stride': 25, 'K': 10, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:46:57.246032
+[STAGE:prepping parameters] done at time 16:46:57.246079
+[LOG] run_cnmf: Initializing CNMF object... at time 16:47:01.711592
+[LOG] run_cnmf: Loading memmap... at time 16:47:01.717606
+[STAGE:fit] starting at time 16:47:01.717673
+[LOG] run_cnmf: .fit() completed at time 16:47:28.456227
+[STAGE:fit] done -> 404 components at time 16:47:28.456249
+[STAGE:reloading images] starting... at time 16:47:28.456264
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:47:28.456418
+[STAGE:refit] done -> 389 neurons remain at time 16:47:53.757360
+[STAGE:evaluate_components] starting at time 16:47:53.759015
+[1m 1/13[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 65ms/step[1m 3/13[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/13[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/13[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 8/13[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 49ms/step[1m10/13[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 49ms/step[1m12/13[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 48ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 16:47:55.763742
+[STAGE:evaluate_components] done -> 177 components remain at time 16:47:55.770051
+kept=177  composite=+1.7497  t=60s at time 16:47:58.843456
+Trial 23: {'gSig': 3, 'rf': 80, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.1992232088912419, 'stride': 80, 'K': 105, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:47:59.248587
+[STAGE:prepping parameters] done at time 16:47:59.248622
+[LOG] run_cnmf: Initializing CNMF object... at time 16:48:03.591606
+[LOG] run_cnmf: Loading memmap... at time 16:48:03.597833
+[STAGE:fit] starting at time 16:48:03.597990
+[LOG] run_cnmf: .fit() completed at time 16:48:45.154515
+[STAGE:fit] done -> 252 components at time 16:48:45.154551
+[STAGE:reloading images] starting... at time 16:48:45.154567
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:48:45.154695
+[STAGE:refit] done -> 235 neurons remain at time 16:49:06.849427
+[STAGE:evaluate_components] starting at time 16:49:06.849768
+[1m1/8[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 50ms/step[1m3/8[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m5/8[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m7/8[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 45ms/step[1m8/8[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 16:49:07.952700
+[STAGE:evaluate_components] done -> 120 components remain at time 16:49:07.955275
+kept=120  composite=+1.6883  t=70s at time 16:49:11.447213
+Trial 24: {'gSig': 5, 'rf': 15, 'overlap_fraction': 0.4599410819570504, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.3, 'stride': 13, 'K': 2, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:49:11.823607
+[STAGE:prepping parameters] done at time 16:49:11.823652
+[LOG] run_cnmf: Initializing CNMF object... at time 16:49:16.423833
+[LOG] run_cnmf: Loading memmap... at time 16:49:16.429869
+[STAGE:fit] starting at time 16:49:16.429990
+[LOG] run_cnmf: .fit() completed at time 16:49:34.798508
+[STAGE:fit] done -> 284 components at time 16:49:34.798541
+[STAGE:reloading images] starting... at time 16:49:34.798558
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:49:34.798888
+[STAGE:refit] done -> 278 neurons remain at time 16:49:57.483119
+[STAGE:evaluate_components] starting at time 16:49:57.485105
+[1m1/9[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 58ms/step[1m3/9[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m5/9[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 47ms/step[1m7/9[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 47ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step at time 16:49:58.831242
+[STAGE:evaluate_components] done -> 111 components remain at time 16:49:58.834382
+kept=111  composite=+1.6465  t=48s at time 16:50:01.966511
+Trial 25: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.14613843625929934, 'stride': 10, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:50:02.402531
+[STAGE:prepping parameters] done at time 16:50:02.402668
+[LOG] run_cnmf: Initializing CNMF object... at time 16:50:06.816275
+[LOG] run_cnmf: Loading memmap... at time 16:50:06.821182
+[STAGE:fit] starting at time 16:50:06.821269
+[LOG] run_cnmf: .fit() completed at time 16:50:23.388366
+[STAGE:fit] done -> 356 components at time 16:50:23.388439
+[STAGE:reloading images] starting... at time 16:50:23.388455
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:50:23.388626
+[STAGE:refit] done -> 341 neurons remain at time 16:50:47.379099
+[STAGE:evaluate_components] starting at time 16:50:47.379776
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 16:50:49.289828
+[STAGE:evaluate_components] done -> 151 components remain at time 16:50:49.297474
+kept=151  composite=+1.8081  t=48s at time 16:50:52.482757
+Trial 26: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.05, 'stride': 10, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:50:52.995170
+[STAGE:prepping parameters] done at time 16:50:52.995217
+[LOG] run_cnmf: Initializing CNMF object... at time 16:50:57.265687
+[LOG] run_cnmf: Loading memmap... at time 16:50:57.272859
+[STAGE:fit] starting at time 16:50:57.273084
+[LOG] run_cnmf: .fit() completed at time 16:51:08.410012
+[STAGE:fit] done -> 186 components at time 16:51:08.410054
+[STAGE:reloading images] starting... at time 16:51:08.410063
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:51:08.410284
+[STAGE:refit] done -> 178 neurons remain at time 16:51:25.533439
+[STAGE:evaluate_components] starting at time 16:51:25.534130
+[1m1/6[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m3/6[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m5/6[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m6/6[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 16:51:26.509646
+[STAGE:evaluate_components] done -> 104 components remain at time 16:51:26.513031
+kept=104  composite=+1.7621  t=35s at time 16:51:29.573386
+Trial 27: {'gSig': 3, 'rf': 40, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.3, 'stride': 40, 'K': 40, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:51:30.059895
+[STAGE:prepping parameters] done at time 16:51:30.059928
+[LOG] run_cnmf: Initializing CNMF object... at time 16:51:34.203505
+[LOG] run_cnmf: Loading memmap... at time 16:51:34.207460
+[STAGE:fit] starting at time 16:51:34.207499
+[LOG] run_cnmf: .fit() completed at time 16:52:03.662980
+[STAGE:fit] done -> 379 components at time 16:52:03.663022
+[STAGE:reloading images] starting... at time 16:52:03.663052
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:52:03.663372
+[STAGE:refit] done -> 332 neurons remain at time 16:52:30.530716
+[STAGE:evaluate_components] starting at time 16:52:30.533730
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 16:52:32.243193
+[STAGE:evaluate_components] done -> 191 components remain at time 16:52:32.246831
+kept=191  composite=+1.7330  t=64s at time 16:52:35.483594
+Trial 28: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15181878938681725, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:52:35.964079
+[STAGE:prepping parameters] done at time 16:52:35.964125
+[LOG] run_cnmf: Initializing CNMF object... at time 16:52:40.193425
+[LOG] run_cnmf: Loading memmap... at time 16:52:40.197804
+[STAGE:fit] starting at time 16:52:40.197947
+[LOG] run_cnmf: .fit() completed at time 16:53:07.138484
+[STAGE:fit] done -> 358 components at time 16:53:07.138526
+[STAGE:reloading images] starting... at time 16:53:07.138541
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:53:07.138596
+[STAGE:refit] done -> 344 neurons remain at time 16:53:30.021181
+[STAGE:evaluate_components] starting at time 16:53:30.022019
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 2/11[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 52ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 52ms/step[1m 4/11[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 52ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 52ms/step[1m 6/11[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 52ms/step[1m 8/11[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 51ms/step[1m10/11[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 51ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 50ms/step at time 16:53:31.634639
+[STAGE:evaluate_components] done -> 167 components remain at time 16:53:31.638047
+kept=167  composite=+1.7617  t=57s at time 16:53:34.855331
+Trial 29: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2504212679557991, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.3, 'stride': 12, 'K': 16, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:53:35.475481
+[STAGE:prepping parameters] done at time 16:53:35.475541
+[LOG] run_cnmf: Initializing CNMF object... at time 16:53:40.115151
+[LOG] run_cnmf: Loading memmap... at time 16:53:40.121426
+[STAGE:fit] starting at time 16:53:40.121487
+[LOG] run_cnmf: .fit() completed at time 16:54:04.333664
+[STAGE:fit] done -> 437 components at time 16:54:04.333702
+[STAGE:reloading images] starting... at time 16:54:04.333721
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:54:04.333935
+[STAGE:refit] done -> 391 neurons remain at time 16:54:34.361132
+[STAGE:evaluate_components] starting at time 16:54:34.362044
+[1m 1/13[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 68ms/step[1m 3/13[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/13[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/13[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/13[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 46ms/step[1m11/13[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 16:54:36.132240
+[STAGE:evaluate_components] done -> 166 components remain at time 16:54:36.140508
+kept=166  composite=+1.7173  t=62s at time 16:54:39.299356
+Trial 30: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.3319615267422633, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.12783595822041485, 'stride': 16, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:54:39.757641
+[STAGE:prepping parameters] done at time 16:54:39.757679
+[LOG] run_cnmf: Initializing CNMF object... at time 16:54:44.110378
+[LOG] run_cnmf: Loading memmap... at time 16:54:44.117764
+[STAGE:fit] starting at time 16:54:44.118185
+[LOG] run_cnmf: .fit() completed at time 16:55:01.686428
+[STAGE:fit] done -> 351 components at time 16:55:01.686471
+[STAGE:reloading images] starting... at time 16:55:01.686487
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:55:01.686643
+[STAGE:refit] done -> 340 neurons remain at time 16:55:24.915778
+[STAGE:evaluate_components] starting at time 16:55:24.916615
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 68ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 16:55:26.572840
+[STAGE:evaluate_components] done -> 155 components remain at time 16:55:26.576447
+kept=155  composite=+1.7591  t=48s at time 16:55:29.797082
+Trial 31: {'gSig': 12, 'rf': 40, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.3, 'stride': 16, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:55:30.296279
+[STAGE:prepping parameters] done at time 16:55:30.296316
+[LOG] run_cnmf: Initializing CNMF object... at time 16:55:34.771129
+[LOG] run_cnmf: Loading memmap... at time 16:55:34.777219
+[STAGE:fit] starting at time 16:55:34.777312
+[LOG] run_cnmf: .fit() completed at time 16:55:45.801230
+[STAGE:fit] done -> 50 components at time 16:55:45.801267
+[STAGE:reloading images] starting... at time 16:55:45.801280
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:55:45.801447
+[STAGE:refit] done -> 50 neurons remain at time 16:56:07.019478
+[STAGE:evaluate_components] starting at time 16:56:07.019800
+[1m1/2[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m2/2[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 28ms/step at time 16:56:07.779443
+[STAGE:evaluate_components] done -> 10 components remain at time 16:56:07.780844
+kept= 10  composite=+1.5519  t=39s at time 16:56:10.813904
+Trial 32: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(3), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.15905777113519942, 'stride': 10, 'K': 8, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 16:56:11.435952
+[STAGE:prepping parameters] done at time 16:56:11.436000
+[LOG] run_cnmf: Initializing CNMF object... at time 16:56:16.066791
+[LOG] run_cnmf: Loading memmap... at time 16:56:16.073052
+[STAGE:fit] starting at time 16:56:16.073158
+[LOG] run_cnmf: .fit() completed at time 16:56:31.608207
+[STAGE:fit] done -> 349 components at time 16:56:31.608242
+[STAGE:reloading images] starting... at time 16:56:31.608249
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:56:31.608481
+[STAGE:refit] done -> 319 neurons remain at time 16:56:53.359089
+[STAGE:evaluate_components] starting at time 16:56:53.359853
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 45ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 45ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step at time 16:56:54.991457
+[STAGE:evaluate_components] done -> 152 components remain at time 16:56:54.994701
+kept=152  composite=+1.7006  t=45s at time 16:56:58.018776
+Trial 33: {'gSig': 4, 'rf': 15, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.3), 'occupancy_frac': 0.1738986648095599, 'stride': 6, 'K': 2, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:56:58.612763
+[STAGE:prepping parameters] done at time 16:56:58.612811
+[LOG] run_cnmf: Initializing CNMF object... at time 16:57:03.002376
+[LOG] run_cnmf: Loading memmap... at time 16:57:03.008491
+[STAGE:fit] starting at time 16:57:03.008564
+[LOG] run_cnmf: .fit() completed at time 16:57:19.425992
+[STAGE:fit] done -> 363 components at time 16:57:19.426038
+[STAGE:reloading images] starting... at time 16:57:19.426055
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:57:19.426265
+[STAGE:refit] done -> 342 neurons remain at time 16:57:45.173688
+[STAGE:evaluate_components] starting at time 16:57:45.174855
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 80ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 16:57:46.965170
+[STAGE:evaluate_components] done -> 117 components remain at time 16:57:46.968826
+kept=117  composite=+1.6953  t=50s at time 16:57:49.924852
+Trial 34: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.25), 'occupancy_frac': 0.05, 'stride': 25, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:57:50.501363
+[STAGE:prepping parameters] done at time 16:57:50.501414
+[LOG] run_cnmf: Initializing CNMF object... at time 16:57:55.086391
+[LOG] run_cnmf: Loading memmap... at time 16:57:55.092430
+[STAGE:fit] starting at time 16:57:55.092470
+[LOG] run_cnmf: .fit() completed at time 16:58:11.829226
+[STAGE:fit] done -> 155 components at time 16:58:11.829267
+[STAGE:reloading images] starting... at time 16:58:11.829280
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:58:11.829414
+[STAGE:refit] done -> 154 neurons remain at time 16:58:25.287608
+[STAGE:evaluate_components] starting at time 16:58:25.291496
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m3/5[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 16:58:26.194604
+[STAGE:evaluate_components] done -> 83 components remain at time 16:58:26.197232
+kept= 83  composite=+1.6652  t=37s at time 16:58:29.129050
+Trial 35: {'gSig': 3, 'rf': 15, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.15242741085177736, 'stride': 15, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:58:29.717217
+[STAGE:prepping parameters] done at time 16:58:29.717264
+[LOG] run_cnmf: Initializing CNMF object... at time 16:58:33.836636
+[LOG] run_cnmf: Loading memmap... at time 16:58:33.842774
+[STAGE:fit] starting at time 16:58:33.842902
+[LOG] run_cnmf: .fit() completed at time 16:59:03.002817
+[STAGE:fit] done -> 427 components at time 16:59:03.002851
+[STAGE:reloading images] starting... at time 16:59:03.002857
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 16:59:03.003008
+[STAGE:refit] done -> 406 neurons remain at time 16:59:26.727071
+[STAGE:evaluate_components] starting at time 16:59:26.728562
+[1m 1/13[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 65ms/step[1m 3/13[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/13[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/13[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/13[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 46ms/step[1m11/13[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 16:59:28.418787
+[STAGE:evaluate_components] done -> 185 components remain at time 16:59:28.426323
+kept=185  composite=+1.6733  t=60s at time 16:59:31.495855
+Trial 36: {'gSig': 3, 'rf': 80, 'overlap_fraction': 0.24552296591939102, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1215458800034042, 'stride': 39, 'K': 64, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 16:59:32.079456
+[STAGE:prepping parameters] done at time 16:59:32.079499
+[LOG] run_cnmf: Initializing CNMF object... at time 16:59:36.580446
+[LOG] run_cnmf: Loading memmap... at time 16:59:36.587041
+[STAGE:fit] starting at time 16:59:36.587080
+[LOG] run_cnmf: .fit() completed at time 17:00:07.910814
+[STAGE:fit] done -> 188 components at time 17:00:07.910853
+[STAGE:reloading images] starting... at time 17:00:07.910871
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:00:07.911065
+[STAGE:refit] done -> 177 neurons remain at time 17:00:27.747967
+[STAGE:evaluate_components] starting at time 17:00:27.748210
+[1m1/6[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 67ms/step[1m3/6[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m5/6[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m6/6[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 17:00:28.687060
+[STAGE:evaluate_components] done -> 89 components remain at time 17:00:28.689505
+kept= 89  composite=+1.7418  t=58s at time 17:00:31.737379
+Trial 37: {'gSig': 3, 'rf': 80, 'overlap_fraction': 0.5, 'nb': np.int64(3), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1211843996387742, 'stride': 80, 'K': 64, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 17:00:32.405275
+[STAGE:prepping parameters] done at time 17:00:32.405321
+[LOG] run_cnmf: Initializing CNMF object... at time 17:00:36.947982
+[LOG] run_cnmf: Loading memmap... at time 17:00:36.953957
+[STAGE:fit] starting at time 17:00:36.954079
+[LOG] run_cnmf: .fit() completed at time 17:01:12.780516
+[STAGE:fit] done -> 177 components at time 17:01:12.780553
+[STAGE:reloading images] starting... at time 17:01:12.780561
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:01:12.780803
+[STAGE:refit] done -> 164 neurons remain at time 17:01:30.278372
+[STAGE:evaluate_components] starting at time 17:01:30.278699
+[1m1/6[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 65ms/step[1m3/6[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m5/6[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 48ms/step[1m6/6[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:01:31.114224
+[STAGE:evaluate_components] done -> 68 components remain at time 17:01:31.117063
+kept= 68  composite=+1.6311  t=60s at time 17:01:34.429476
+Trial 38: {'gSig': 3, 'rf': 15, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.13753838788178102, 'stride': 15, 'K': 3, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:01:35.034198
+[STAGE:prepping parameters] done at time 17:01:35.034233
+[LOG] run_cnmf: Initializing CNMF object... at time 17:01:39.478359
+[LOG] run_cnmf: Loading memmap... at time 17:01:39.484507
+[STAGE:fit] starting at time 17:01:39.484573
+[LOG] run_cnmf: .fit() completed at time 17:02:08.240766
+[STAGE:fit] done -> 427 components at time 17:02:08.240814
+[STAGE:reloading images] starting... at time 17:02:08.240831
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:02:08.240931
+[STAGE:refit] done -> 407 neurons remain at time 17:02:31.917973
+[STAGE:evaluate_components] starting at time 17:02:31.920389
+[1m 1/13[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 64ms/step[1m 3/13[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/13[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/13[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/13[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 45ms/step[1m11/13[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m13/13[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:02:33.660322
+[STAGE:evaluate_components] done -> 188 components remain at time 17:02:33.664080
+kept=188  composite=+1.6862  t=60s at time 17:02:36.655926
+Trial 39: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.14046746270029883, 'stride': 25, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:02:37.406429
+[STAGE:prepping parameters] done at time 17:02:37.406467
+[LOG] run_cnmf: Initializing CNMF object... at time 17:02:41.852062
+[LOG] run_cnmf: Loading memmap... at time 17:02:41.858159
+[STAGE:fit] starting at time 17:02:41.858225
+[LOG] run_cnmf: .fit() completed at time 17:03:04.974716
+[STAGE:fit] done -> 320 components at time 17:03:04.974771
+[STAGE:reloading images] starting... at time 17:03:04.974788
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:03:04.974963
+[STAGE:refit] done -> 308 neurons remain at time 17:03:25.727288
+[STAGE:evaluate_components] starting at time 17:03:25.729948
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 66ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 46ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 17:03:27.176684
+[STAGE:evaluate_components] done -> 148 components remain at time 17:03:27.179893
+kept=148  composite=+1.7616  t=51s at time 17:03:30.111706
+Trial 40: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.4519833165511768, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.13615634471108687, 'stride': 22, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:03:30.798079
+[STAGE:prepping parameters] done at time 17:03:30.798128
+[LOG] run_cnmf: Initializing CNMF object... at time 17:03:35.256923
+[LOG] run_cnmf: Loading memmap... at time 17:03:35.263029
+[STAGE:fit] starting at time 17:03:35.263097
+[LOG] run_cnmf: .fit() completed at time 17:03:55.140490
+[STAGE:fit] done -> 327 components at time 17:03:55.140511
+[STAGE:reloading images] starting... at time 17:03:55.140516
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:03:55.140742
+[STAGE:refit] done -> 307 neurons remain at time 17:04:15.769202
+[STAGE:evaluate_components] starting at time 17:04:15.770560
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 47ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step at time 17:04:17.288538
+[STAGE:evaluate_components] done -> 143 components remain at time 17:04:17.291858
+kept=143  composite=+1.7414  t=48s at time 17:04:20.266660
+Trial 41: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.46084436045399335, 'nb': np.int64(3), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.13693474704364558, 'stride': 23, 'K': 7, 'nb_patch': np.int64(3)} ...   [STAGE:prepping parameters] starting at time 17:04:20.986094
+[STAGE:prepping parameters] done at time 17:04:20.986143
+[LOG] run_cnmf: Initializing CNMF object... at time 17:04:25.369649
+[LOG] run_cnmf: Loading memmap... at time 17:04:25.375765
+[STAGE:fit] starting at time 17:04:25.375804
+[LOG] run_cnmf: .fit() completed at time 17:04:47.202949
+[STAGE:fit] done -> 323 components at time 17:04:47.202972
+[STAGE:reloading images] starting... at time 17:04:47.202986
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:04:47.203500
+[STAGE:refit] done -> 301 neurons remain at time 17:05:07.104139
+[STAGE:evaluate_components] starting at time 17:05:07.110750
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 47ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step at time 17:05:08.755215
+[STAGE:evaluate_components] done -> 158 components remain at time 17:05:08.758333
+kept=158  composite=+1.5835  t=49s at time 17:05:11.782125
+Trial 42: {'gSig': 4, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.3, 'stride': 10, 'K': 10, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:05:12.401041
+[STAGE:prepping parameters] done at time 17:05:12.401090
+[LOG] run_cnmf: Initializing CNMF object... at time 17:05:16.946727
+[LOG] run_cnmf: Loading memmap... at time 17:05:16.951910
+[STAGE:fit] starting at time 17:05:16.951986
+[LOG] run_cnmf: .fit() completed at time 17:05:34.391289
+[STAGE:fit] done -> 319 components at time 17:05:34.391327
+[STAGE:reloading images] starting... at time 17:05:34.391345
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:05:34.391542
+[STAGE:refit] done -> 296 neurons remain at time 17:05:59.845419
+[STAGE:evaluate_components] starting at time 17:05:59.845941
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 46ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 17:06:01.294991
+[STAGE:evaluate_components] done -> 119 components remain at time 17:06:01.298138
+kept=119  composite=+1.7009  t=50s at time 17:06:04.285745
+Trial 43: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15964357537738266, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:06:05.017944
+[STAGE:prepping parameters] done at time 17:06:05.017994
+[LOG] run_cnmf: Initializing CNMF object... at time 17:06:09.628067
+[LOG] run_cnmf: Loading memmap... at time 17:06:09.634534
+[STAGE:fit] starting at time 17:06:09.634661
+[LOG] run_cnmf: .fit() completed at time 17:06:34.191449
+[STAGE:fit] done -> 358 components at time 17:06:34.191482
+[STAGE:reloading images] starting... at time 17:06:34.191491
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:06:34.191651
+[STAGE:refit] done -> 344 neurons remain at time 17:06:56.834673
+[STAGE:evaluate_components] starting at time 17:06:56.836121
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 43ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 17:06:58.557182
+[STAGE:evaluate_components] done -> 168 components remain at time 17:06:58.560581
+kept=168  composite=+1.7595  t=55s at time 17:07:01.707556
+Trial 44: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.1578998611027768, 'stride': 10, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:07:02.393578
+[STAGE:prepping parameters] done at time 17:07:02.393626
+[LOG] run_cnmf: Initializing CNMF object... at time 17:07:06.729887
+[LOG] run_cnmf: Loading memmap... at time 17:07:06.735958
+[STAGE:fit] starting at time 17:07:06.736053
+[LOG] run_cnmf: .fit() completed at time 17:07:22.091325
+[STAGE:fit] done -> 356 components at time 17:07:22.091360
+[STAGE:reloading images] starting... at time 17:07:22.091365
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:07:22.091584
+[STAGE:refit] done -> 341 neurons remain at time 17:07:44.021232
+[STAGE:evaluate_components] starting at time 17:07:44.021852
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 43ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 17:07:45.608985
+[STAGE:evaluate_components] done -> 150 components remain at time 17:07:45.612549
+kept=150  composite=+1.8062  t=44s at time 17:07:48.578143
+Trial 45: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.11376589055124567, 'stride': 25, 'K': 6, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:07:49.365309
+[STAGE:prepping parameters] done at time 17:07:49.365359
+[LOG] run_cnmf: Initializing CNMF object... at time 17:07:53.652295
+[LOG] run_cnmf: Loading memmap... at time 17:07:53.658265
+[STAGE:fit] starting at time 17:07:53.658382
+[LOG] run_cnmf: .fit() completed at time 17:08:14.251924
+[STAGE:fit] done -> 282 components at time 17:08:14.251957
+[STAGE:reloading images] starting... at time 17:08:14.251970
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:08:14.252248
+[STAGE:refit] done -> 272 neurons remain at time 17:08:32.586740
+[STAGE:evaluate_components] starting at time 17:08:32.588665
+[1m1/9[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m3/9[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m5/9[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 47ms/step[1m7/9[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 46ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 17:08:33.977727
+[STAGE:evaluate_components] done -> 134 components remain at time 17:08:33.981163
+kept=134  composite=+1.7487  t=46s at time 17:08:36.974616
+Trial 46: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.16654225151526542, 'stride': 10, 'K': 9, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:08:37.722369
+[STAGE:prepping parameters] done at time 17:08:37.722448
+[LOG] run_cnmf: Initializing CNMF object... at time 17:08:41.966393
+[LOG] run_cnmf: Loading memmap... at time 17:08:41.972519
+[STAGE:fit] starting at time 17:08:41.972606
+[LOG] run_cnmf: .fit() completed at time 17:08:58.161874
+[STAGE:fit] done -> 366 components at time 17:08:58.161911
+[STAGE:reloading images] starting... at time 17:08:58.161927
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:08:58.162034
+[STAGE:refit] done -> 346 neurons remain at time 17:09:20.692689
+[STAGE:evaluate_components] starting at time 17:09:20.693428
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:09:22.315850
+[STAGE:evaluate_components] done -> 146 components remain at time 17:09:22.321123
+kept=146  composite=+1.8096  t=46s at time 17:09:25.368794
+Trial 47: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.14291446388185486, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:09:25.933577
+[STAGE:prepping parameters] done at time 17:09:25.933625
+[LOG] run_cnmf: Initializing CNMF object... at time 17:09:30.176026
+[LOG] run_cnmf: Loading memmap... at time 17:09:30.182098
+[STAGE:fit] starting at time 17:09:30.182222
+[LOG] run_cnmf: .fit() completed at time 17:09:56.994462
+[STAGE:fit] done -> 358 components at time 17:09:56.994503
+[STAGE:reloading images] starting... at time 17:09:56.994514
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:09:56.994693
+[STAGE:refit] done -> 344 neurons remain at time 17:10:19.636207
+[STAGE:evaluate_components] starting at time 17:10:19.638014
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:10:21.416276
+[STAGE:evaluate_components] done -> 167 components remain at time 17:10:21.419866
+kept=167  composite=+1.7581  t=57s at time 17:10:24.646943
+Trial 48: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.17501118039118801, 'stride': 10, 'K': 9, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:10:25.284123
+[STAGE:prepping parameters] done at time 17:10:25.284169
+[LOG] run_cnmf: Initializing CNMF object... at time 17:10:29.652344
+[LOG] run_cnmf: Loading memmap... at time 17:10:29.658783
+[STAGE:fit] starting at time 17:10:29.658846
+[LOG] run_cnmf: .fit() completed at time 17:10:46.290215
+[STAGE:fit] done -> 366 components at time 17:10:46.290254
+[STAGE:reloading images] starting... at time 17:10:46.290274
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:10:46.290626
+[STAGE:refit] done -> 343 neurons remain at time 17:11:08.647895
+[STAGE:evaluate_components] starting at time 17:11:08.648578
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:11:10.302236
+[STAGE:evaluate_components] done -> 146 components remain at time 17:11:10.305710
+kept=146  composite=+1.8150  t=46s at time 17:11:13.343637
+Trial 49: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.20080016554767005, 'stride': 10, 'K': 11, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:11:14.066351
+[STAGE:prepping parameters] done at time 17:11:14.066425
+[LOG] run_cnmf: Initializing CNMF object... at time 17:11:18.524093
+[LOG] run_cnmf: Loading memmap... at time 17:11:18.530095
+[STAGE:fit] starting at time 17:11:18.530254
+[LOG] run_cnmf: .fit() completed at time 17:11:36.434282
+[STAGE:fit] done -> 388 components at time 17:11:36.434321
+[STAGE:reloading images] starting... at time 17:11:36.434329
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:11:36.434481
+[STAGE:refit] done -> 364 neurons remain at time 17:12:00.274078
+[STAGE:evaluate_components] starting at time 17:12:00.274875
+[1m 1/12[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/12[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/12[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/12[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/12[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 44ms/step[1m11/12[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 44ms/step[1m12/12[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 42ms/step at time 17:12:02.043065
+[STAGE:evaluate_components] done -> 151 components remain at time 17:12:02.046862
+kept=151  composite=+1.7348  t=49s at time 17:12:05.079925
+Trial 50: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.29138454203572556, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.21982399775296696, 'stride': 14, 'K': 12, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:12:05.804234
+[STAGE:prepping parameters] done at time 17:12:05.804283
+[LOG] run_cnmf: Initializing CNMF object... at time 17:12:10.122465
+[LOG] run_cnmf: Loading memmap... at time 17:12:10.128577
+[STAGE:fit] starting at time 17:12:10.128642
+[LOG] run_cnmf: .fit() completed at time 17:12:30.005786
+[STAGE:fit] done -> 403 components at time 17:12:30.005846
+[STAGE:reloading images] starting... at time 17:12:30.005863
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:12:30.006019
+[STAGE:refit] done -> 377 neurons remain at time 17:12:55.660031
+[STAGE:evaluate_components] starting at time 17:12:55.660741
+[1m 1/12[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/12[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/12[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/12[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/12[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 44ms/step[1m11/12[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 44ms/step[1m12/12[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:12:57.407017
+[STAGE:evaluate_components] done -> 149 components remain at time 17:12:57.410617
+kept=149  composite=+1.7377  t=53s at time 17:13:00.493012
+Trial 51: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.15359831256225998, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:13:01.538683
+[STAGE:prepping parameters] done at time 17:13:01.538733
+[LOG] run_cnmf: Initializing CNMF object... at time 17:13:05.851987
+[LOG] run_cnmf: Loading memmap... at time 17:13:05.859262
+[STAGE:fit] starting at time 17:13:05.859627
+[LOG] run_cnmf: .fit() completed at time 17:13:29.164261
+[STAGE:fit] done -> 357 components at time 17:13:29.164309
+[STAGE:reloading images] starting... at time 17:13:29.164325
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:13:29.164490
+[STAGE:refit] done -> 344 neurons remain at time 17:13:51.623776
+[STAGE:evaluate_components] starting at time 17:13:51.629430
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:13:53.254606
+[STAGE:evaluate_components] done -> 168 components remain at time 17:13:53.258487
+kept=168  composite=+1.7666  t=53s at time 17:13:56.280267
+Trial 52: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.15684448003285206, 'stride': 10, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:13:57.116771
+[STAGE:prepping parameters] done at time 17:13:57.116819
+[LOG] run_cnmf: Initializing CNMF object... at time 17:14:01.331783
+[LOG] run_cnmf: Loading memmap... at time 17:14:01.338104
+[STAGE:fit] starting at time 17:14:01.338171
+[LOG] run_cnmf: .fit() completed at time 17:14:17.124260
+[STAGE:fit] done -> 357 components at time 17:14:17.124306
+[STAGE:reloading images] starting... at time 17:14:17.124324
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:14:17.124526
+[STAGE:refit] done -> 342 neurons remain at time 17:14:39.548099
+[STAGE:evaluate_components] starting at time 17:14:39.548815
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:14:41.113231
+[STAGE:evaluate_components] done -> 151 components remain at time 17:14:41.116982
+kept=151  composite=+1.8119  t=45s at time 17:14:44.106895
+Trial 53: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.15748377581038395, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:14:45.183206
+[STAGE:prepping parameters] done at time 17:14:45.183254
+[LOG] run_cnmf: Initializing CNMF object... at time 17:14:49.416124
+[LOG] run_cnmf: Loading memmap... at time 17:14:49.422384
+[STAGE:fit] starting at time 17:14:49.422448
+[LOG] run_cnmf: .fit() completed at time 17:15:13.070677
+[STAGE:fit] done -> 358 components at time 17:15:13.070710
+[STAGE:reloading images] starting... at time 17:15:13.070715
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:15:13.070933
+[STAGE:refit] done -> 344 neurons remain at time 17:15:35.777377
+[STAGE:evaluate_components] starting at time 17:15:35.779090
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 73ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 67ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 67ms/step at time 17:15:37.866764
+[STAGE:evaluate_components] done -> 172 components remain at time 17:15:37.872918
+kept=172  composite=+1.7678  t=54s at time 17:15:40.887675
+Trial 54: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.16254406458308757, 'stride': 25, 'K': 9, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:15:41.766270
+[STAGE:prepping parameters] done at time 17:15:41.766318
+[LOG] run_cnmf: Initializing CNMF object... at time 17:15:46.022132
+[LOG] run_cnmf: Loading memmap... at time 17:15:46.030519
+[STAGE:fit] starting at time 17:15:46.030673
+[LOG] run_cnmf: .fit() completed at time 17:16:14.941074
+[STAGE:fit] done -> 386 components at time 17:16:14.941124
+[STAGE:reloading images] starting... at time 17:16:14.941141
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:16:14.941255
+[STAGE:refit] done -> 373 neurons remain at time 17:16:37.949623
+[STAGE:evaluate_components] starting at time 17:16:37.950342
+[1m 1/12[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/12[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/12[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/12[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/12[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 45ms/step[1m11/12[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 45ms/step[1m12/12[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:16:39.699423
+[STAGE:evaluate_components] done -> 168 components remain at time 17:16:39.702908
+kept=168  composite=+1.7420  t=59s at time 17:16:42.839103
+Trial 55: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.12435706408035987, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:16:43.703874
+[STAGE:prepping parameters] done at time 17:16:43.704017
+[LOG] run_cnmf: Initializing CNMF object... at time 17:16:48.286967
+[LOG] run_cnmf: Loading memmap... at time 17:16:48.293687
+[STAGE:fit] starting at time 17:16:48.293765
+[LOG] run_cnmf: .fit() completed at time 17:17:03.665769
+[STAGE:fit] done -> 338 components at time 17:17:03.665802
+[STAGE:reloading images] starting... at time 17:17:03.665808
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:17:03.666024
+[STAGE:refit] done -> 324 neurons remain at time 17:17:24.449095
+[STAGE:evaluate_components] starting at time 17:17:24.449788
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 79ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:17:25.964790
+[STAGE:evaluate_components] done -> 145 components remain at time 17:17:25.967868
+kept=145  composite=+1.8124  t=44s at time 17:17:28.981058
+Trial 56: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.12661919827416263, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:17:29.765515
+[STAGE:prepping parameters] done at time 17:17:29.765553
+[LOG] run_cnmf: Initializing CNMF object... at time 17:17:34.173787
+[LOG] run_cnmf: Loading memmap... at time 17:17:34.179842
+[STAGE:fit] starting at time 17:17:34.179911
+[LOG] run_cnmf: .fit() completed at time 17:17:49.195938
+[STAGE:fit] done -> 338 components at time 17:17:49.195970
+[STAGE:reloading images] starting... at time 17:17:49.196031
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:17:49.196365
+[STAGE:refit] done -> 325 neurons remain at time 17:18:10.582778
+[STAGE:evaluate_components] starting at time 17:18:10.583465
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 75ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:18:12.146751
+[STAGE:evaluate_components] done -> 145 components remain at time 17:18:12.150239
+kept=145  composite=+1.8137  t=44s at time 17:18:15.231437
+Trial 57: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.12567882720622897, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:18:16.144159
+[STAGE:prepping parameters] done at time 17:18:16.144207
+[LOG] run_cnmf: Initializing CNMF object... at time 17:18:20.345091
+[LOG] run_cnmf: Loading memmap... at time 17:18:20.351157
+[STAGE:fit] starting at time 17:18:20.351194
+[LOG] run_cnmf: .fit() completed at time 17:18:35.947576
+[STAGE:fit] done -> 338 components at time 17:18:35.947614
+[STAGE:reloading images] starting... at time 17:18:35.947625
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:18:35.947841
+[STAGE:refit] done -> 325 neurons remain at time 17:18:58.123219
+[STAGE:evaluate_components] starting at time 17:18:58.124945
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:18:59.794885
+[STAGE:evaluate_components] done -> 144 components remain at time 17:18:59.798484
+kept=144  composite=+1.8159  t=45s at time 17:19:02.830268
+Trial 58: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15328664305283418, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:19:03.684055
+[STAGE:prepping parameters] done at time 17:19:03.684103
+[LOG] run_cnmf: Initializing CNMF object... at time 17:19:08.047423
+[LOG] run_cnmf: Loading memmap... at time 17:19:08.053875
+[STAGE:fit] starting at time 17:19:08.053915
+[LOG] run_cnmf: .fit() completed at time 17:19:32.359138
+[STAGE:fit] done -> 358 components at time 17:19:32.359174
+[STAGE:reloading images] starting... at time 17:19:32.359181
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:19:32.359377
+[STAGE:refit] done -> 344 neurons remain at time 17:19:55.249055
+[STAGE:evaluate_components] starting at time 17:19:55.250718
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:19:57.006025
+[STAGE:evaluate_components] done -> 166 components remain at time 17:19:57.009671
+kept=166  composite=+1.7638  t=55s at time 17:20:00.097140
+Trial 59: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.12593236282810172, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:20:00.996128
+[STAGE:prepping parameters] done at time 17:20:00.996273
+[LOG] run_cnmf: Initializing CNMF object... at time 17:20:05.429669
+[LOG] run_cnmf: Loading memmap... at time 17:20:05.436097
+[STAGE:fit] starting at time 17:20:05.436172
+[LOG] run_cnmf: .fit() completed at time 17:20:21.373922
+[STAGE:fit] done -> 338 components at time 17:20:21.373955
+[STAGE:reloading images] starting... at time 17:20:21.373963
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:20:21.374144
+[STAGE:refit] done -> 325 neurons remain at time 17:20:42.579322
+[STAGE:evaluate_components] starting at time 17:20:42.579863
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 17:20:44.370170
+[STAGE:evaluate_components] done -> 143 components remain at time 17:20:44.374575
+kept=143  composite=+1.8157  t=45s at time 17:20:47.434469
+Trial 60: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15992627274426832, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:20:48.300369
+[STAGE:prepping parameters] done at time 17:20:48.300440
+[LOG] run_cnmf: Initializing CNMF object... at time 17:20:52.607132
+[LOG] run_cnmf: Loading memmap... at time 17:20:52.612188
+[STAGE:fit] starting at time 17:20:52.612379
+[LOG] run_cnmf: .fit() completed at time 17:21:16.569358
+[STAGE:fit] done -> 356 components at time 17:21:16.569392
+[STAGE:reloading images] starting... at time 17:21:16.569421
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:21:16.569631
+[STAGE:refit] done -> 342 neurons remain at time 17:21:38.636221
+[STAGE:evaluate_components] starting at time 17:21:38.637976
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:21:40.282985
+[STAGE:evaluate_components] done -> 164 components remain at time 17:21:40.286443
+kept=164  composite=+1.7618  t=53s at time 17:21:43.296166
+Trial 61: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15849086684171687, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:21:44.473080
+[STAGE:prepping parameters] done at time 17:21:44.473128
+[LOG] run_cnmf: Initializing CNMF object... at time 17:21:48.747886
+[LOG] run_cnmf: Loading memmap... at time 17:21:48.753917
+[STAGE:fit] starting at time 17:21:48.753970
+[LOG] run_cnmf: .fit() completed at time 17:22:12.321245
+[STAGE:fit] done -> 357 components at time 17:22:12.321280
+[STAGE:reloading images] starting... at time 17:22:12.321288
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:22:12.321464
+[STAGE:refit] done -> 343 neurons remain at time 17:22:34.767890
+[STAGE:evaluate_components] starting at time 17:22:34.769039
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:22:36.340711
+[STAGE:evaluate_components] done -> 170 components remain at time 17:22:36.344237
+kept=170  composite=+1.7692  t=53s at time 17:22:39.356665
+Trial 62: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.1329366987246623, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:22:40.304355
+[STAGE:prepping parameters] done at time 17:22:40.304432
+[LOG] run_cnmf: Initializing CNMF object... at time 17:22:44.569424
+[LOG] run_cnmf: Loading memmap... at time 17:22:44.575864
+[STAGE:fit] starting at time 17:22:44.575906
+[LOG] run_cnmf: .fit() completed at time 17:23:00.459372
+[STAGE:fit] done -> 338 components at time 17:23:00.459443
+[STAGE:reloading images] starting... at time 17:23:00.459457
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:23:00.459633
+[STAGE:refit] done -> 323 neurons remain at time 17:23:21.764814
+[STAGE:evaluate_components] starting at time 17:23:21.765418
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 83ms/step[1m 2/11[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 50ms/step[1m 4/11[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 49ms/step[1m 6/11[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 8/11[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m10/11[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:23:23.474168
+[STAGE:evaluate_components] done -> 147 components remain at time 17:23:23.477314
+kept=147  composite=+1.8084  t=45s at time 17:23:26.552330
+Trial 63: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1215390510164268, 'stride': 10, 'K': 6, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:23:27.477684
+[STAGE:prepping parameters] done at time 17:23:27.477842
+[LOG] run_cnmf: Initializing CNMF object... at time 17:23:31.706172
+[LOG] run_cnmf: Loading memmap... at time 17:23:31.712467
+[STAGE:fit] starting at time 17:23:31.712510
+[LOG] run_cnmf: .fit() completed at time 17:23:47.036749
+[STAGE:fit] done -> 293 components at time 17:23:47.036796
+[STAGE:reloading images] starting... at time 17:23:47.036815
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:23:47.037009
+[STAGE:refit] done -> 280 neurons remain at time 17:24:06.662281
+[STAGE:evaluate_components] starting at time 17:24:06.663350
+[1m1/9[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m3/9[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m5/9[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 45ms/step[1m7/9[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 45ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m9/9[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step at time 17:24:08.104182
+[STAGE:evaluate_components] done -> 121 components remain at time 17:24:08.107507
+kept=121  composite=+1.7833  t=42s at time 17:24:11.134874
+Trial 64: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.3), 'occupancy_frac': 0.15337906323079034, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:24:12.367389
+[STAGE:prepping parameters] done at time 17:24:12.367471
+[LOG] run_cnmf: Initializing CNMF object... at time 17:24:16.552955
+[LOG] run_cnmf: Loading memmap... at time 17:24:16.559479
+[STAGE:fit] starting at time 17:24:16.559518
+[LOG] run_cnmf: .fit() completed at time 17:24:42.087112
+[STAGE:fit] done -> 358 components at time 17:24:42.087146
+[STAGE:reloading images] starting... at time 17:24:42.087154
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:24:42.087442
+[STAGE:refit] done -> 343 neurons remain at time 17:25:04.299182
+[STAGE:evaluate_components] starting at time 17:25:04.304714
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:25:06.066308
+[STAGE:evaluate_components] done -> 145 components remain at time 17:25:06.070713
+kept=145  composite=+1.7271  t=55s at time 17:25:09.150065
+Trial 65: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1358031668338196, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:25:10.021988
+[STAGE:prepping parameters] done at time 17:25:10.022037
+[LOG] run_cnmf: Initializing CNMF object... at time 17:25:14.348514
+[LOG] run_cnmf: Loading memmap... at time 17:25:14.354832
+[STAGE:fit] starting at time 17:25:14.354907
+[LOG] run_cnmf: .fit() completed at time 17:25:30.251748
+[STAGE:fit] done -> 338 components at time 17:25:30.251795
+[STAGE:reloading images] starting... at time 17:25:30.251826
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:25:30.251919
+[STAGE:refit] done -> 325 neurons remain at time 17:25:51.715381
+[STAGE:evaluate_components] starting at time 17:25:51.716053
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 78ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:25:53.340371
+[STAGE:evaluate_components] done -> 146 components remain at time 17:25:53.344081
+kept=146  composite=+1.8096  t=45s at time 17:25:56.450333
+Trial 66: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.15), 'occupancy_frac': 0.13522128096685831, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:25:57.394303
+[STAGE:prepping parameters] done at time 17:25:57.394351
+[LOG] run_cnmf: Initializing CNMF object... at time 17:26:01.747231
+[LOG] run_cnmf: Loading memmap... at time 17:26:01.753775
+[STAGE:fit] starting at time 17:26:01.753900
+[LOG] run_cnmf: .fit() completed at time 17:26:17.496485
+[STAGE:fit] done -> 338 components at time 17:26:17.496519
+[STAGE:reloading images] starting... at time 17:26:17.496528
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:26:17.496797
+[STAGE:refit] done -> 325 neurons remain at time 17:26:38.205476
+[STAGE:evaluate_components] starting at time 17:26:38.207904
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:26:39.718384
+[STAGE:evaluate_components] done -> 145 components remain at time 17:26:39.721778
+kept=145  composite=+1.8113  t=44s at time 17:26:42.775897
+Trial 67: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15962360665751701, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:26:43.907895
+[STAGE:prepping parameters] done at time 17:26:43.907942
+[LOG] run_cnmf: Initializing CNMF object... at time 17:26:48.244812
+[LOG] run_cnmf: Loading memmap... at time 17:26:48.251011
+[STAGE:fit] starting at time 17:26:48.251131
+[LOG] run_cnmf: .fit() completed at time 17:27:12.507358
+[STAGE:fit] done -> 358 components at time 17:27:12.507439
+[STAGE:reloading images] starting... at time 17:27:12.507450
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:27:12.507589
+[STAGE:refit] done -> 344 neurons remain at time 17:27:33.494369
+[STAGE:evaluate_components] starting at time 17:27:33.496145
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:27:35.082187
+[STAGE:evaluate_components] done -> 167 components remain at time 17:27:35.085636
+kept=167  composite=+1.7623  t=52s at time 17:27:38.134633
+Trial 68: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13400163151695452, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:27:39.364047
+[STAGE:prepping parameters] done at time 17:27:39.364096
+[LOG] run_cnmf: Initializing CNMF object... at time 17:27:43.712958
+[LOG] run_cnmf: Loading memmap... at time 17:27:43.719049
+[STAGE:fit] starting at time 17:27:43.719087
+[LOG] run_cnmf: .fit() completed at time 17:27:58.894299
+[STAGE:fit] done -> 338 components at time 17:27:58.894333
+[STAGE:reloading images] starting... at time 17:27:58.894338
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:27:58.894559
+[STAGE:refit] done -> 324 neurons remain at time 17:28:20.472791
+[STAGE:evaluate_components] starting at time 17:28:20.473330
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 17:28:22.000114
+[STAGE:evaluate_components] done -> 145 components remain at time 17:28:22.003590
+kept=145  composite=+1.8150  t=44s at time 17:28:25.011733
+Trial 69: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.4953654085211096, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.15040835466791558, 'stride': 24, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:28:26.129368
+[STAGE:prepping parameters] done at time 17:28:26.129453
+[LOG] run_cnmf: Initializing CNMF object... at time 17:28:30.292539
+[LOG] run_cnmf: Loading memmap... at time 17:28:30.296968
+[STAGE:fit] starting at time 17:28:30.297029
+[LOG] run_cnmf: .fit() completed at time 17:28:54.482239
+[STAGE:fit] done -> 349 components at time 17:28:54.482273
+[STAGE:reloading images] starting... at time 17:28:54.482280
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:28:54.482544
+[STAGE:refit] done -> 337 neurons remain at time 17:29:16.702142
+[STAGE:evaluate_components] starting at time 17:29:16.713645
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:29:18.561609
+[STAGE:evaluate_components] done -> 146 components remain at time 17:29:18.565267
+kept=146  composite=+1.7341  t=54s at time 17:29:21.744348
+Trial 70: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.25), 'occupancy_frac': 0.12746812844300098, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:29:22.730655
+[STAGE:prepping parameters] done at time 17:29:22.730711
+[LOG] run_cnmf: Initializing CNMF object... at time 17:29:27.312080
+[LOG] run_cnmf: Loading memmap... at time 17:29:27.318589
+[STAGE:fit] starting at time 17:29:27.318734
+[LOG] run_cnmf: .fit() completed at time 17:29:43.702434
+[STAGE:fit] done -> 338 components at time 17:29:43.702477
+[STAGE:reloading images] starting... at time 17:29:43.702492
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:29:43.702587
+[STAGE:refit] done -> 323 neurons remain at time 17:30:05.971895
+[STAGE:evaluate_components] starting at time 17:30:05.972468
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 87ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:30:07.637594
+[STAGE:evaluate_components] done -> 133 components remain at time 17:30:07.640791
+kept=133  composite=+1.7902  t=46s at time 17:30:10.757896
+Trial 71: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13391618080426587, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:30:11.807147
+[STAGE:prepping parameters] done at time 17:30:11.807309
+[LOG] run_cnmf: Initializing CNMF object... at time 17:30:16.190539
+[LOG] run_cnmf: Loading memmap... at time 17:30:16.196813
+[STAGE:fit] starting at time 17:30:16.196981
+[LOG] run_cnmf: .fit() completed at time 17:30:31.937184
+[STAGE:fit] done -> 338 components at time 17:30:31.937236
+[STAGE:reloading images] starting... at time 17:30:31.937252
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:30:31.937418
+[STAGE:refit] done -> 323 neurons remain at time 17:30:52.984059
+[STAGE:evaluate_components] starting at time 17:30:52.984853
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 43ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 40ms/step at time 17:30:54.512581
+[STAGE:evaluate_components] done -> 143 components remain at time 17:30:54.515906
+kept=143  composite=+1.8097  t=44s at time 17:30:57.569936
+Trial 72: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13387642592137866, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:30:58.632776
+[STAGE:prepping parameters] done at time 17:30:58.632812
+[LOG] run_cnmf: Initializing CNMF object... at time 17:31:02.986845
+[LOG] run_cnmf: Loading memmap... at time 17:31:02.993258
+[STAGE:fit] starting at time 17:31:02.993343
+[LOG] run_cnmf: .fit() completed at time 17:31:18.164321
+[STAGE:fit] done -> 338 components at time 17:31:18.164367
+[STAGE:reloading images] starting... at time 17:31:18.164384
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:31:18.164602
+[STAGE:refit] done -> 324 neurons remain at time 17:31:40.798775
+[STAGE:evaluate_components] starting at time 17:31:40.799509
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 50ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 17:31:42.369476
+[STAGE:evaluate_components] done -> 145 components remain at time 17:31:42.372672
+kept=145  composite=+1.8099  t=45s at time 17:31:45.386598
+Trial 73: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13383175942950648, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:31:46.686842
+[STAGE:prepping parameters] done at time 17:31:46.686890
+[LOG] run_cnmf: Initializing CNMF object... at time 17:31:51.091496
+[LOG] run_cnmf: Loading memmap... at time 17:31:51.097590
+[STAGE:fit] starting at time 17:31:51.097715
+[LOG] run_cnmf: .fit() completed at time 17:32:07.030026
+[STAGE:fit] done -> 338 components at time 17:32:07.030078
+[STAGE:reloading images] starting... at time 17:32:07.030094
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:32:07.030278
+[STAGE:refit] done -> 324 neurons remain at time 17:32:28.285032
+[STAGE:evaluate_components] starting at time 17:32:28.294816
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 80ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:32:29.850841
+[STAGE:evaluate_components] done -> 149 components remain at time 17:32:29.854142
+kept=149  composite=+1.8167  t=45s at time 17:32:32.944324
+Trial 74: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15342623081739754, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:32:33.985521
+[STAGE:prepping parameters] done at time 17:32:33.985573
+[LOG] run_cnmf: Initializing CNMF object... at time 17:32:38.202237
+[LOG] run_cnmf: Loading memmap... at time 17:32:38.208284
+[STAGE:fit] starting at time 17:32:38.208372
+[LOG] run_cnmf: .fit() completed at time 17:33:02.885665
+[STAGE:fit] done -> 358 components at time 17:33:02.885714
+[STAGE:reloading images] starting... at time 17:33:02.885746
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:33:02.885944
+[STAGE:refit] done -> 344 neurons remain at time 17:33:26.756959
+[STAGE:evaluate_components] starting at time 17:33:26.758796
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 83ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:33:28.405771
+[STAGE:evaluate_components] done -> 167 components remain at time 17:33:28.411656
+kept=167  composite=+1.7696  t=56s at time 17:33:31.550951
+Trial 75: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13263260638056468, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:33:32.681700
+[STAGE:prepping parameters] done at time 17:33:32.681841
+[LOG] run_cnmf: Initializing CNMF object... at time 17:33:37.055674
+[LOG] run_cnmf: Loading memmap... at time 17:33:37.061941
+[STAGE:fit] starting at time 17:33:37.062018
+[LOG] run_cnmf: .fit() completed at time 17:33:53.442454
+[STAGE:fit] done -> 338 components at time 17:33:53.442487
+[STAGE:reloading images] starting... at time 17:33:53.442499
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:33:53.442731
+[STAGE:refit] done -> 325 neurons remain at time 17:34:15.000954
+[STAGE:evaluate_components] starting at time 17:34:15.001859
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 84ms/step[1m 2/11[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 51ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 51ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 50ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 49ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 48ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:34:16.639573
+[STAGE:evaluate_components] done -> 142 components remain at time 17:34:16.643208
+kept=142  composite=+1.8119  t=45s at time 17:34:19.751056
+Trial 76: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1503642406231987, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:34:20.905679
+[STAGE:prepping parameters] done at time 17:34:20.905727
+[LOG] run_cnmf: Initializing CNMF object... at time 17:34:25.208883
+[LOG] run_cnmf: Loading memmap... at time 17:34:25.215612
+[STAGE:fit] starting at time 17:34:25.215754
+[LOG] run_cnmf: .fit() completed at time 17:34:51.518818
+[STAGE:fit] done -> 356 components at time 17:34:51.518865
+[STAGE:reloading images] starting... at time 17:34:51.518882
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:34:51.519022
+[STAGE:refit] done -> 343 neurons remain at time 17:35:14.520599
+[STAGE:evaluate_components] starting at time 17:35:14.522361
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 69ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:35:16.214736
+[STAGE:evaluate_components] done -> 169 components remain at time 17:35:16.218219
+kept=169  composite=+1.7503  t=57s at time 17:35:19.320139
+Trial 77: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1331476567915708, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:35:20.609022
+[STAGE:prepping parameters] done at time 17:35:20.609059
+[LOG] run_cnmf: Initializing CNMF object... at time 17:35:25.133546
+[LOG] run_cnmf: Loading memmap... at time 17:35:25.139619
+[STAGE:fit] starting at time 17:35:25.139657
+[LOG] run_cnmf: .fit() completed at time 17:35:40.426427
+[STAGE:fit] done -> 338 components at time 17:35:40.426461
+[STAGE:reloading images] starting... at time 17:35:40.426472
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:35:40.426650
+[STAGE:refit] done -> 325 neurons remain at time 17:36:01.898367
+[STAGE:evaluate_components] starting at time 17:36:01.899104
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 51ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 49ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:36:03.473368
+[STAGE:evaluate_components] done -> 143 components remain at time 17:36:03.476609
+kept=143  composite=+1.8163  t=44s at time 17:36:06.523692
+Trial 78: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15267227557434818, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:36:08.028367
+[STAGE:prepping parameters] done at time 17:36:08.028450
+[LOG] run_cnmf: Initializing CNMF object... at time 17:36:12.294844
+[LOG] run_cnmf: Loading memmap... at time 17:36:12.300770
+[STAGE:fit] starting at time 17:36:12.300865
+[LOG] run_cnmf: .fit() completed at time 17:36:37.050595
+[STAGE:fit] done -> 357 components at time 17:36:37.050632
+[STAGE:reloading images] starting... at time 17:36:37.050667
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:36:37.051030
+[STAGE:refit] done -> 343 neurons remain at time 17:37:00.437909
+[STAGE:evaluate_components] starting at time 17:37:00.453309
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 17:37:02.326030
+[STAGE:evaluate_components] done -> 169 components remain at time 17:37:02.329944
+kept=169  composite=+1.7676  t=56s at time 17:37:05.450669
+Trial 79: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13206571801187172, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:37:06.686619
+[STAGE:prepping parameters] done at time 17:37:06.686667
+[LOG] run_cnmf: Initializing CNMF object... at time 17:37:11.145059
+[LOG] run_cnmf: Loading memmap... at time 17:37:11.151209
+[STAGE:fit] starting at time 17:37:11.151335
+[LOG] run_cnmf: .fit() completed at time 17:37:27.055318
+[STAGE:fit] done -> 338 components at time 17:37:27.055354
+[STAGE:reloading images] starting... at time 17:37:27.055370
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:37:27.055500
+[STAGE:refit] done -> 325 neurons remain at time 17:37:47.854354
+[STAGE:evaluate_components] starting at time 17:37:47.854867
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 17:37:49.487304
+[STAGE:evaluate_components] done -> 145 components remain at time 17:37:49.490669
+kept=145  composite=+1.8112  t=44s at time 17:37:52.546685
+Trial 80: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1542820861566765, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:37:53.882022
+[STAGE:prepping parameters] done at time 17:37:53.882063
+[LOG] run_cnmf: Initializing CNMF object... at time 17:37:58.208493
+[LOG] run_cnmf: Loading memmap... at time 17:37:58.214736
+[STAGE:fit] starting at time 17:37:58.214774
+[LOG] run_cnmf: .fit() completed at time 17:38:22.941613
+[STAGE:fit] done -> 356 components at time 17:38:22.941636
+[STAGE:reloading images] starting... at time 17:38:22.941641
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:38:22.941861
+[STAGE:refit] done -> 342 neurons remain at time 17:38:46.163956
+[STAGE:evaluate_components] starting at time 17:38:46.165740
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 2/11[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m0s[0m 51ms/step[1m 4/11[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 6/11[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 8/11[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 46ms/step[1m10/11[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:38:48.125930
+[STAGE:evaluate_components] done -> 168 components remain at time 17:38:48.132652
+kept=168  composite=+1.7634  t=56s at time 17:38:51.271059
+Trial 81: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15395628867961064, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:38:52.764215
+[STAGE:prepping parameters] done at time 17:38:52.764251
+[LOG] run_cnmf: Initializing CNMF object... at time 17:38:57.152931
+[LOG] run_cnmf: Loading memmap... at time 17:38:57.159202
+[STAGE:fit] starting at time 17:38:57.159305
+[LOG] run_cnmf: .fit() completed at time 17:39:22.308472
+[STAGE:fit] done -> 357 components at time 17:39:22.308491
+[STAGE:reloading images] starting... at time 17:39:22.308497
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:39:22.308740
+[STAGE:refit] done -> 344 neurons remain at time 17:39:45.858312
+[STAGE:evaluate_components] starting at time 17:39:45.860148
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:39:47.630646
+[STAGE:evaluate_components] done -> 168 components remain at time 17:39:47.634137
+kept=168  composite=+1.7511  t=56s at time 17:39:50.664362
+Trial 82: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.1535536420049034, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:39:52.240552
+[STAGE:prepping parameters] done at time 17:39:52.240588
+[LOG] run_cnmf: Initializing CNMF object... at time 17:39:56.687824
+[LOG] run_cnmf: Loading memmap... at time 17:39:56.694300
+[STAGE:fit] starting at time 17:39:56.694364
+[LOG] run_cnmf: .fit() completed at time 17:40:20.921503
+[STAGE:fit] done -> 358 components at time 17:40:20.921528
+[STAGE:reloading images] starting... at time 17:40:20.921536
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:40:20.921712
+[STAGE:refit] done -> 344 neurons remain at time 17:40:43.437774
+[STAGE:evaluate_components] starting at time 17:40:43.438719
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 74ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:40:45.088916
+[STAGE:evaluate_components] done -> 170 components remain at time 17:40:45.092801
+kept=170  composite=+1.7644  t=54s at time 17:40:48.052873
+Trial 83: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13232773323133507, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:40:49.431519
+[STAGE:prepping parameters] done at time 17:40:49.431568
+[LOG] run_cnmf: Initializing CNMF object... at time 17:40:53.858504
+[LOG] run_cnmf: Loading memmap... at time 17:40:53.864751
+[STAGE:fit] starting at time 17:40:53.864815
+[LOG] run_cnmf: .fit() completed at time 17:41:09.453303
+[STAGE:fit] done -> 338 components at time 17:41:09.453342
+[STAGE:reloading images] starting... at time 17:41:09.453358
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:41:09.453523
+[STAGE:refit] done -> 325 neurons remain at time 17:41:31.988480
+[STAGE:evaluate_components] starting at time 17:41:31.990838
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:41:33.656300
+[STAGE:evaluate_components] done -> 145 components remain at time 17:41:33.659738
+kept=145  composite=+1.8119  t=46s at time 17:41:36.746157
+Trial 84: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15069914266899165, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:41:37.890576
+[STAGE:prepping parameters] done at time 17:41:37.890625
+[LOG] run_cnmf: Initializing CNMF object... at time 17:41:42.204358
+[LOG] run_cnmf: Loading memmap... at time 17:41:42.210688
+[STAGE:fit] starting at time 17:41:42.210753
+[LOG] run_cnmf: .fit() completed at time 17:42:06.310291
+[STAGE:fit] done -> 358 components at time 17:42:06.310327
+[STAGE:reloading images] starting... at time 17:42:06.310344
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:42:06.310485
+[STAGE:refit] done -> 344 neurons remain at time 17:42:28.488054
+[STAGE:evaluate_components] starting at time 17:42:28.489814
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 79ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 17:42:30.176169
+[STAGE:evaluate_components] done -> 165 components remain at time 17:42:30.183006
+kept=165  composite=+1.7737  t=54s at time 17:42:33.329459
+Trial 85: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15018139865883823, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:42:34.895160
+[STAGE:prepping parameters] done at time 17:42:34.895196
+[LOG] run_cnmf: Initializing CNMF object... at time 17:42:39.305504
+[LOG] run_cnmf: Loading memmap... at time 17:42:39.310231
+[STAGE:fit] starting at time 17:42:39.310329
+[LOG] run_cnmf: .fit() completed at time 17:43:07.821483
+[STAGE:fit] done -> 357 components at time 17:43:07.821519
+[STAGE:reloading images] starting... at time 17:43:07.821526
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:43:07.821676
+[STAGE:refit] done -> 343 neurons remain at time 17:43:31.399446
+[STAGE:evaluate_components] starting at time 17:43:31.400184
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:43:33.033758
+[STAGE:evaluate_components] done -> 164 components remain at time 17:43:33.037353
+kept=164  composite=+1.7661  t=60s at time 17:43:36.191714
+Trial 86: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1334869440153571, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:43:37.519543
+[STAGE:prepping parameters] done at time 17:43:37.519588
+[LOG] run_cnmf: Initializing CNMF object... at time 17:43:42.321457
+[LOG] run_cnmf: Loading memmap... at time 17:43:42.327472
+[STAGE:fit] starting at time 17:43:42.327535
+[LOG] run_cnmf: .fit() completed at time 17:43:57.723053
+[STAGE:fit] done -> 338 components at time 17:43:57.723090
+[STAGE:reloading images] starting... at time 17:43:57.723103
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:43:57.723257
+[STAGE:refit] done -> 325 neurons remain at time 17:44:18.885227
+[STAGE:evaluate_components] starting at time 17:44:18.886126
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 78ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 48ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 48ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:44:20.455315
+[STAGE:evaluate_components] done -> 142 components remain at time 17:44:20.458762
+kept=142  composite=+1.8118  t=44s at time 17:44:23.379911
+Trial 87: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15386667489227318, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:44:24.911119
+[STAGE:prepping parameters] done at time 17:44:24.911155
+[LOG] run_cnmf: Initializing CNMF object... at time 17:44:29.361760
+[LOG] run_cnmf: Loading memmap... at time 17:44:29.367931
+[STAGE:fit] starting at time 17:44:29.368017
+[LOG] run_cnmf: .fit() completed at time 17:44:54.668756
+[STAGE:fit] done -> 358 components at time 17:44:54.668790
+[STAGE:reloading images] starting... at time 17:44:54.668798
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:44:54.668940
+[STAGE:refit] done -> 344 neurons remain at time 17:45:17.481670
+[STAGE:evaluate_components] starting at time 17:45:17.482838
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 45ms/step at time 17:45:19.300974
+[STAGE:evaluate_components] done -> 166 components remain at time 17:45:19.305204
+kept=166  composite=+1.7647  t=56s at time 17:45:22.464294
+Trial 88: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15127722171535604, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:45:23.857576
+[STAGE:prepping parameters] done at time 17:45:23.857626
+[LOG] run_cnmf: Initializing CNMF object... at time 17:45:28.371647
+[LOG] run_cnmf: Loading memmap... at time 17:45:28.380241
+[STAGE:fit] starting at time 17:45:28.380602
+[LOG] run_cnmf: .fit() completed at time 17:45:52.896376
+[STAGE:fit] done -> 357 components at time 17:45:52.896421
+[STAGE:reloading images] starting... at time 17:45:52.896434
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:45:52.896694
+[STAGE:refit] done -> 343 neurons remain at time 17:46:15.169414
+[STAGE:evaluate_components] starting at time 17:46:15.171263
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:46:16.954106
+[STAGE:evaluate_components] done -> 168 components remain at time 17:46:16.957468
+kept=168  composite=+1.7587  t=54s at time 17:46:20.064781
+Trial 89: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1320560729235321, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:46:21.552300
+[STAGE:prepping parameters] done at time 17:46:21.552346
+[LOG] run_cnmf: Initializing CNMF object... at time 17:46:26.058088
+[LOG] run_cnmf: Loading memmap... at time 17:46:26.064597
+[STAGE:fit] starting at time 17:46:26.064636
+[LOG] run_cnmf: .fit() completed at time 17:46:41.386549
+[STAGE:fit] done -> 338 components at time 17:46:41.386584
+[STAGE:reloading images] starting... at time 17:46:41.386591
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:46:41.386885
+[STAGE:refit] done -> 325 neurons remain at time 17:47:02.884390
+[STAGE:evaluate_components] starting at time 17:47:02.884893
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 71ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:47:04.410493
+[STAGE:evaluate_components] done -> 144 components remain at time 17:47:04.413888
+kept=144  composite=+1.8145  t=44s at time 17:47:07.469088
+Trial 90: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.5, 'nb': np.int64(4), 'decay_time': np.float64(0.1), 'occupancy_frac': 0.15226897099944375, 'stride': 25, 'K': 8, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:47:08.883349
+[STAGE:prepping parameters] done at time 17:47:08.883427
+[LOG] run_cnmf: Initializing CNMF object... at time 17:47:13.275187
+[LOG] run_cnmf: Loading memmap... at time 17:47:13.281733
+[STAGE:fit] starting at time 17:47:13.281805
+[LOG] run_cnmf: .fit() completed at time 17:47:37.846518
+[STAGE:fit] done -> 357 components at time 17:47:37.846552
+[STAGE:reloading images] starting... at time 17:47:37.846565
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:47:37.846686
+[STAGE:refit] done -> 343 neurons remain at time 17:48:00.997236
+[STAGE:evaluate_components] starting at time 17:48:00.999077
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 46ms/step at time 17:48:02.844915
+[STAGE:evaluate_components] done -> 171 components remain at time 17:48:02.848658
+kept=171  composite=+1.7619  t=55s at time 17:48:05.992026
+Trial 91: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13142398168269703, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:48:07.316161
+[STAGE:prepping parameters] done at time 17:48:07.316213
+[LOG] run_cnmf: Initializing CNMF object... at time 17:48:11.683832
+[LOG] run_cnmf: Loading memmap... at time 17:48:11.690301
+[STAGE:fit] starting at time 17:48:11.690428
+[LOG] run_cnmf: .fit() completed at time 17:48:27.902078
+[STAGE:fit] done -> 338 components at time 17:48:27.902109
+[STAGE:reloading images] starting... at time 17:48:27.902122
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:48:27.902299
+[STAGE:refit] done -> 325 neurons remain at time 17:48:50.352176
+[STAGE:evaluate_components] starting at time 17:48:50.352986
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 84ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:48:52.029017
+[STAGE:evaluate_components] done -> 145 components remain at time 17:48:52.033793
+kept=145  composite=+1.8137  t=46s at time 17:48:55.071118
+Trial 92: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13115096677493587, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:48:56.601540
+[STAGE:prepping parameters] done at time 17:48:56.601590
+[LOG] run_cnmf: Initializing CNMF object... at time 17:49:01.093029
+[LOG] run_cnmf: Loading memmap... at time 17:49:01.099476
+[STAGE:fit] starting at time 17:49:01.099599
+[LOG] run_cnmf: .fit() completed at time 17:49:17.640084
+[STAGE:fit] done -> 338 components at time 17:49:17.640128
+[STAGE:reloading images] starting... at time 17:49:17.640144
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:49:17.640348
+[STAGE:refit] done -> 325 neurons remain at time 17:49:39.919873
+[STAGE:evaluate_components] starting at time 17:49:39.920629
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 76ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:49:41.458996
+[STAGE:evaluate_components] done -> 144 components remain at time 17:49:41.462429
+kept=144  composite=+1.8149  t=46s at time 17:49:44.765436
+Trial 93: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13078411740319526, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:49:46.453924
+[STAGE:prepping parameters] done at time 17:49:46.453959
+[LOG] run_cnmf: Initializing CNMF object... at time 17:49:50.818909
+[LOG] run_cnmf: Loading memmap... at time 17:49:50.825335
+[STAGE:fit] starting at time 17:49:50.825417
+[LOG] run_cnmf: .fit() completed at time 17:50:07.401780
+[STAGE:fit] done -> 338 components at time 17:50:07.401814
+[STAGE:reloading images] starting... at time 17:50:07.401820
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:50:07.402014
+[STAGE:refit] done -> 325 neurons remain at time 17:50:29.525347
+[STAGE:evaluate_components] starting at time 17:50:29.526136
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 8/11[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 46ms/step[1m10/11[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step at time 17:50:31.303124
+[STAGE:evaluate_components] done -> 145 components remain at time 17:50:31.306444
+kept=145  composite=+1.8137  t=46s at time 17:50:34.386550
+Trial 94: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1307215720167037, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:50:35.852440
+[STAGE:prepping parameters] done at time 17:50:35.852483
+[LOG] run_cnmf: Initializing CNMF object... at time 17:50:40.412034
+[LOG] run_cnmf: Loading memmap... at time 17:50:40.418296
+[STAGE:fit] starting at time 17:50:40.418362
+[LOG] run_cnmf: .fit() completed at time 17:50:56.064224
+[STAGE:fit] done -> 338 components at time 17:50:56.064263
+[STAGE:reloading images] starting... at time 17:50:56.064279
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:50:56.064452
+[STAGE:refit] done -> 325 neurons remain at time 17:51:17.175846
+[STAGE:evaluate_components] starting at time 17:51:17.176540
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 80ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:51:18.841290
+[STAGE:evaluate_components] done -> 145 components remain at time 17:51:18.846386
+kept=145  composite=+1.8116  t=44s at time 17:51:21.906474
+Trial 95: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.12983804311864186, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:51:23.508585
+[STAGE:prepping parameters] done at time 17:51:23.508634
+[LOG] run_cnmf: Initializing CNMF object... at time 17:51:27.984025
+[LOG] run_cnmf: Loading memmap... at time 17:51:27.990480
+[STAGE:fit] starting at time 17:51:27.990519
+[LOG] run_cnmf: .fit() completed at time 17:51:43.184031
+[STAGE:fit] done -> 338 components at time 17:51:43.184068
+[STAGE:reloading images] starting... at time 17:51:43.184090
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:51:43.184208
+[STAGE:refit] done -> 325 neurons remain at time 17:52:04.708029
+[STAGE:evaluate_components] starting at time 17:52:04.708595
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:52:06.200473
+[STAGE:evaluate_components] done -> 145 components remain at time 17:52:06.203937
+kept=145  composite=+1.8115  t=44s at time 17:52:09.293003
+Trial 96: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13066532617123372, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:52:10.816519
+[STAGE:prepping parameters] done at time 17:52:10.816556
+[LOG] run_cnmf: Initializing CNMF object... at time 17:52:15.223204
+[LOG] run_cnmf: Loading memmap... at time 17:52:15.229773
+[STAGE:fit] starting at time 17:52:15.229937
+[LOG] run_cnmf: .fit() completed at time 17:52:31.433075
+[STAGE:fit] done -> 338 components at time 17:52:31.433111
+[STAGE:reloading images] starting... at time 17:52:31.433119
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:52:31.433258
+[STAGE:refit] done -> 325 neurons remain at time 17:52:53.000332
+[STAGE:evaluate_components] starting at time 17:52:53.000980
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 77ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 46ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 46ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 43ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 43ms/step at time 17:52:54.542182
+[STAGE:evaluate_components] done -> 144 components remain at time 17:52:54.545524
+kept=144  composite=+1.8039  t=45s at time 17:52:57.657238
+Trial 97: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.1316970170097147, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:52:59.370835
+[STAGE:prepping parameters] done at time 17:52:59.370869
+[LOG] run_cnmf: Initializing CNMF object... at time 17:53:03.805736
+[LOG] run_cnmf: Loading memmap... at time 17:53:03.810556
+[STAGE:fit] starting at time 17:53:03.810636
+[LOG] run_cnmf: .fit() completed at time 17:53:19.905703
+[STAGE:fit] done -> 338 components at time 17:53:19.905751
+[STAGE:reloading images] starting... at time 17:53:19.905778
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:53:19.905957
+[STAGE:refit] done -> 325 neurons remain at time 17:53:41.589949
+[STAGE:evaluate_components] starting at time 17:53:41.590438
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 77ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 47ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 47ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:53:43.128166
+[STAGE:evaluate_components] done -> 146 components remain at time 17:53:43.131473
+kept=146  composite=+1.8101  t=45s at time 17:53:46.194598
+Trial 98: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13157593981538612, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:53:47.776621
+[STAGE:prepping parameters] done at time 17:53:47.776656
+[LOG] run_cnmf: Initializing CNMF object... at time 17:53:52.128516
+[LOG] run_cnmf: Loading memmap... at time 17:53:52.134728
+[STAGE:fit] starting at time 17:53:52.134824
+[LOG] run_cnmf: .fit() completed at time 17:54:07.647467
+[STAGE:fit] done -> 338 components at time 17:54:07.647491
+[STAGE:reloading images] starting... at time 17:54:07.647497
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:54:07.647701
+[STAGE:refit] done -> 324 neurons remain at time 17:54:28.905022
+[STAGE:evaluate_components] starting at time 17:54:28.905964
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 70ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 45ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 44ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 44ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 41ms/step at time 17:54:30.445210
+[STAGE:evaluate_components] done -> 145 components remain at time 17:54:30.448488
+kept=145  composite=+1.8125  t=44s at time 17:54:33.440040
+Trial 99: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13130544484781892, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:54:34.919357
+[STAGE:prepping parameters] done at time 17:54:34.919393
+[LOG] run_cnmf: Initializing CNMF object... at time 17:54:39.310896
+[LOG] run_cnmf: Loading memmap... at time 17:54:39.316769
+[STAGE:fit] starting at time 17:54:39.316884
+[LOG] run_cnmf: .fit() completed at time 17:54:54.937866
+[STAGE:fit] done -> 338 components at time 17:54:54.937902
+[STAGE:reloading images] starting... at time 17:54:54.937910
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:54:54.938156
+[STAGE:refit] done -> 323 neurons remain at time 17:55:15.999101
+[STAGE:evaluate_components] starting at time 17:55:15.999616
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 79ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 48ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 48ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 48ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 44ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 44ms/step at time 17:55:17.563635
+[STAGE:evaluate_components] done -> 143 components remain at time 17:55:17.567149
+kept=143  composite=+1.8100  t=44s at time 17:55:20.644307
+Trial 100: {'gSig': 3, 'rf': 25, 'overlap_fraction': 0.2, 'nb': np.int64(4), 'decay_time': np.float64(0.2), 'occupancy_frac': 0.13255480436128236, 'stride': 10, 'K': 7, 'nb_patch': np.int64(4)} ...   [STAGE:prepping parameters] starting at time 17:55:22.256274
+[STAGE:prepping parameters] done at time 17:55:22.256323
+[LOG] run_cnmf: Initializing CNMF object... at time 17:55:26.582252
+[LOG] run_cnmf: Loading memmap... at time 17:55:26.588771
+[STAGE:fit] starting at time 17:55:26.588813
+[LOG] run_cnmf: .fit() completed at time 17:55:42.564615
+[STAGE:fit] done -> 338 components at time 17:55:42.564648
+[STAGE:reloading images] starting... at time 17:55:42.564653
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:55:42.564873
+[STAGE:refit] done -> 324 neurons remain at time 17:56:04.251784
+[STAGE:evaluate_components] starting at time 17:56:04.253182
+[1m 1/11[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 72ms/step[1m 3/11[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/11[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m0s[0m 46ms/step[1m 7/11[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 45ms/step[1m 9/11[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 45ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step[1m11/11[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 42ms/step at time 17:56:05.937161
+[STAGE:evaluate_components] done -> 149 components remain at time 17:56:05.940641
+kept=149  composite=+1.8158  t=45s at time 17:56:08.950710
+ at time 17:56:10.946538
+Best params (calib): at time 17:56:10.946586
+gSig: 3 at time 17:56:10.946604
+rf: 25 at time 17:56:10.946620
+nb: 4 at time 17:56:10.946633
+nb_patch: 4 at time 17:56:10.946647
+decay_time: 0.2 at time 17:56:10.946661
+stride: 10 at time 17:56:10.946674
+K: 7 at time 17:56:10.946687
+ at time 17:56:11.522002
+[STAGE: Validation] Re-fitting final model with best parameters to save outputs... at time 17:56:11.522038
+[STAGE:prepping parameters] starting at time 17:56:11.522054
+[STAGE:prepping parameters] done at time 17:56:11.522070
+[LOG] run_cnmf: Initializing CNMF object... at time 17:56:15.954073
+[LOG] run_cnmf: Loading memmap... at time 17:56:15.960194
+[STAGE:fit] starting at time 17:56:15.960276
+[LOG] run_cnmf: .fit() completed at time 17:56:32.886187
+[STAGE:fit] done -> 325 components at time 17:56:32.886223
+[STAGE:reloading images] starting... at time 17:56:32.886238
+[STAGE:refit] starting — second-pass validation of accepted neurons at time 17:56:32.886366
+[STAGE:refit] done -> 301 neurons remain at time 17:56:55.255822
+[STAGE:evaluate_components] starting at time 17:56:55.256584
+[1m 1/10[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m0s[0m 73ms/step[1m 3/10[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 5/10[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 47ms/step[1m 7/10[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 47ms/step[1m 9/10[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 46ms/step[1m10/10[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 45ms/step at time 17:56:56.773477
+[STAGE:evaluate_components] done -> 139 components remain at time 17:56:56.777949
+[STAGE: plotting] Generating diagnostic contour and trace plots... at time 17:56:58.138246
+[STAGE: plotting] Extracting contour coordinates... at time 17:56:58.138269
+[STAGE: Save] Saved coordinate-based contour plot to /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/optimized_contours_coords.png at time 17:56:59.036284
+[STAGE: traces] Calculating estimates.F_dff... at time 17:57:01.343791
+[STAGE: Save] Saved CNMF results to /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/pipeline_results.hdf5 at time 17:57:01.762518
+[STAGE: Save] Saved raw traces as numpy array to /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/neuron_traces.npy at time 17:57:01.762897
+[STAGE: Save] Saved traces CSV to /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/neuron_traces.csv at time 17:57:01.906111
+[STAGE: Save] Saved sample trace plot to /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/optimized_traces.png at time 17:57:01.979252
+ at time 17:57:01.980017
+====================================================================== at time 17:57:01.980036
+DONE  |  calibrate_cnmf  |  calibrate_512_100calls  |  92.2 min at time 17:57:01.980050
+Best params saved -> /home/abl-dell/Fish_Brain_Dynamics/results/calibrate_512_100calls/calibration_summary.json at time 17:57:01.980068
+====================================================================== at time 17:57:01.980082
+Monitoring ended at 17:57:03.315268

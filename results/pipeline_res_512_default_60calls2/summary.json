@@ -1,0 +1,36 @@
+{
+  "mode": "single_plane",
+  "run_name": "pipeline_res_512_default_60calls2",
+  "resolution": "512",
+  "brain_mask": false,
+  "stripe_removal": true,
+  "best_params": {
+    "gSig": 3,
+    "rf": 60,
+    "nb": 4,
+    "nb_patch": 4,
+    "decay_time": 0.2,
+    "stride": 26,
+    "K": 19
+  },
+  "format_info": "Interleaved",
+  "preprocessing_info": {
+    "original_shape": [
+      700,
+      2048,
+      2048
+    ],
+    "downsampled_to": [
+      512,
+      512
+    ],
+    "stripe_removed": true,
+    "brain_mask_used": false,
+    "final_shape": [
+      700,
+      512,
+      512
+    ]
+  },
+  "n_neurons_found": 100
+}

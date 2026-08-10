@@ -118,7 +118,7 @@ import caiman.base.movies
 from caiman.source_extraction.cnmf import cnmf as cnmf_module
 from caiman.source_extraction.cnmf import params as params_module
 from caiman.motion_correction import MotionCorrect
-from caiman.utils.visualization import plot_contours
+from caiman.utils.visualization import plot_contours, get_contours
 
 if not hasattr(cm, "load"):
     cm.load = caiman.base.movies.load
@@ -977,23 +977,56 @@ def bayesian_tune(mmap_path, dims, mask, tag="calib"):
 # OPTIMIZED PLOTS
 # =============================================================================
 
+def plot_contours_via_coordinates(images, cnm, output_dir):
+    print("[STAGE: plotting] Extracting contour coordinates...")
+    
+    # 1. Generate the anatomical background (Mean Image)
+    mean_frame = images.mean(axis=0)
+    H_val, W_val = mean_frame.shape
+
+    # 2. Filter for accepted components only
+    if hasattr(cnm.estimates, "idx_components") and cnm.estimates.idx_components is not None and len(cnm.estimates.idx_components) > 0:
+        A_accepted = cnm.estimates.A[:, cnm.estimates.idx_components]
+    else:
+        A_accepted = cnm.estimates.A
+        
+    num_accepted = A_accepted.shape[1]
+
+    # 3. Extract the (X, Y) coordinates of the footprint boundaries
+    # thr=0.2 (or 0.8) uses CaImAn's cumulative energy math to find the boundary
+    coors = get_contours(A_accepted, (H_val, W_val)) #, thr=0.8)
+
+    # 4. Plotting
+    fig, ax = plt.subplots(figsize=(11, 11), dpi=150)
+    ax.imshow(mean_frame, cmap="gray")
+    ax.set_title(f"Optimized Spatial Footprints: {num_accepted} kept neurons", fontsize=10)
+    ax.axis("off")
+
+    # 5. Draw the coordinates as clean cyan lines
+    for c in coors:
+        # c['coordinates'] is an array of shape (N, 2) containing X, Y points
+        coords = c['coordinates']
+        
+        # Plot a line connecting the boundary points
+        ax.plot(coords[:, 0], coords[:, 1], color="cyan", linewidth=0.6, alpha=0.85)
+
+    plt.tight_layout()
+    contour_path = os.path.join(output_dir, "optimized_contours_coords.png")
+    plt.savefig(contour_path)
+    plt.close(fig)
+    print(f"[STAGE: Save] Saved coordinate-based contour plot to {contour_path}")
+
+
+
 def generate_optimized_plots(images, cnm, output_dir=OUTPUT_DIR):
     print("[STAGE: plotting] Generating diagnostic contour and trace plots...")
 
-    # --- 1. Spatial Footprints (Contours) ---
-    Cn = cm.local_correlations(images, swap_dim=False)
-    Cn[np.isnan(Cn)] = 0
+    # --- 1. Plot Contours via Coordinates ---
+    plot_contours_via_coordinates(images, cnm, output_dir)
 
-    fig_spatial, ax_spatial = plt.subplots(figsize=(10, 10), dpi=100)
-    plot_contours(cnm.estimates.A, Cn, ax=ax_spatial, display_numbers=False, thr=0.9)
-    ax_spatial.set_title("Optimized Spatial Footprints (Contours)")
-    ax_spatial.axis("off")
-
-    contour_path = os.path.join(output_dir, "optimized_contours.png")
-    fig_spatial.savefig(contour_path, bbox_inches="tight")
-    plt.close(fig_spatial)
-    
     # --- 2. Extract / Calculate Traces ---
+    Cn = cm.local_correlations(images, swap_dim=False)
+    # Cn[np.isnan(Cn)] = 0
     if hasattr(cnm.estimates, "F_dff") and cnm.estimates.F_dff is not None:
         print("[STAGE: traces] estimates.F_dff already defined.")
         traces = cnm.estimates.F_dff
